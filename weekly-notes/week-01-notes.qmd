@@ -16,7 +16,7 @@ date: "2025-09-08"
   - to refer to variables with column names that have spaces, you need to surround them with backticks ```
 
 - Quarto Features
-  - upgrader version of RMD that can work with R, Python, and other languages
+  - upgraded version of RMD that can work with R, Python, and other languages
   - can even be used for websites and slides
 
 ## Questions & Challenges
@@ -28,3 +28,4 @@ date: "2025-09-08"
 ## Reflection
 - Have used RMD in the past, so excited to learn this new workflow with Quarto
 - Applying this knowledge - I may also look at using Github to create a personal portfolio
+  - Github is considered the industry standard for portfolios and version control

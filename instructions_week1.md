@@ -91,7 +91,8 @@ cd [your-repository-name]
 ### Make Changes and Preview
 ```bash
 # Edit your files using RStudio
-# Preview your changes:
+# Preview your changes
+# Enter the below commands into the terminal
 quarto render
 quarto preview
 
