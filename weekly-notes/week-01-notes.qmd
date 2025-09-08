@@ -4,20 +4,27 @@ date: "2025-09-08"
 ---
 
 ## Key Concepts Learned
-- [List main concepts from lecture]
-- [Technical skills covered]
+- Course Overview, Structure, and Grading
+- R, Quarto, and Github Basics
 
 ## Coding Techniques
-- [New R functions or approaches]
-- [Quarto features learned]
+- Tidyverse vs R
+  - read.csv reads data as data frames
+  - read_csv reads data as tibbles (more intuitively formatted)
+
+- Renaming Variables
+  - to refer to variables with column names that have spaces, you need to surround them with backticks ```
+
+- Quarto Features
+  - upgrader version of RMD that can work with R, Python, and other languages
+  - can even be used for websites and slides
 
 ## Questions & Challenges
-- [What I didn't fully understand]
-- [Areas needing more practice]
+- I need more practice on understanding workflows in Github and Quarto
 
 ## Connections to Policy
-- [How this week's content applies to real policy work]
+- NA for this week
 
 ## Reflection
-- [What was most interesting]
-- [How I'll apply this knowledge]
+- Have used RMD in the past, so excited to learn this new workflow with Quarto
+- Applying this knowledge - I may also look at using Github to create a personal portfolio
