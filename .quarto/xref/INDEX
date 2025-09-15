@@ -7,5 +7,8 @@
   },
   "index.qmd": {
     "index.html": "96218c17"
+  },
+  "labs/lab_0/scripts/lab0_template.qmd": {
+    "lab0_template.html": "59d01e8f"
   }
 }
