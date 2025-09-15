@@ -11,12 +11,12 @@ website:
       - text: Weekly Notes
         menu: 
         - href: weekly-notes/week-01-notes.qmd
-        - href: weekly-notes/week-02-notes.qmd
-        - text: week
+          href: weekly-notes/week-02-notes.qmd
+          text: week
       - text: Labs
         menu:
-        - href: labs/scripts/lab0_template.qmd
-        - text: lab
+        - href: labs/lab_0/scripts/lab0_template.qmd
+          text: lab
 
 format:
   html:
