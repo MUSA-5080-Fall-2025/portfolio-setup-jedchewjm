@@ -1,0 +1,21 @@
+---
+title: "Week 2 Notes - Algorithmic Decision Making & Census Data"
+date: "2025-09-15"
+---
+
+## Key Concepts Learned
+- R basics practice in RStudio
+- Types of algorithms
+- Types of Census Data vs ACS data
+
+## Coding Techniques
+- Lab0 Practice of R Fundamentals
+
+## Questions & Challenges
+- With more reps, I hope to become more independent in my coding instead of having to refer to demo code
+
+## Connections to Policy
+- TBD
+
+## Reflection
+- TBD
