@@ -4,18 +4,29 @@ date: "2025-09-15"
 ---
 
 ## Key Concepts Learned
-- R basics practice in RStudio
-- Types of algorithms
-- Types of Census Data vs ACS data
+
+-   R basics practice in RStudio
+-   Types of algorithms
+-   Types of Census Data vs ACS data
+    -   Blocks data is only available for Decennial Census data
+    -   Block Group data has large margins of error
 
 ## Coding Techniques
-- Lab0 Practice of R Fundamentals
+
+-   Lab0 Practice of R fundamentals and packages
+-   Intro to tidycensus
 
 ## Questions & Challenges
-- With more reps, I hope to become more independent in my coding instead of having to refer to demo code
+
+-   With more reps, I hope to become more independent in my coding instead of having to refer to demo code
 
 ## Connections to Policy
-- TBD
+
+-   When policymakers explore the use of algorithms, they need to ask themselves
+    -   what proxy are they using?
+    -   what are the possible blind spots?
+    -   what are the resultant harms as well as potential guardrails?
 
 ## Reflection
-- TBD
+
+-   It was really interesting to hear about the 2020 Census Innovation of Differential Privacy (adding mathematical noise as anomalies to protect respondents' privacy)

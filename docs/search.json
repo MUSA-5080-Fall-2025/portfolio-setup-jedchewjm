@@ -46,7 +46,7 @@
     "href": "index.html",
     "title": "MUSA 5080 Portfolio",
     "section": "",
-    "text": "This portfolio documents my learning journey in Public Policy Analytics (MUSA 5080).\n\n\nAdvanced spatial analysis and data science for urban planning and public policy.\n\n\n\n\nWeekly Notes: My learning reflections and key concepts\nLabs: Completed assignments and analyses\nFinal Project: Capstone modeling challenge\n\n\n\n\nSenior at the University of Pennsylvania concentrating in Urban Studies and Real Estate. Interested in housing markets, transport infrastructure, and public-private partnerships. Taking MUSA 5080 to inform my senior thesis research and to build up a toolbox of useful skills.\n\n\n\n\nEmail: jedchew@sas.upenn.edu\nGitHub: @jedchewjm"
+    "text": "This portfolio documents my learning journey in Public Policy Analytics (MUSA 5080).\n\n\nAdvanced spatial analysis and data science for urban planning and public policy.\n\n\n\n\nWeekly Notes: My learning reflections and key concepts\nLabs: Completed assignments and analyses\nFinal Project: Capstone modeling challenge\n\n\n\n\nSenior at the University of Pennsylvania concentrating in Urban Studies and Real Estate. Interested in housing markets, transport infrastructure, and public-private partnerships. Taking MUSA 5080 to inform my senior thesis research and to build up a toolbox of useful skills.\n\n\n\n\nEmail: jedchew@sas.upenn.edu\nGitHub: @jedchewjm\nLinkedIn: linkedin.com/in/jed-chew"
   },
   {
     "objectID": "index.html#about-this-course",
@@ -74,7 +74,7 @@
     "href": "index.html#contact",
     "title": "MUSA 5080 Portfolio",
     "section": "",
-    "text": "Email: jedchew@sas.upenn.edu\nGitHub: @jedchewjm"
+    "text": "Email: jedchew@sas.upenn.edu\nGitHub: @jedchewjm\nLinkedIn: linkedin.com/in/jed-chew"
   },
   {
     "objectID": "instructions_week1.html",
@@ -236,5 +236,47 @@
     "title": "Lab 0: Getting Started with dplyr",
     "section": "5.2 Categorical Summaries",
     "text": "5.2 Categorical Summaries\n\n# Frequency table for price categories\ncar_price_summary &lt;- car_data |&gt; \n  group_by(price_category) |&gt; \n  summarize(n=n()) |&gt; \n  mutate(freq = n/sum(n))\ncar_price_summary\n\n# A tibble: 3 × 3\n  price_category     n  freq\n  &lt;chr&gt;          &lt;int&gt; &lt;dbl&gt;\n1 budget         34040 0.681\n2 luxury          6179 0.124\n3 midrange        9781 0.196"
+  },
+  {
+    "objectID": "weekly-notes/week-02-notes.html",
+    "href": "weekly-notes/week-02-notes.html",
+    "title": "Week 2 Notes - Algorithmic Decision Making & Census Data",
+    "section": "",
+    "text": "R basics practice in RStudio\nTypes of algorithms\nTypes of Census Data vs ACS data\n\nBlocks data is only available for Decennial Census data\nBlock Group data has large margins of error"
+  },
+  {
+    "objectID": "weekly-notes/week-02-notes.html#key-concepts-learned",
+    "href": "weekly-notes/week-02-notes.html#key-concepts-learned",
+    "title": "Week 2 Notes - Algorithmic Decision Making & Census Data",
+    "section": "",
+    "text": "R basics practice in RStudio\nTypes of algorithms\nTypes of Census Data vs ACS data\n\nBlocks data is only available for Decennial Census data\nBlock Group data has large margins of error"
+  },
+  {
+    "objectID": "weekly-notes/week-02-notes.html#coding-techniques",
+    "href": "weekly-notes/week-02-notes.html#coding-techniques",
+    "title": "Week 2 Notes - Algorithmic Decision Making & Census Data",
+    "section": "Coding Techniques",
+    "text": "Coding Techniques\n\nLab0 Practice of R fundamentals and packages\nIntro to tidycensus"
+  },
+  {
+    "objectID": "weekly-notes/week-02-notes.html#questions-challenges",
+    "href": "weekly-notes/week-02-notes.html#questions-challenges",
+    "title": "Week 2 Notes - Algorithmic Decision Making & Census Data",
+    "section": "Questions & Challenges",
+    "text": "Questions & Challenges\n\nWith more reps, I hope to become more independent in my coding instead of having to refer to demo code"
+  },
+  {
+    "objectID": "weekly-notes/week-02-notes.html#connections-to-policy",
+    "href": "weekly-notes/week-02-notes.html#connections-to-policy",
+    "title": "Week 2 Notes - Algorithmic Decision Making & Census Data",
+    "section": "Connections to Policy",
+    "text": "Connections to Policy\n\nWhen policymakers explore the use of algorithms, they need to ask themselves\n\nwhat proxy are they using?\nwhat are the possible blind spots?\nwhat are the resultant harms as well as potential guardrails?"
+  },
+  {
+    "objectID": "weekly-notes/week-02-notes.html#reflection",
+    "href": "weekly-notes/week-02-notes.html#reflection",
+    "title": "Week 2 Notes - Algorithmic Decision Making & Census Data",
+    "section": "Reflection",
+    "text": "Reflection\n\nIt was really interesting to hear about the 2020 Census Innovation of Differential Privacy (adding mathematical noise as anomalies to protect respondents’ privacy)"
   }
 ]
