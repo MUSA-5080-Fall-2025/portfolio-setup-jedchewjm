@@ -14,7 +14,7 @@ website:
         - text: week
       - text: Labs
         menu:
-        - href: labs/
+        - href: labs/scripts/lab0_template.qmd
         - text: lab
 
 format:
