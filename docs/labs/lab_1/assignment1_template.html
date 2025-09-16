@@ -353,8 +353,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="data-quality-assessment">2.2 Data Quality Assessment</h2>
 <p><strong>Your Task:</strong> Calculate margin of error percentages and create reliability categories.</p>
 <p><strong>Requirements:</strong></p>
-<p>- Calculate MOE percentage: (margin of error / estimate) * 100</p>
-<p>- Create reliability categories:<br>
+<p>- Calculate MOE percentage: (margin of error / estimate) * 100<br>
+- Create reliability categories:<br>
 - High Confidence: MOE &lt; 5%<br>
 - Moderate Confidence: MOE 5-10%<br>
 - Low Confidence: MOE &gt; 10%<br>
@@ -479,8 +479,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 </div>
 </div>
-<p><strong>Data Quality Commentary:</strong></p>
-<p>Algorithmic decision-making at the New York state-level cannot occur with one broad brush. While 56 out of 62 NY counties are classified as having highly reliable income data, 5 counties are classified as having moderate reliability and 1 county is classified as having low reliability. As shown in the table below, a possible reason for these 6 counties having low/moderate reliability could be their relatively smaller populations compared to other counties. Hence, special attention must be paid to these 6 counties, with algorithmic tools to identify communities that should receive priority for social service funding and outreach programs being complemented by qualitative on-the-ground outreach and interviews with local residents.</p>
+<p><strong>Data Quality Commentary:</strong> Algorithmic decision-making at the New York state-level cannot occur with one broad brush. While 56 out of 62 NY counties are classified as having highly reliable income data, 5 counties are classified as having moderate reliability and 1 county is classified as having low reliability. As shown in the table below, a possible reason for these 6 counties having low/moderate reliability could be their relatively smaller populations compared to other counties. Hence, special attention must be paid to these 6 counties, with algorithmic tools to identify communities that should receive priority for social service funding and outreach programs being complemented by qualitative on-the-ground outreach and interviews with local residents.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>high_uncertainty_pop <span class="ot">&lt;-</span> ny_reliability <span class="sc">|&gt;</span> </span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(moe_percent)) <span class="sc">|&gt;</span> </span>
@@ -540,7 +539,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="tract-level-demographics" class="level2">
 <h2 class="anchored" data-anchor-id="tract-level-demographics">3.2 Tract-Level Demographics</h2>
 <p><strong>Your Task:</strong> Get demographic data for census tracts in your selected counties.</p>
-<p><strong>Requirements:</strong> - Geography: tract level - Variables: white alone (B03002_003), Black/African American (B03002_004), Hispanic/Latino (B03002_012), total population (B03002_001) - Use the same state and year as before - Output format: wide</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Geography: tract level</li>
+<li>Variables: white alone (B03002_003), Black/African American (B03002_004), Hispanic/Latino (B03002_012), total population (B03002_001)</li>
+<li>Use the same state and year as before</li>
+<li>Output format: wide</li>
+</ul>
 <p><strong>Challenge:</strong> You’ll need county codes, not names. Look at the GEOID patterns in your county data for hints.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define your race/ethnicity variables with descriptive names</span></span>
@@ -576,7 +581,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="moe-analysis-for-demographic-variables" class="level2">
 <h2 class="anchored" data-anchor-id="moe-analysis-for-demographic-variables">4.1 MOE Analysis for Demographic Variables</h2>
 <p><strong>Your Task:</strong> Examine margins of error for demographic variables to see if some communities have less reliable data.</p>
-<p><strong>Requirements:</strong> - Calculate MOE percentages for each demographic variable - Flag tracts where any demographic variable has MOE &gt; 15% - Create summary statistics</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Calculate MOE percentages for each demographic variable</li>
+<li>Flag tracts where any demographic variable has MOE &gt; 15%</li>
+<li>Create Summary Statistics</li>
+</ul>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate MOE percentages for white, Black, and Hispanic variables</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Hint: use the same formula as before (margin/estimate * 100)</span></span>
@@ -643,8 +653,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="technical-notes" class="level1">
 <h1>Technical Notes</h1>
-<p><strong>Data Sources:</strong> - U.S. Census Bureau, American Community Survey 2018-2022 5-Year Estimates - Retrieved via tidycensus R package on [date]</p>
-<p><strong>Reproducibility:</strong> - All analysis conducted in R version [your version] - Census API key required for replication - Complete code and documentation available at: [your portfolio URL]</p>
+<p><strong>Data Sources:</strong> - U.S. Census Bureau, American Community Survey 2018-2022 5-Year Estimates - Retrieved via tidycensus R package on September 17, 2025</p>
+<p><strong>Reproducibility:</strong> - All analysis conducted in R version 4.5.1 - Census API key required for replication - Complete code and documentation available at: <a href="https://musa-5080-fall-2025.github.io/portfolio-setup-jedchewjm/" class="uri">https://musa-5080-fall-2025.github.io/portfolio-setup-jedchewjm/</a></p>
 <p><strong>Methodology Notes:</strong> [Describe any decisions you made about data processing, county selection, or analytical choices that might affect reproducibility]</p>
 <p><strong>Limitations:</strong> [Note any limitations in your analysis - sample size issues, geographic scope, temporal factors, etc.]</p>
 <hr>
@@ -652,13 +662,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="submission-checklist">Submission Checklist</h2>
 <p>Before submitting your portfolio link on Canvas:</p>
 <ul class="task-list">
-<li><label><input type="checkbox">All code chunks run without errors</label></li>
+<li><label><input type="checkbox" checked="">All code chunks run without errors</label></li>
 <li><label><input type="checkbox">All “[Fill this in]” prompts have been completed</label></li>
 <li><label><input type="checkbox">Tables are properly formatted and readable</label></li>
 <li><label><input type="checkbox">Executive summary addresses all four required components</label></li>
-<li><label><input type="checkbox">Portfolio navigation includes this assignment</label></li>
-<li><label><input type="checkbox">Census API key is properly set</label></li>
-<li><label><input type="checkbox">Document renders correctly to HTML</label></li>
+<li><label><input type="checkbox" checked="">Portfolio navigation includes this assignment</label></li>
+<li><label><input type="checkbox" checked="">Census API key is properly set</label></li>
+<li><label><input type="checkbox" checked="">Document renders correctly to HTML</label></li>
 </ul>
 <p><strong>Remember:</strong> Submit your portfolio URL on Canvas, not the file itself. Your assignment should be accessible at <code>your-portfolio-url/assignments/assignment_1/your_file_name.html</code></p>
 

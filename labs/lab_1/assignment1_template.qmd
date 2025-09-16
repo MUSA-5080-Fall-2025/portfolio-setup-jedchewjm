@@ -112,12 +112,11 @@ head(ny_clean)
 
 **Requirements:**
 
-\- Calculate MOE percentage: (margin of error / estimate) \* 100
-
-\- Create reliability categories: \
-- High Confidence: MOE \< 5% \
+\- Calculate MOE percentage: (margin of error / estimate) \* 100\
+- Create reliability categories:\
+- High Confidence: MOE \< 5%\
 - Moderate Confidence: MOE 5-10%\
-- Low Confidence: MOE \> 10% \
+- Low Confidence: MOE \> 10%\
 - Create a flag for unreliable estimates (MOE \> 10%)
 
 **Hint:** Use `mutate()` with `case_when()` for the categories.
@@ -167,9 +166,7 @@ kable(high_uncertainty,
       format.args = list(big.mark = ",")) #large nums have 000s separators
 ```
 
-**Data Quality Commentary:**
-
-Algorithmic decision-making at the New York state-level cannot occur with one broad brush. While 56 out of 62 NY counties are classified as having highly reliable income data, 5 counties are classified as having moderate reliability and 1 county is classified as having low reliability. As shown in the table below, a possible reason for these 6 counties having low/moderate reliability could be their relatively smaller populations compared to other counties. Hence, special attention must be paid to these 6 counties, with algorithmic tools to identify communities that should receive priority for social service funding and outreach programs being complemented by qualitative on-the-ground outreach and interviews with local residents.
+**Data Quality Commentary:** Algorithmic decision-making at the New York state-level cannot occur with one broad brush. While 56 out of 62 NY counties are classified as having highly reliable income data, 5 counties are classified as having moderate reliability and 1 county is classified as having low reliability. As shown in the table below, a possible reason for these 6 counties having low/moderate reliability could be their relatively smaller populations compared to other counties. Hence, special attention must be paid to these 6 counties, with algorithmic tools to identify communities that should receive priority for social service funding and outreach programs being complemented by qualitative on-the-ground outreach and interviews with local residents.
 
 ```{r}
 high_uncertainty_pop <- ny_reliability |> 
@@ -207,7 +204,12 @@ select(selected_counties, county_name, median_incomeE, moe_percent, reliability)
 
 **Your Task:** Get demographic data for census tracts in your selected counties.
 
-**Requirements:** - Geography: tract level - Variables: white alone (B03002_003), Black/African American (B03002_004), Hispanic/Latino (B03002_012), total population (B03002_001) - Use the same state and year as before - Output format: wide
+**Requirements:**
+
+-   Geography: tract level
+-   Variables: white alone (B03002_003), Black/African American (B03002_004), Hispanic/Latino (B03002_012), total population (B03002_001)
+-   Use the same state and year as before
+-   Output format: wide
 
 **Challenge:** You'll need county codes, not names. Look at the GEOID patterns in your county data for hints.
 
@@ -247,7 +249,11 @@ select(selected_counties, county_name, median_incomeE, moe_percent, reliability)
 
 **Your Task:** Examine margins of error for demographic variables to see if some communities have less reliable data.
 
-**Requirements:** - Calculate MOE percentages for each demographic variable - Flag tracts where any demographic variable has MOE \> 15% - Create summary statistics
+**Requirements:**
+
+-   Calculate MOE percentages for each demographic variable
+-   Flag tracts where any demographic variable has MOE \> 15%
+-   Create Summary Statistics
 
 ```{r demographic-moe}
 # Calculate MOE percentages for white, Black, and Hispanic variables
@@ -326,9 +332,9 @@ select(selected_counties, county_name, median_incomeE, moe_percent, reliability)
 
 # Technical Notes
 
-**Data Sources:** - U.S. Census Bureau, American Community Survey 2018-2022 5-Year Estimates - Retrieved via tidycensus R package on \[date\]
+**Data Sources:** - U.S. Census Bureau, American Community Survey 2018-2022 5-Year Estimates - Retrieved via tidycensus R package on September 17, 2025
 
-**Reproducibility:** - All analysis conducted in R version \[your version\] - Census API key required for replication - Complete code and documentation available at: \[your portfolio URL\]
+**Reproducibility:** - All analysis conducted in R version 4.5.1 - Census API key required for replication - Complete code and documentation available at: <https://musa-5080-fall-2025.github.io/portfolio-setup-jedchewjm/>
 
 **Methodology Notes:** \[Describe any decisions you made about data processing, county selection, or analytical choices that might affect reproducibility\]
 
@@ -340,12 +346,12 @@ select(selected_counties, county_name, median_incomeE, moe_percent, reliability)
 
 Before submitting your portfolio link on Canvas:
 
--   [ ] All code chunks run without errors
+-   [x] All code chunks run without errors
 -   [ ] All "\[Fill this in\]" prompts have been completed
 -   [ ] Tables are properly formatted and readable
 -   [ ] Executive summary addresses all four required components
--   [ ] Portfolio navigation includes this assignment
--   [ ] Census API key is properly set
--   [ ] Document renders correctly to HTML
+-   [x] Portfolio navigation includes this assignment
+-   [x] Census API key is properly set
+-   [x] Document renders correctly to HTML
 
 **Remember:** Submit your portfolio URL on Canvas, not the file itself. Your assignment should be accessible at `your-portfolio-url/assignments/assignment_1/your_file_name.html`
