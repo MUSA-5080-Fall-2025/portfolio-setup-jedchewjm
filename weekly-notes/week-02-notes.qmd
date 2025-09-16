@@ -15,6 +15,7 @@ date: "2025-09-15"
 
 -   Lab0 Practice of R fundamentals and packages
 -   Intro to tidycensus
+-   Census API Key: fe841b7ef0aa73d9579f0517bd1c8f26d33c789b
 
 ## Questions & Challenges
 
