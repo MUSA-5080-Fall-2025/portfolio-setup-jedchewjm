@@ -17,6 +17,7 @@ website:
       - text: Labs
         menu:
         - href: labs/lab_0/scripts/lab0_template.qmd
+        - href: labs/lab_1/assignment1_template.qmd
           
 
 format:

@@ -18,7 +18,7 @@ execute:
 
 ## Scenario
 
-You are a data analyst for the **\[Your State\] Department of Human Services**. The department is considering implementing an algorithmic system to identify communities that should receive priority for social service funding and outreach programs. Your supervisor has asked you to evaluate the quality and reliability of available census data to inform this decision.
+You are a data analyst for the **New York Department of Human Services**. The department is considering implementing an algorithmic system to identify communities that should receive priority for social service funding and outreach programs. Your supervisor has asked you to evaluate the quality and reliability of available census data to inform this decision.
 
 Drawing on our Week 2 discussion of algorithmic bias, you need to assess not just what the data shows, but how reliable it is and what communities might be affected by data quality issues.
 
@@ -53,13 +53,18 @@ If there is a special character like comma, you need use double quote mark so th
 
 ```{r setup}
 # Load required packages (hint: you need tidycensus, tidyverse, and knitr)
+library(tidyverse)
+library(tidycensus)
+library(knitr)
 
 # Set your Census API key
+census_api_key("fe841b7ef0aa73d9579f0517bd1c8f26d33c789b")
 
 # Choose your state for analysis - assign it to a variable called my_state
+
 ```
 
-**State Selection:** I have chosen **\[Your State Name\]** for this analysis because: \[Brief explanation of why you chose this state\]
+**State Selection:** I have chosen **New York State** for this analysis because I will be working in New York City post-graduation.
 
 # Part 2: County-Level Resource Assessment
 
@@ -74,27 +79,68 @@ If there is a special character like comma, you need use double quote mark so th
 
 ```{r county-data}
 # Write your get_acs() code here
+ny_data <- get_acs(
+  geography = "county",
+  variables = c(
+    total_pop = "B01003_001",
+    median_income = "B19013_001"
+  ),
+  state = "NY",
+  year = 2022,
+  survey = "acs5",
+  output = "wide" 
+)
 
 # Clean the county names to remove state name and "County" 
 # Hint: use mutate() with str_remove()
 
+ny_clean <- ny_data |> 
+  mutate(
+    # Remove state name from county names
+    county_name = str_remove(NAME, ", New York"),
+    # Remove "County" word
+    county_name = str_remove(county_name, " County")
+  )
+
 # Display the first few rows
+head(ny_clean)
 ```
 
 ## 2.2 Data Quality Assessment
 
 **Your Task:** Calculate margin of error percentages and create reliability categories.
 
-**Requirements:** - Calculate MOE percentage: (margin of error / estimate) \* 100 - Create reliability categories: - High Confidence: MOE \< 5% - Moderate Confidence: MOE 5-10%\
-- Low Confidence: MOE \> 10% - Create a flag for unreliable estimates (MOE \> 10%)
+**Requirements:**
+
+\- Calculate MOE percentage: (margin of error / estimate) \* 100
+
+\- Create reliability categories: \
+- High Confidence: MOE \< 5% \
+- Moderate Confidence: MOE 5-10%\
+- Low Confidence: MOE \> 10% \
+- Create a flag for unreliable estimates (MOE \> 10%)
 
 **Hint:** Use `mutate()` with `case_when()` for the categories.
 
 ```{r income-reliability}
 # Calculate MOE percentage and reliability categories using mutate()
+ny_reliability <- ny_clean |> 
+  mutate(
+    moe_percent = round((median_incomeM / median_incomeE) * 100, 2),
+    
+    # Create reliability categories
+    reliability = case_when(
+      moe_percent < 5 ~ "High",
+      moe_percent >= 5 & moe_percent <= 10 ~ "Moderate",
+      moe_percent > 10 ~ "Low"
+    )
+  )
+
+ny_reliability
 
 # Create a summary showing count of counties in each reliability category
 # Hint: use count() and mutate() to add percentages
+count(ny_reliability, reliability)
 ```
 
 ## 2.3 High Uncertainty Counties
@@ -107,13 +153,32 @@ If there is a special character like comma, you need use double quote mark so th
 
 ```{r high-uncertainty}
 # Create table of top 5 counties by MOE percentage
+high_uncertainty <- ny_reliability |> 
+  arrange(desc(moe_percent)) |> 
+  slice(1:5) |> 
+  select(county_name, median_incomeE, moe_percent, reliability)
+
+high_uncertainty
 
 # Format as table with kable() - include appropriate column names and caption
+kable(high_uncertainty,
+      col.names = c("County", "Median Imcome", "MOE %", "Reliability"),
+      caption = "NY Counties with Greatest Income Data Uncertainty",
+      format.args = list(big.mark = ",")) #large nums have 000s separators
 ```
 
 **Data Quality Commentary:**
 
-\[Write 2-3 sentences explaining what these results mean for algorithmic decision-making. Consider: Which counties might be poorly served by algorithms that rely on this income data? What factors might contribute to higher uncertainty?\]
+Algorithmic decision-making at the New York state-level cannot occur with one broad brush. While 56 out of 62 NY counties are classified as having highly reliable income data, 5 counties are classified as having moderate reliability and 1 county is classified as having low reliability. As shown in the table below, a possible reason for these 6 counties having low/moderate reliability could be their relatively smaller populations compared to other counties. Hence, special attention must be paid to these 6 counties, with algorithmic tools to identify communities that should receive priority for social service funding and outreach programs being complemented by qualitative on-the-ground outreach and interviews with local residents.
+
+```{r}
+high_uncertainty_pop <- ny_reliability |> 
+  arrange(desc(moe_percent)) |> 
+  slice(1:5) |> 
+  select(county_name, total_popE, median_incomeE, moe_percent, reliability)
+
+high_uncertainty_pop
+```
 
 # Part 3: Neighborhood-Level Analysis
 
@@ -127,28 +192,39 @@ If there is a special character like comma, you need use double quote mark so th
 # Use filter() to select 2-3 counties from your county_reliability data
 # Store the selected counties in a variable called selected_counties
 
+selected_counties <- ny_reliability |> 
+  slice_min(moe_percent, n = 1, by = reliability)
+selected_counties
+
 # Display the selected counties with their key characteristics
 # Show: county name, median income, MOE percentage, reliability category
+select(selected_counties, county_name, median_incomeE, moe_percent, reliability)
 ```
 
-**Comment on the output:** \[write something :)\]
+**Comment on the output:** There is a significant difference between the margin of error for different counties. For example, Queens County has a margin of error percentage of only 1.06%, whereas Hamilton County has a margin of error percentage of 11.39%.
 
 ## 3.2 Tract-Level Demographics
 
 **Your Task:** Get demographic data for census tracts in your selected counties.
 
-**Requirements:** - Geography: tract level - Variables: white alone (B03002_003), Black/African American (B03002_004), Hispanic/Latino (B03002_012), total population (B03002_001) - Use the same state and year as before - Output format: wide - **Challenge:** You'll need county codes, not names. Look at the GEOID patterns in your county data for hints.
+**Requirements:** - Geography: tract level - Variables: white alone (B03002_003), Black/African American (B03002_004), Hispanic/Latino (B03002_012), total population (B03002_001) - Use the same state and year as before - Output format: wide
+
+**Challenge:** You'll need county codes, not names. Look at the GEOID patterns in your county data for hints.
 
 ```{r tract-demographics}
 # Define your race/ethnicity variables with descriptive names
 
+
 # Use get_acs() to retrieve tract-level data
 # Hint: You may need to specify county codes in the county parameter
+
 
 # Calculate percentage of each group using mutate()
 # Create percentages for white, Black, and Hispanic populations
 
+
 # Add readable tract and county name columns using str_extract() or similar
+
 ```
 
 ## 3.3 Demographic Analysis
@@ -204,7 +280,15 @@ If there is a special character like comma, you need use double quote mark so th
 
 **Your Task:** Write an executive summary that integrates findings from all four analyses.
 
-**Executive Summary Requirements:** 1. **Overall Pattern Identification**: What are the systematic patterns across all your analyses? 2. **Equity Assessment**: Which communities face the greatest risk of algorithmic bias based on your findings? 3. **Root Cause Analysis**: What underlying factors drive both data quality issues and bias risk? 4. **Strategic Recommendations**: What should the Department implement to address these systematic issues?
+**Executive Summary Requirements:**
+
+1\. **Overall Pattern Identification**: What are the systematic patterns across all your analyses?
+
+2\. **Equity Assessment**: Which communities face the greatest risk of algorithmic bias based on your findings?
+
+3\. **Root Cause Analysis**: What underlying factors drive both data quality issues and bias risk?
+
+4\. **Strategic Recommendations**: What should the Department implement to address these systematic issues?
 
 **Executive Summary:**
 
