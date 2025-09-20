@@ -72,8 +72,12 @@ census_api_key("fe841b7ef0aa73d9579f0517bd1c8f26d33c789b")
 
 **Your Task:** Use `get_acs()` to retrieve county-level data for your chosen state.
 
-**Requirements:** - Geography: county level - Variables: median household income (B19013_001) and total population (B01003_001)\
-- Year: 2022 - Survey: acs5 - Output format: wide
+**Requirements:**\
+- Geography: county level\
+- Variables: median household income (B19013_001) and total population (B01003_001)\
+- Year: 2022\
+- Survey: acs5\
+- Output format: wide
 
 **Hint:** Remember to give your variables descriptive names using the `variables = c(name = "code")` syntax.
 
@@ -155,13 +159,13 @@ count(ny_reliability, reliability)
 high_uncertainty <- ny_reliability |> 
   arrange(desc(moe_percent)) |> 
   slice(1:5) |> 
-  select(county_name, median_incomeE, moe_percent, reliability)
+  select(county_name, median_incomeE, median_incomeM, moe_percent, reliability)
 
 high_uncertainty
 
 # Format as table with kable() - include appropriate column names and caption
 kable(high_uncertainty,
-      col.names = c("County", "Median Imcome", "MOE %", "Reliability"),
+      col.names = c("County", "Median Income", "MOE", "MOE %", "Reliability"),
       caption = "NY Counties with Greatest Income Data Uncertainty",
       format.args = list(big.mark = ",")) #large nums have 000s separators
 ```
@@ -215,17 +219,47 @@ select(selected_counties, county_name, median_incomeE, moe_percent, reliability)
 
 ```{r tract-demographics}
 # Define your race/ethnicity variables with descriptive names
-
+race_vars <- c(
+    total_pop = "B03002_001",
+    White     = "B03002_003",
+    Black     = "B03002_004",
+    Hispanic  = "B03002_012"
+)
 
 # Use get_acs() to retrieve tract-level data
 # Hint: You may need to specify county codes in the county parameter
 
+tract_data <- get_acs(
+  geography = "county",
+  variables = race_vars,
+  state = "NY",
+  # GEOIDs for Queens, Seneca, and Hamilton Counties
+  county = c("081", "099", "041"),
+  year = 2022,
+  output = "wide"
+)
+tract_data
 
+# Add readable tract and county name columns using str_extract() or similar
 # Calculate percentage of each group using mutate()
 # Create percentages for white, Black, and Hispanic populations
 
+tract_clean <- tract_data |> 
+  mutate(
+    county_name = str_remove(NAME, ", New York"),
+    county_name = str_remove(county_name, " County")
+  )
 
-# Add readable tract and county name columns using str_extract() or similar
+tract_clean <- tract_clean |> 
+  mutate(
+    percent_white = round((WhiteE/total_popE) * 100, 2),
+    percent_black = round((BlackE/total_popE) * 100, 2),
+    percent_hispanic = round((HispanicE/total_popE) * 100, 2),
+    moe_percent_white = round((WhiteM/WhiteE) * 100, 2), 
+    moe_percent_black = round((BlackM/BlackE) * 100, 2),
+    moe_percent_hispanic = round((HispanicM/HispanicE) * 100, 2)
+  )
+tract_clean
 
 ```
 
@@ -236,6 +270,9 @@ select(selected_counties, county_name, median_incomeE, moe_percent, reliability)
 ```{r demographic-analysis}
 # Find the tract with the highest percentage of Hispanic/Latino residents
 # Hint: use arrange() and slice() to get the top tract
+
+# tract_highest_hispanic <- tract_clean |> 
+  # arrange(desc())
 
 # Calculate average demographics by county using group_by() and summarize()
 # Show: number of tracts, average percentage for each racial/ethnic group
