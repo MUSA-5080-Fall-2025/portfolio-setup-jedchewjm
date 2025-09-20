@@ -235,6 +235,7 @@ tract_data <- get_acs(
   # GEOIDs for Queens, Seneca, and Hamilton Counties
   county = c("081", "099", "041"),
   year = 2022,
+  survey = "acs5",
   output = "wide"
 )
 tract_data
@@ -265,9 +266,6 @@ tract_clean <- tract_clean |>
     percent_white = round((WhiteE/total_popE) * 100, 2),
     percent_black = round((BlackE/total_popE) * 100, 2),
     percent_hispanic = round((HispanicE/total_popE) * 100, 2),
-    moe_percent_white = round((WhiteM/WhiteE) * 100, 2), 
-    moe_percent_black = round((BlackM/BlackE) * 100, 2),
-    moe_percent_hispanic = round((HispanicM/HispanicE) * 100, 2)
   )
 
 tract_clean
@@ -292,7 +290,7 @@ tract_highest_hispanic
 # Calculate average demographics by county using group_by() and summarize()
 # Show: number of tracts, average percentage for each racial/ethnic group
 
-demo_county <- tract_clean |> 
+demo_county <- tract_clean |>
   group_by(county_name) |> 
   summarize(
     num_tracts = n(),
@@ -324,10 +322,29 @@ kable(demo_county,
 # Calculate MOE percentages for white, Black, and Hispanic variables
 # Hint: use the same formula as before (margin/estimate * 100)
 
+tract_reliability <- tract_clean |> 
+  mutate(
+    moe_percent_white = round((WhiteM/WhiteE) * 100, 2), 
+    moe_percent_black = round((BlackM/BlackE) * 100, 2),
+    moe_percent_hispanic = round((HispanicM/HispanicE) * 100, 2)
+  )
+
 # Create a flag for tracts with high MOE on any demographic variable
 # Use logical operators (| for OR) in an ifelse() statement
 
+tract_reliability <- tract_reliability |> 
+  mutate(reliability = if_else(
+      moe_percent_white > 15 | moe_percent_black > 15 | moe_percent_hispanic > 15,
+      "Low",
+      "High"
+    )
+  )
+
+tract_reliability
+
 # Create summary statistics showing how many tracts have data quality issues
+# count(tract_reliability, reliability)
+
 ```
 
 ## 4.2 Pattern Analysis
@@ -414,7 +431,7 @@ Before submitting your portfolio link on Canvas:
 
 -   [x] All code chunks run without errors
 -   [ ] All "\[Fill this in\]" prompts have been completed
--   [ ] Tables are properly formatted and readable
+-   [x] Tables are properly formatted and readable
 -   [ ] Executive summary addresses all four required components
 -   [x] Portfolio navigation includes this assignment
 -   [x] Census API key is properly set
