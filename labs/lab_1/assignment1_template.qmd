@@ -228,9 +228,8 @@ race_vars <- c(
 
 # Use get_acs() to retrieve tract-level data
 # Hint: You may need to specify county codes in the county parameter
-
 tract_data <- get_acs(
-  geography = "county",
+  geography = "tract",
   variables = race_vars,
   state = "NY",
   # GEOIDs for Queens, Seneca, and Hamilton Counties
@@ -239,17 +238,28 @@ tract_data <- get_acs(
   output = "wide"
 )
 tract_data
+```
 
+```{r}
 # Add readable tract and county name columns using str_extract() or similar
-# Calculate percentage of each group using mutate()
-# Create percentages for white, Black, and Hispanic populations
-
 tract_clean <- tract_data |> 
+  filter(total_popE > 0) |> # remove tracts with zero estimated population
+  separate(
+    NAME, 
+    into = c("tract_name", "county_name", "state_name"), 
+    sep = "; "
+  ) |> 
   mutate(
-    county_name = str_remove(NAME, ", New York"),
+    tract_name = str_remove(tract_name, "Census Tract "),
     county_name = str_remove(county_name, " County")
   )
 
+tract_clean
+```
+
+```{r}
+# Calculate percentage of each group using mutate()
+# Create percentages for white, Black, and Hispanic populations
 tract_clean <- tract_clean |> 
   mutate(
     percent_white = round((WhiteE/total_popE) * 100, 2),
@@ -259,8 +269,8 @@ tract_clean <- tract_clean |>
     moe_percent_black = round((BlackM/BlackE) * 100, 2),
     moe_percent_hispanic = round((HispanicM/HispanicE) * 100, 2)
   )
-tract_clean
 
+tract_clean
 ```
 
 ## 3.3 Demographic Analysis
@@ -270,14 +280,32 @@ tract_clean
 ```{r demographic-analysis}
 # Find the tract with the highest percentage of Hispanic/Latino residents
 # Hint: use arrange() and slice() to get the top tract
+tract_highest_hispanic <- tract_clean |> 
+  arrange(desc(percent_hispanic)) |> 
+  slice(1) |> 
+  select(tract_name, county_name, total_popE, percent_hispanic)
 
-# tract_highest_hispanic <- tract_clean |> 
-  # arrange(desc())
+tract_highest_hispanic
+```
 
+```{r}
 # Calculate average demographics by county using group_by() and summarize()
 # Show: number of tracts, average percentage for each racial/ethnic group
 
+demo_county <- tract_clean |> 
+  group_by(county_name) |> 
+  summarize(
+    num_tracts = n(),
+    mean_white = round(mean(percent_white), 2),
+    mean_black = round(mean(percent_black), 2),
+    mean_hispanic = round(mean(percent_hispanic), 2)
+  )
+
 # Create a nicely formatted table of your results using kable()
+kable(demo_county,
+      col.names = c("County Name", "# Tracts", "% White", "% Black", "% Hispanic"),
+      caption = "Average Demographics by County for Selected NY Counties",
+      format.args = list(big.mark = ",")) #large nums have 000s separators
 ```
 
 # Part 4: Comprehensive Data Quality Evaluation
@@ -351,6 +379,7 @@ tract_clean
 # - Low Confidence: "Requires manual review or additional data"
 
 # Format as a professional table with kable()
+
 ```
 
 **Key Recommendations:**
