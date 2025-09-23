@@ -1,0 +1,15 @@
+{
+  "hash": "174c9169824d05ffc7c63fe44d8d6f24",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Week 3 Notes - Data Viz and Exploratory Analysis\"\ndate: \"2025-09-22\"\n---\n\n## Key Concepts Learned\n\n-   **Data Viz basics with ggplot in RStudio**\n-   **Exploratory Data Analysis (EDA) Workflow**\n    -   **Load and inspect** - dimensions, variable types, missing data\n    -   **Assess reliability** - examine margins of error, calculate coefficients of variation\n    -   **Visualize distributions** - histograms, boxplots for each variable\n    -   **Explore relationships** - scatter plots, correlations\n    -   **Identify patterns** - grouping, clustering, geographical patterns\n    -   **Question anomalies** - investigate outliers and unusual patterns\n    -   **Document limitations** - prepare honest communication about data quality\n-   **Combining datasets through spatial joins**\n    -   `left_join()` - Keep all rows from left dataset\n    -   `right_join()` - Keep all rows from right dataset\n    -   `inner_join()` - Keep only rows that match in both\n    -   `full_join()` - Keep all rows from both datasets\n\n## Coding Techniques\n\n**Formatting Charts: Grammar of Graphics**\n\nData → Aesthetics → Geometries → Visual\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# Formatting Charts\nggplot(demo_data) +\n  aes(x = total_popE, y = median_incomeE) +\n  geom_point(alpha = 0.7) +\n  geom_smooth(method = \"lm\", se = TRUE) +\n  labs(\n    title = \"Income vs Population in Pennsylvania Counties\",\n    subtitle = \"2018-2022 ACS 5-Year Estimates\",\n    x = \"Total Population\",\n    y = \"Median Household Income ($)\",\n    caption = \"Source: U.S. Census Bureau ACS\"\n  ) +\n  theme_minimal() +\n  scale_y_continuous(labels = scales::dollar) +\n  scale_x_continuous(labels = scales::comma)\n```\n:::\n\n\n**Finding Census Variable Codes**\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# Finding Census Variable Codes\npopulation_vars <- acs_vars_2022 %>%\n  filter(str_detect(label, \"Total.*population\"))\n\nage_vars <- acs_vars_2022 %>%\n  filter(str_detect(label, \"[Mm]edian.*age\"))\n\nhousing_vars <- acs_vars_2022 %>%\n  filter(str_detect(label, \"[Mm]edian.*(rent|value)\"))\n```\n:::\n\n\n## Questions & Challenges\n\n-   With more reps, I hope to become more independent in my coding instead of having to refer to demo code\n\n## Connections to Policy\n\n-   Summary statistics can hide critical patterns\n-   Outliers may represent important communities\n-   Relationships aren’t always linear\n-   Visual inspection reveals data quality issues\n\n## Reflection\n\n-   I really liked the Anscombe's Quartet example – it is a really powerful and intuitive example to show the power of data visualization\n-   Astounding Statistic that only **27% of planners** warn users about unreliable ACS data – I admit to being guilty of this oversight too\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -656,5 +656,47 @@
     "title": "Data Visualization & Exploratory Analysis",
     "section": "Questions Before We Begin?",
     "text": "Questions Before We Begin?\nReady for hands-on practice?\nRemember: Today’s skills build directly on Week 1-2 foundations:\n\nSame dplyr functions, now with visualization\nSame census data concepts, now with multiple tables\n\nLet’s create some beautiful graphs"
+  },
+  {
+    "objectID": "weekly-notes/week-03-notes.html",
+    "href": "weekly-notes/week-03-notes.html",
+    "title": "Week 3 Notes - Data Viz and Exploratory Analysis",
+    "section": "",
+    "text": "Data Viz basics with ggplot in RStudio\nExploratory Data Analysis (EDA) Workflow\n\nLoad and inspect - dimensions, variable types, missing data\nAssess reliability - examine margins of error, calculate coefficients of variation\nVisualize distributions - histograms, boxplots for each variable\nExplore relationships - scatter plots, correlations\nIdentify patterns - grouping, clustering, geographical patterns\nQuestion anomalies - investigate outliers and unusual patterns\nDocument limitations - prepare honest communication about data quality\n\nCombining datasets through spatial joins\n\nleft_join() - Keep all rows from left dataset\nright_join() - Keep all rows from right dataset\ninner_join() - Keep only rows that match in both\nfull_join() - Keep all rows from both datasets"
+  },
+  {
+    "objectID": "weekly-notes/week-03-notes.html#key-concepts-learned",
+    "href": "weekly-notes/week-03-notes.html#key-concepts-learned",
+    "title": "Week 3 Notes - Data Viz and Exploratory Analysis",
+    "section": "",
+    "text": "Data Viz basics with ggplot in RStudio\nExploratory Data Analysis (EDA) Workflow\n\nLoad and inspect - dimensions, variable types, missing data\nAssess reliability - examine margins of error, calculate coefficients of variation\nVisualize distributions - histograms, boxplots for each variable\nExplore relationships - scatter plots, correlations\nIdentify patterns - grouping, clustering, geographical patterns\nQuestion anomalies - investigate outliers and unusual patterns\nDocument limitations - prepare honest communication about data quality\n\nCombining datasets through spatial joins\n\nleft_join() - Keep all rows from left dataset\nright_join() - Keep all rows from right dataset\ninner_join() - Keep only rows that match in both\nfull_join() - Keep all rows from both datasets"
+  },
+  {
+    "objectID": "weekly-notes/week-03-notes.html#coding-techniques",
+    "href": "weekly-notes/week-03-notes.html#coding-techniques",
+    "title": "Week 3 Notes - Data Viz and Exploratory Analysis",
+    "section": "Coding Techniques",
+    "text": "Coding Techniques\nFormatting Charts: Grammar of Graphics\nData → Aesthetics → Geometries → Visual\n\n\nCode\n# Formatting Charts\nggplot(demo_data) +\n  aes(x = total_popE, y = median_incomeE) +\n  geom_point(alpha = 0.7) +\n  geom_smooth(method = \"lm\", se = TRUE) +\n  labs(\n    title = \"Income vs Population in Pennsylvania Counties\",\n    subtitle = \"2018-2022 ACS 5-Year Estimates\",\n    x = \"Total Population\",\n    y = \"Median Household Income ($)\",\n    caption = \"Source: U.S. Census Bureau ACS\"\n  ) +\n  theme_minimal() +\n  scale_y_continuous(labels = scales::dollar) +\n  scale_x_continuous(labels = scales::comma)\n\n\nFinding Census Variable Codes\n\n\nCode\n# Finding Census Variable Codes\npopulation_vars &lt;- acs_vars_2022 %&gt;%\n  filter(str_detect(label, \"Total.*population\"))\n\nage_vars &lt;- acs_vars_2022 %&gt;%\n  filter(str_detect(label, \"[Mm]edian.*age\"))\n\nhousing_vars &lt;- acs_vars_2022 %&gt;%\n  filter(str_detect(label, \"[Mm]edian.*(rent|value)\"))"
+  },
+  {
+    "objectID": "weekly-notes/week-03-notes.html#questions-challenges",
+    "href": "weekly-notes/week-03-notes.html#questions-challenges",
+    "title": "Week 3 Notes - Data Viz and Exploratory Analysis",
+    "section": "Questions & Challenges",
+    "text": "Questions & Challenges\n\nWith more reps, I hope to become more independent in my coding instead of having to refer to demo code"
+  },
+  {
+    "objectID": "weekly-notes/week-03-notes.html#connections-to-policy",
+    "href": "weekly-notes/week-03-notes.html#connections-to-policy",
+    "title": "Week 3 Notes - Data Viz and Exploratory Analysis",
+    "section": "Connections to Policy",
+    "text": "Connections to Policy\n\nSummary statistics can hide critical patterns\nOutliers may represent important communities\nRelationships aren’t always linear\nVisual inspection reveals data quality issues"
+  },
+  {
+    "objectID": "weekly-notes/week-03-notes.html#reflection",
+    "href": "weekly-notes/week-03-notes.html#reflection",
+    "title": "Week 3 Notes - Data Viz and Exploratory Analysis",
+    "section": "Reflection",
+    "text": "Reflection\n\nI really liked the Anscombe’s Quartet example – it is a really powerful and intuitive example to show the power of data visualization\nAstounding Statistic that only 27% of planners warn users about unreliable ACS data – I admit to being guilty of this oversight too"
   }
 ]

@@ -5,12 +5,28 @@ date: "2025-09-22"
 
 ## Key Concepts Learned
 
--   Data Viz basics with ggplot in RStudio
--   
+-   **Data Viz basics with ggplot in RStudio**
+-   **Exploratory Data Analysis (EDA) Workflow**
+    -   **Load and inspect** - dimensions, variable types, missing data
+    -   **Assess reliability** - examine margins of error, calculate coefficients of variation
+    -   **Visualize distributions** - histograms, boxplots for each variable
+    -   **Explore relationships** - scatter plots, correlations
+    -   **Identify patterns** - grouping, clustering, geographical patterns
+    -   **Question anomalies** - investigate outliers and unusual patterns
+    -   **Document limitations** - prepare honest communication about data quality
+-   **Combining datasets through spatial joins**
+    -   `left_join()` - Keep all rows from left dataset
+    -   `right_join()` - Keep all rows from right dataset
+    -   `inner_join()` - Keep only rows that match in both
+    -   `full_join()` - Keep all rows from both datasets
 
 ## Coding Techniques
 
-```{r ggplot}
+**Formatting Charts: Grammar of Graphics**
+
+Data → Aesthetics → Geometries → Visual
+
+```{r ggplot, eval = FALSE }
 # Formatting Charts
 ggplot(demo_data) +
   aes(x = total_popE, y = median_incomeE) +
@@ -28,7 +44,9 @@ ggplot(demo_data) +
   scale_x_continuous(labels = scales::comma)
 ```
 
-```{r}
+**Finding Census Variable Codes**
+
+```{r census, eval = FALSE}
 # Finding Census Variable Codes
 population_vars <- acs_vars_2022 %>%
   filter(str_detect(label, "Total.*population"))
@@ -47,11 +65,12 @@ housing_vars <- acs_vars_2022 %>%
 
 ## Connections to Policy
 
--   When policymakers explore the use of algorithms, they need to ask themselves
-    -   what proxy are they using?
-    -   what are the possible blind spots?
-    -   what are the resultant harms as well as potential guardrails?
+-   Summary statistics can hide critical patterns
+-   Outliers may represent important communities
+-   Relationships aren’t always linear
+-   Visual inspection reveals data quality issues
 
 ## Reflection
 
--   It was really interesting to hear about the 2020 Census Innovation of Differential Privacy (adding mathematical noise as anomalies to protect respondents' privacy)
+-   I really liked the Anscombe's Quartet example – it is a really powerful and intuitive example to show the power of data visualization
+-   Astounding Statistic that only **27% of planners** warn users about unreliable ACS data – I admit to being guilty of this oversight too
