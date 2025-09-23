@@ -13,6 +13,7 @@ website:
         menu: 
         - href: weekly-notes/week-01-notes.qmd
         - href: weekly-notes/week-02-notes.qmd
+        - href: weekly-notes/week-03-notes.qmd
           
       - text: Labs
         menu:

@@ -1,0 +1,57 @@
+---
+title: "Week 3 Notes - Data Viz and Exploratory Analysis"
+date: "2025-09-22"
+---
+
+## Key Concepts Learned
+
+-   Data Viz basics with ggplot in RStudio
+-   
+
+## Coding Techniques
+
+```{r ggplot}
+# Formatting Charts
+ggplot(demo_data) +
+  aes(x = total_popE, y = median_incomeE) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(method = "lm", se = TRUE) +
+  labs(
+    title = "Income vs Population in Pennsylvania Counties",
+    subtitle = "2018-2022 ACS 5-Year Estimates",
+    x = "Total Population",
+    y = "Median Household Income ($)",
+    caption = "Source: U.S. Census Bureau ACS"
+  ) +
+  theme_minimal() +
+  scale_y_continuous(labels = scales::dollar) +
+  scale_x_continuous(labels = scales::comma)
+```
+
+```{r}
+# Finding Census Variable Codes
+population_vars <- acs_vars_2022 %>%
+  filter(str_detect(label, "Total.*population"))
+
+age_vars <- acs_vars_2022 %>%
+  filter(str_detect(label, "[Mm]edian.*age"))
+
+housing_vars <- acs_vars_2022 %>%
+  filter(str_detect(label, "[Mm]edian.*(rent|value)"))
+
+```
+
+## Questions & Challenges
+
+-   With more reps, I hope to become more independent in my coding instead of having to refer to demo code
+
+## Connections to Policy
+
+-   When policymakers explore the use of algorithms, they need to ask themselves
+    -   what proxy are they using?
+    -   what are the possible blind spots?
+    -   what are the resultant harms as well as potential guardrails?
+
+## Reflection
+
+-   It was really interesting to hear about the 2020 Census Innovation of Differential Privacy (adding mathematical noise as anomalies to protect respondents' privacy)
