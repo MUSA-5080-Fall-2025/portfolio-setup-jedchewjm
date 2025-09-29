@@ -97,7 +97,6 @@ ny_data <- get_acs(
 
 # Clean the county names to remove state name and "County" 
 # Hint: use mutate() with str_remove()
-
 ny_clean <- ny_data |> 
   mutate(
     # Remove state name from county names
@@ -138,7 +137,6 @@ ny_reliability <- ny_clean |>
       moe_percent > 10 ~ "Low"
     )
   )
-
 ny_reliability
 
 # Create a summary showing count of counties in each reliability category
@@ -160,7 +158,6 @@ high_uncertainty <- ny_reliability |>
   arrange(desc(moe_percent)) |> 
   slice(1:5) |> 
   select(county_name, median_incomeE, median_incomeM, moe_percent, reliability)
-
 high_uncertainty
 
 # Format as table with kable() - include appropriate column names and caption
@@ -177,7 +174,6 @@ high_uncertainty_pop <- ny_reliability |>
   arrange(desc(moe_percent)) |> 
   slice(1:5) |> 
   select(county_name, total_popE, median_incomeE, moe_percent, reliability)
-
 high_uncertainty_pop
 ```
 
@@ -192,7 +188,6 @@ high_uncertainty_pop
 ```{r select-counties}
 # Use filter() to select 2-3 counties from your county_reliability data
 # Store the selected counties in a variable called selected_counties
-
 selected_counties <- ny_reliability |> 
   slice_min(moe_percent, n = 1, by = reliability)
 selected_counties
@@ -328,7 +323,6 @@ tract_reliability <- tract_clean |>
 
 # Create a flag for tracts with high MOE on any demographic variable
 # Use logical operators (| for OR) in an ifelse() statement
-
 tract_reliability <- tract_reliability |> 
   mutate(reliability = if_else(
       moe_percent_white > 15 | moe_percent_black > 15 | moe_percent_hispanic > 15,
@@ -355,7 +349,7 @@ count(tract_reliability, reliability)
 # Create a professional table showing the patterns
 ```
 
-**Pattern Analysis:** As shown in the tibble above, all 704 census tracts were flagged for low reliability because one of their demographic variable has a MOE \> 15%. I was initially very confused by this, because I had deliberately chosen one county from each reliability category earlier (as shown below). However, I realized that the MOE calculation in earlier sections was based on median income rather than population. After discussing with Dr. Delmelle during office hours, some reasons that we came up with for these high MOEs include low population (especially for Hamilton County) or non-residential census tracts (such as LaGuardia Airport or Citi Field in Queens County).
+**Pattern Analysis:** As shown in the tibble in Section 4.1 above, all 704 census tracts in my selected NY counties were flagged for low reliability because one of their demographic variable has a MOE \> 15%. I was initially very confused by this, because I had deliberately chosen one county from each reliability category earlier (as shown below). However, I realized that the MOE calculation in earlier sections was based on median income rather than population. After discussing with Dr. Delmelle during office hours, some reasons that we came up with for these high MOEs include low population (especially for Hamilton County) or non-residential census tracts (such as LaGuardia Airport or Citi Field in Queens County).
 
 ```{r}
 select(selected_counties, county_name, median_incomeE, moe_percent, reliability)
@@ -379,13 +373,13 @@ select(selected_counties, county_name, median_incomeE, moe_percent, reliability)
 
 **Executive Summary:**
 
-**\[Overall Pattern Identification\]** Across the four analyses, county-level indicators (e.g., median income, population) are generally high-reliability, but tract-level results show wide dispersion in MOE%, especially for race/ethnicity estimates. Small-population tracts and those with uneven response rates consistently exhibit higher uncertainty, producing unstable ranks and larger model errors.
+**\[Overall Pattern Identification\]** My analyses found that county-level indicators are generally high-reliability, but tract-level results show wide variance in MOE%, especially for demographic estimates such as race/ethnicity.
 
-**\[Equity Assessment\]** Communities in tracts with MOE% \> \~15% for key demographics and income face the greatest risk of algorithmic bias because small sampling error can flip eligibility or prioritization decisions. This risk concentrates in low-population or boundary tracts and in places where Black and Hispanic counts are small at the tract level, making those communities more likely to be mischaracterized by automated rules.
+**\[Equity Assessment\]** Communities in tracts with high MOE% (threshold of \~15%) for key demographics and income indicators face the greatest risk of algorithmic bias because small sampling error can flip decision regarding eligibility or prioritization for social service and outreach programs. This risk concentrates in low-population tracts and often in places where Black and Hispanic counts are small minorities at the tract level.
 
-**\[Root Cause Analysis\]** Primary drivers include ACS sampling variability at fine geographies, nonresponse and imputation patterns, and temporal mismatch between data vintage and current conditions. Modeling choices (e.g., using point estimates without MOE, hard thresholds, and features that correlate with data sparsity) further amplify noise into biased decisions.
+**\[Root Cause Analysis\]** The root cause of this high MOE%s is likely the ACS sampling variability. Every year, the ACS surveys about 1 in 40 housing units, and the 5-year estimates essentially incorporate the past 5 years of these non-overlapping sampling to recreate the longform of the decennial census. However, this could result in major tract-level changes (such as redevelopment) or a redrawing of tract boundaries being smoothed over when looking at the 5-year estimates, leading to substantial noise in the data that shows in up high MOE% for limited sample sizes.
 
-**\[Strategic Recommendations\]** Adopt a tiered reliability policy (e.g., High = proceed; Moderate = caution/monitor; Low = human review or supplemental data) and encode MOE-aware logic (confidence bands, Bayesian shrinkage, or partial pooling across years) before applying thresholds. Pair this with routine fairness audits and stability checks, prioritize five-year ACS where appropriate, and fund targeted data collection or administrative-data linkages in chronically high-MOE tracts to reduce structural uncertainty over time.
+**\[Strategic Recommendations\]** NY Department of Human Services should adopt a tiered reliability policy (e.g., High = proceed; Moderate = monitor with additional oversight; Low = human review or supplemental data) before applying thresholds. Pair this with routine fairness audits and stability checks, prioritize five-year ACS estimates where appropriate, and fund targeted data collection or administrative-data linkages in the selected tracts that repeatedly produce the highest MOE% to reduce structural uncertainty of algorithmic decisions over time.
 
 ## 6.3 Specific Recommendations
 
@@ -424,7 +418,7 @@ kable(county_summary,
 
 1.  **Counties suitable for immediate algorithmic implementation:** \[List counties with high confidence data and explain why they're appropriate\]
 
-    The 56 NY counties listed below have MOE percentages of less than 5%, hence we classify the income data as having "high reliability." This data can thus be used to train, fit, and test a suitable algorithm for the department.
+    The 56 NY counties listed below have MOE percentages of less than 5%, hence we classify the income data as having "*high reliability*." This data can thus be used to train, fit, and test a suitable algorithm for the department of human services.
 
     ```{r}
     high_reliability <- county_summary |> 
@@ -438,7 +432,7 @@ kable(county_summary,
 
 2.  **Counties requiring additional oversight:** \[List counties with moderate confidence data and describe what kind of monitoring would be needed\]
 
-    The 5 counties below have MOE percentages of between 5-10%, hence we classify the income data as having "moderate reliability." Oversight measures may include periodic monitoring of outcome distributions, bias audits against protected groups, and sensitivity testing to ensure model decisions remain robust when confidence intervals shift.
+    The 5 counties below have MOE percentages of between 5-10%, hence we classify the income data as having "*moderate reliability*." Oversight measures may include periodic monitoring of outcome distributions, bias audits against protected groups, and sensitivity testing to ensure model decisions remain robust when confidence intervals shift.
 
     ```{r}
     moderate_reliability <- county_summary |> 
@@ -452,7 +446,7 @@ kable(county_summary,
 
 3.  **Counties needing alternative approaches:** \[List counties with low confidence data and suggest specific alternatives - manual review, additional surveys, etc.\]
 
-    Only 1 NY County - Hamilton County - has a MOE percentage \>10%, hence we classify the income data as having "low reliability." Given the unreliability of this data, it is not suitable for direct algorithmic implementation. Instead, the department should rely on manual review, locally administered surveys, or integration of administrative datasets as proxies (e.g., tax records, school enrollment, social services data) to supplement ACS estimates. This ensures decisions affecting communities in Hamilton County are based on reliable, context-specific evidence rather than unreliable model inputs.
+    Only 1 NY County - Hamilton County - has a MOE percentage \>10%, hence we classify the income data as having "*low reliability*." Given the unreliability of this data, it is not suitable for direct algorithmic implementation. Instead, the department should rely on manual review, locally administered surveys, or integration of administrative datasets as proxies (e.g., tax records, school enrollment, social services data) to supplement ACS estimates. This ensures decisions affecting communities in Hamilton County are based on reliable, context-specific evidence rather than unreliable model inputs.
 
     ```{r}
     low_reliability <- county_summary |> 

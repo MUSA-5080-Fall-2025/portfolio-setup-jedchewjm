@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jed Chew">
-<meta name="dcterms.date" content="2025-09-23">
+<meta name="dcterms.date" content="2025-09-29">
 
 <title>Assignment 1: Census Data Quality for Policy Decisions – Jed Chew - MUSA 5080 Portfolio</title>
 <style>
@@ -246,7 +246,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 23, 2025</p>
+      <p class="date">September 29, 2025</p>
     </div>
   </div>
   
@@ -333,17 +333,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean the county names to remove state name and "County" </span></span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Hint: use mutate() with str_remove()</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>ny_clean <span class="ot">&lt;-</span> ny_data <span class="sc">|&gt;</span> </span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove state name from county names</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">county_name =</span> <span class="fu">str_remove</span>(NAME, <span class="st">", New York"</span>),</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove "County" word</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">county_name =</span> <span class="fu">str_remove</span>(county_name, <span class="st">" County"</span>)</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the first few rows</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ny_clean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>ny_clean <span class="ot">&lt;-</span> ny_data <span class="sc">|&gt;</span> </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove state name from county names</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">county_name =</span> <span class="fu">str_remove</span>(NAME, <span class="st">", New York"</span>),</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove "County" word</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">county_name =</span> <span class="fu">str_remove</span>(county_name, <span class="st">" County"</span>)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the first few rows</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ny_clean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
   GEOID NAME     total_popE total_popM median_incomeE median_incomeM county_name
@@ -381,8 +380,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>      moe_percent <span class="sc">&gt;</span> <span class="dv">10</span> <span class="sc">~</span> <span class="st">"Low"</span></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>ny_reliability</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>ny_reliability</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 62 × 9
    GEOID NAME    total_popE total_popM median_incomeE median_incomeM county_name
@@ -424,8 +422,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(moe_percent)) <span class="sc">|&gt;</span> </span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(county_name, median_incomeE, median_incomeM, moe_percent, reliability)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>high_uncertainty</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>high_uncertainty</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 5
   county_name median_incomeE median_incomeM moe_percent reliability
@@ -499,8 +496,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(moe_percent)) <span class="sc">|&gt;</span> </span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(county_name, total_popE, median_incomeE, moe_percent, reliability)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>high_uncertainty_pop</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>high_uncertainty_pop</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 5
   county_name total_popE median_incomeE moe_percent reliability
@@ -523,10 +519,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use filter() to select 2-3 counties from your county_reliability data</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Store the selected counties in a variable called selected_counties</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>selected_counties <span class="ot">&lt;-</span> ny_reliability <span class="sc">|&gt;</span> </span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(moe_percent, <span class="at">n =</span> <span class="dv">1</span>, <span class="at">by =</span> reliability)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>selected_counties</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>selected_counties <span class="ot">&lt;-</span> ny_reliability <span class="sc">|&gt;</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(moe_percent, <span class="at">n =</span> <span class="dv">1</span>, <span class="at">by =</span> reliability)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>selected_counties</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 9
   GEOID NAME     total_popE total_popM median_incomeE median_incomeM county_name
@@ -765,15 +760,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a flag for tracts with high MOE on any demographic variable</span></span>
 <span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Use logical operators (| for OR) in an ifelse() statement</span></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>tract_reliability <span class="ot">&lt;-</span> tract_reliability <span class="sc">|&gt;</span> </span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">reliability =</span> <span class="fu">if_else</span>(</span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>      moe_percent_white <span class="sc">&gt;</span> <span class="dv">15</span> <span class="sc">|</span> moe_percent_black <span class="sc">&gt;</span> <span class="dv">15</span> <span class="sc">|</span> moe_percent_hispanic <span class="sc">&gt;</span> <span class="dv">15</span>,</span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Low"</span>,</span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>      <span class="st">"High"</span></span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>tract_reliability</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>tract_reliability <span class="ot">&lt;-</span> tract_reliability <span class="sc">|&gt;</span> </span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">reliability =</span> <span class="fu">if_else</span>(</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>      moe_percent_white <span class="sc">&gt;</span> <span class="dv">15</span> <span class="sc">|</span> moe_percent_black <span class="sc">&gt;</span> <span class="dv">15</span> <span class="sc">|</span> moe_percent_hispanic <span class="sc">&gt;</span> <span class="dv">15</span>,</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Low"</span>,</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>      <span class="st">"High"</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>tract_reliability</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 704 × 19
    GEOID   tract_name county_name state_name total_popE total_popM WhiteE WhiteM
@@ -815,7 +809,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Use group_by() and summarize() to create this comparison</span></span>
 <span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a professional table showing the patterns</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p><strong>Pattern Analysis:</strong> As shown in the tibble above, all 704 census tracts were flagged for low reliability because one of their demographic variable has a MOE &gt; 15%. I was initially very confused by this, because I had deliberately chosen one county from each reliability category earlier (as shown below). However, I realized that the MOE calculation in earlier sections was based on median income rather than population. After discussing with Dr.&nbsp;Delmelle during office hours, some reasons that we came up with for these high MOEs include low population (especially for Hamilton County) or non-residential census tracts (such as LaGuardia Airport or Citi Field in Queens County).</p>
+<p><strong>Pattern Analysis:</strong> As shown in the tibble in Section 4.1 above, all 704 census tracts in my selected NY counties were flagged for low reliability because one of their demographic variable has a MOE &gt; 15%. I was initially very confused by this, because I had deliberately chosen one county from each reliability category earlier (as shown below). However, I realized that the MOE calculation in earlier sections was based on median income rather than population. After discussing with Dr.&nbsp;Delmelle during office hours, some reasons that we came up with for these high MOEs include low population (especially for Hamilton County) or non-residential census tracts (such as LaGuardia Airport or Citi Field in Queens County).</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(selected_counties, county_name, median_incomeE, moe_percent, reliability)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -840,10 +834,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>3. <strong>Root Cause Analysis</strong>: What underlying factors drive both data quality issues and bias risk?</p>
 <p>4. <strong>Strategic Recommendations</strong>: What should the Department implement to address these systematic issues?</p>
 <p><strong>Executive Summary:</strong></p>
-<p><strong>[Overall Pattern Identification]</strong> Across the four analyses, county-level indicators (e.g., median income, population) are generally high-reliability, but tract-level results show wide dispersion in MOE%, especially for race/ethnicity estimates. Small-population tracts and those with uneven response rates consistently exhibit higher uncertainty, producing unstable ranks and larger model errors.</p>
-<p><strong>[Equity Assessment]</strong> Communities in tracts with MOE% &gt; ~15% for key demographics and income face the greatest risk of algorithmic bias because small sampling error can flip eligibility or prioritization decisions. This risk concentrates in low-population or boundary tracts and in places where Black and Hispanic counts are small at the tract level, making those communities more likely to be mischaracterized by automated rules.</p>
-<p><strong>[Root Cause Analysis]</strong> Primary drivers include ACS sampling variability at fine geographies, nonresponse and imputation patterns, and temporal mismatch between data vintage and current conditions. Modeling choices (e.g., using point estimates without MOE, hard thresholds, and features that correlate with data sparsity) further amplify noise into biased decisions.</p>
-<p><strong>[Strategic Recommendations]</strong> Adopt a tiered reliability policy (e.g., High = proceed; Moderate = caution/monitor; Low = human review or supplemental data) and encode MOE-aware logic (confidence bands, Bayesian shrinkage, or partial pooling across years) before applying thresholds. Pair this with routine fairness audits and stability checks, prioritize five-year ACS where appropriate, and fund targeted data collection or administrative-data linkages in chronically high-MOE tracts to reduce structural uncertainty over time.</p>
+<p><strong>[Overall Pattern Identification]</strong> My analyses found that county-level indicators are generally high-reliability, but tract-level results show wide variance in MOE%, especially for demographic estimates such as race/ethnicity.</p>
+<p><strong>[Equity Assessment]</strong> Communities in tracts with high MOE% (threshold of ~15%) for key demographics and income indicators face the greatest risk of algorithmic bias because small sampling error can flip decision regarding eligibility or prioritization for social service and outreach programs. This risk concentrates in low-population tracts and often in places where Black and Hispanic counts are small minorities at the tract level.</p>
+<p><strong>[Root Cause Analysis]</strong> The root cause of this high MOE%s is likely the ACS sampling variability. Every year, the ACS surveys about 1 in 40 housing units, and the 5-year estimates essentially incorporate the past 5 years of these non-overlapping sampling to recreate the longform of the decennial census. However, this could result in major tract-level changes (such as redevelopment) or a redrawing of tract boundaries being smoothed over when looking at the 5-year estimates, leading to substantial noise in the data that shows in up high MOE% for limited sample sizes.</p>
+<p><strong>[Strategic Recommendations]</strong> NY Department of Human Services should adopt a tiered reliability policy (e.g., High = proceed; Moderate = monitor with additional oversight; Low = human review or supplemental data) before applying thresholds. Pair this with routine fairness audits and stability checks, prioritize five-year ACS estimates where appropriate, and fund targeted data collection or administrative-data linkages in the selected tracts that repeatedly produce the highest MOE% to reduce structural uncertainty of algorithmic decisions over time.</p>
 </section>
 <section id="specific-recommendations" class="level2">
 <h2 class="anchored" data-anchor-id="specific-recommendations">6.3 Specific Recommendations</h2>
@@ -1335,7 +1329,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Your Task:</strong> Use your analysis results to provide specific guidance to the department.</p>
 <ol type="1">
 <li><p><strong>Counties suitable for immediate algorithmic implementation:</strong> [List counties with high confidence data and explain why they’re appropriate]</p>
-<p>The 56 NY counties listed below have MOE percentages of less than 5%, hence we classify the income data as having “high reliability.” This data can thus be used to train, fit, and test a suitable algorithm for the department.</p>
+<p>The 56 NY counties listed below have MOE percentages of less than 5%, hence we classify the income data as having “<em>high reliability</em>.” This data can thus be used to train, fit, and test a suitable algorithm for the department of human services.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>high_reliability <span class="ot">&lt;-</span> county_summary <span class="sc">|&gt;</span> </span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(reliability <span class="sc">==</span> <span class="st">"High"</span>)</span>
@@ -1761,7 +1755,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div></li>
 <li><p><strong>Counties requiring additional oversight:</strong> [List counties with moderate confidence data and describe what kind of monitoring would be needed]</p>
-<p>The 5 counties below have MOE percentages of between 5-10%, hence we classify the income data as having “moderate reliability.” Oversight measures may include periodic monitoring of outcome distributions, bias audits against protected groups, and sensitivity testing to ensure model decisions remain robust when confidence intervals shift.</p>
+<p>The 5 counties below have MOE percentages of between 5-10%, hence we classify the income data as having “<em>moderate reliability</em>.” Oversight measures may include periodic monitoring of outcome distributions, bias audits against protected groups, and sensitivity testing to ensure model decisions remain robust when confidence intervals shift.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>moderate_reliability <span class="ot">&lt;-</span> county_summary <span class="sc">|&gt;</span> </span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(reliability <span class="sc">==</span> <span class="st">"Moderate"</span>)</span>
@@ -1830,7 +1824,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div></li>
 <li><p><strong>Counties needing alternative approaches:</strong> [List counties with low confidence data and suggest specific alternatives - manual review, additional surveys, etc.]</p>
-<p>Only 1 NY County - Hamilton County - has a MOE percentage &gt;10%, hence we classify the income data as having “low reliability.” Given the unreliability of this data, it is not suitable for direct algorithmic implementation. Instead, the department should rely on manual review, locally administered surveys, or integration of administrative datasets as proxies (e.g., tax records, school enrollment, social services data) to supplement ACS estimates. This ensures decisions affecting communities in Hamilton County are based on reliable, context-specific evidence rather than unreliable model inputs.</p>
+<p>Only 1 NY County - Hamilton County - has a MOE percentage &gt;10%, hence we classify the income data as having “<em>low reliability</em>.” Given the unreliability of this data, it is not suitable for direct algorithmic implementation. Instead, the department should rely on manual review, locally administered surveys, or integration of administrative datasets as proxies (e.g., tax records, school enrollment, social services data) to supplement ACS estimates. This ensures decisions affecting communities in Hamilton County are based on reliable, context-specific evidence rather than unreliable model inputs.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>low_reliability <span class="ot">&lt;-</span> county_summary <span class="sc">|&gt;</span> </span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(reliability <span class="sc">==</span> <span class="st">"Low"</span>)</span>
