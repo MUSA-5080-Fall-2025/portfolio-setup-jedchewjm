@@ -240,10 +240,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Buffers, intersections, and unions</p></li>
 <li><p>Spatial aggregation</p></li>
 </ul></li>
-<li><strong>Coordinate Systems</strong>
+<li><strong>Coordinate Reference Systems (CRS)</strong>
 <ul>
-<li><p>Understanding projections</p></li>
-<li><p>Transforming between coordinate systems</p></li>
+<li><p>Understanding projections &amp; transforming between CRS</p></li>
+<li><p><strong>Geographic Coordinate Systems (GCS)</strong> utilize lat/long coordinates with angular units in decimal degrees</p>
+<ul>
+<li><em>WGS84 (EPSG:4326):</em>GPS standard, global coverage, good for web mapping, data sharing</li>
+</ul></li>
+<li><p><strong>Project Coordinate Systems (PCS)</strong> utilize X/Y coordinates on a flat plane with units in metres/feet</p>
+<ul>
+<li><p><em>Web Mercator (EPSG:3857):</em> Web mapping standard, heavily distorts areas near poles</p></li>
+<li><p><em>State Plane / UTM zones:</em> local accuracy, different zones for different regions, optimized for specific geographic areas</p></li>
+</ul></li>
 </ul></li>
 <li><strong>Spatial Analysis Workflow</strong>
 <ul>
@@ -290,7 +298,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># st_transform</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>census_tracts <span class="ot">&lt;-</span> census_tracts <span class="sc">%&gt;%</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(pa_counties))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(pa_counties))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform to Pennsylvania South State Plane (good for PA analysis)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>pa_counties_projected <span class="ot">&lt;-</span> pa_counties <span class="sc">%&gt;%</span>   <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">3365</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform to Albers Equal Area (good for area calculations) </span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>pa_counties_albers <span class="ot">&lt;-</span> pa_counties <span class="sc">%&gt;%</span>   <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">5070</span>) <span class="st">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p><strong>Plot Maps</strong></p>
@@ -353,7 +367,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>      type <span class="sc">==</span> <span class="st">"Clinic"</span> <span class="sc">~</span> <span class="dv">5000</span></span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_buffer</span>(<span class="at">dist =</span> .<span class="sc">$</span>buffer_size)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_buffer</span>(<span class="at">dist =</span> .<span class="sc">$</span>buffer_size)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Use Unions to calculate what percentage of low-income tracts have access</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>access_summary <span class="ot">&lt;-</span> low_income_tracts <span class="sc">%&gt;%</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">has_access =</span> <span class="fu">st_intersects</span>(., <span class="fu">st_union</span>(hospital_buffers), <span class="at">sparse =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_tracts =</span> <span class="fu">n</span>(),</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">tracts_with_access =</span> <span class="fu">sum</span>(has_access),</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">pct_with_access =</span> (tracts_with_access <span class="sc">/</span> total_tracts) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(access_summary)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section>

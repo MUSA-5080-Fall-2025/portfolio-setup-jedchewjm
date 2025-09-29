@@ -19,10 +19,18 @@ date: "2025-09-29"
     -   Buffers, intersections, and unions
 
     -   Spatial aggregation
--   **Coordinate Systems**
-    -   Understanding projections
+-   **Coordinate Reference Systems (CRS)**
+    -   Understanding projections & transforming between CRS
 
-    -   Transforming between coordinate systems
+    -   **Geographic Coordinate Systems (GCS)** utilize lat/long coordinates with angular units in decimal degrees
+
+        -   *WGS84 (EPSG:4326):*GPS standard, global coverage, good for web mapping, data sharing
+
+    -   **Project Coordinate Systems (PCS)** utilize X/Y coordinates on a flat plane with units in metres/feet
+
+        -   *Web Mercator (EPSG:3857):* Web mapping standard, heavily distorts areas near poles
+
+        -   *State Plane / UTM zones:* local accuracy, different zones for different regions, optimized for specific geographic areas
 -   **Spatial Analysis Workflow**
     -   **Load data** → Get spatial boundaries and attribute data
     -   **Check projections** → Transform to appropriate CRS
@@ -68,6 +76,12 @@ st_within()
 # st_transform
 census_tracts <- census_tracts %>%
   st_transform(st_crs(pa_counties))
+
+# Transform to Pennsylvania South State Plane (good for PA analysis)
+pa_counties_projected <- pa_counties %>%   st_transform(crs = 3365)
+
+# Transform to Albers Equal Area (good for area calculations) 
+pa_counties_albers <- pa_counties %>%   st_transform(crs = 5070) `
 ```
 
 **Plot Maps**
@@ -126,6 +140,20 @@ hospital_buffers <- hospitals %>%
     )
   ) %>%
   st_buffer(dist = .$buffer_size)
+
+# Use Unions to calculate what percentage of low-income tracts have access
+access_summary <- low_income_tracts %>%
+  mutate(
+    has_access = st_intersects(., st_union(hospital_buffers), sparse = FALSE)
+  ) %>%
+  st_drop_geometry() %>%
+  summarize(
+    total_tracts = n(),
+    tracts_with_access = sum(has_access),
+    pct_with_access = (tracts_with_access / total_tracts) * 100
+  )
+
+print(access_summary)
 ```
 
 ## Questions & Challenges
