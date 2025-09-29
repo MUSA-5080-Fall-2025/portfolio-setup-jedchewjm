@@ -1,0 +1,8 @@
+"0",""
+"0","# Calculate correlation"
+"0","edu_income_cor <- cor(combined_data$pct_college, combined_data$median_incomeE, use = ""complete.obs"")"
+"0","print(paste(""Education-Income Correlation:"", round(edu_income_cor, 3)))"
+"1","[1]"
+"1"," ""Education-Income Correlation: 0.811"""
+"1","
+"

@@ -1,0 +1,8 @@
+"0","# Histogram of median income"
+"0","ggplot(demo_data) +"
+"0","  aes(x = median_incomeE) +"
+"0","  geom_histogram(bins = 15, fill = ""steelblue"", alpha = 0.7) +"
+"0","  labs(title = ""Distribution of Median Income"","
+"0","       x = ""Median Household Income"", "
+"0","       y = ""Number of Counties"")"
+"0",""

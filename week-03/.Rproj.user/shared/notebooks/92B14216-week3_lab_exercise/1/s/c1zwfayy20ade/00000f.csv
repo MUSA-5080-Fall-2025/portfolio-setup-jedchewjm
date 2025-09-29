@@ -1,5 +1,0 @@
-"0","# Search for median age"
-"0","age_vars <- acs_vars_2022 %>%"
-"0","  filter(str_detect(label, ""[Mm]edian.*age""))"
-"0",""
-"0","age_vars"
