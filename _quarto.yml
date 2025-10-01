@@ -15,11 +15,16 @@ website:
         - href: weekly-notes/week-02-notes.qmd
         - href: weekly-notes/week-03-notes.qmd
         - href: weekly-notes/week-04-notes.qmd
+        - href: weekly-notes/week-05-notes.qmd
           
       - text: Labs
         menu:
         - href: labs/lab_0/scripts/lab0_template.qmd
         - href: labs/lab_1/assignment1_template.qmd
+        - href: labs/lab_2/assignment2_template.qmd
+        
+      - text: Side Hustles
+        
           
 
 format:

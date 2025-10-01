@@ -28,5 +28,20 @@
   },
   "weekly-notes/week-04-notes.qmd": {
     "week-04-notes.html": "b0388f4f"
+  },
+  "weekly-notes/week-05-notes.qmd": {
+    "week-05-notes.html": "e6bfbb55"
+  },
+  "labs/lab_2/assignment2_template.qmd": {
+    "assignment2_template.html": "f4a75c5e"
+  },
+  "lectures/week-03/lecture/week3.qmd": {
+    "week3.html": "9b046b8f"
+  },
+  "lectures/week-03/scrips/week3_lab_exercise.qmd": {
+    "week3_lab_exercise.html": "87cbebdd"
+  },
+  "lectures/week-04/lecture/week4_slides.qmd": {
+    "week4_slides.html": "c8b56420"
   }
 }

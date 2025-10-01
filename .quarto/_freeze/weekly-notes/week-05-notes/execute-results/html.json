@@ -1,0 +1,15 @@
+{
+  "hash": "d48a9942f609b31864963ea96013730a",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Week 5 Notes - TBD\"\ndate: \"2025-10-06\"\n---\n\n## Key Concepts Learned\n\n-   TBD\n\n## Coding Techniques\n\n-   TBD\n\n\n::: {.cell}\n\n:::\n\n\n## Questions & Challenges\n\n-   \n\n## Connections to Policy\n\n-   \n\n## Reflection\n\n-   \n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
