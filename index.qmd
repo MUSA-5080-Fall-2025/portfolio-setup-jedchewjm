@@ -2,9 +2,9 @@
 title: "MUSA 5080 Portfolio"
 ---
 
-# Welcome to My Portfolio
+# Welcome to My Fall 2025 Portfolio
 
-This portfolio documents my learning journey in Public Policy Analytics (MUSA 5080).
+This portfolio documents my learning journey in the Master of Urban Spatial Analytics course, MUSA 5080: Public Policy Analytics.
 
 ## About This Course
 Advanced spatial analysis and data science for urban planning and public policy.
