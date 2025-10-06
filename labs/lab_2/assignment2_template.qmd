@@ -70,6 +70,8 @@ library(tigris)
 library(scales)
 library(patchwork)
 library(RColorBrewer)
+library(units)
+library(knitr)
 
 # Set Census API key
 census_api_key("fe841b7ef0aa73d9579f0517bd1c8f26d33c789b")
@@ -451,9 +453,6 @@ investment.
 **Your Task:**
 
 ```{r}
-library(knitr)
-
-# Create and format priority counties table
 priority_counties <- county_summary |> 
   arrange(desc(avg_dist_nearest_hosp_mi), desc(total_vulnerable_residents)) |> 
   select(county_name, total_vulnerable_residents, n_vulnerable_tracts, 
@@ -889,15 +888,10 @@ understand the basics**
 
 -   **Question:** "Is lack of recreation access associated with vulnerable
     populations?"
-
-<!-- -->
-
 -   Data Source A:
     <https://phl.maps.arcgis.com/apps/MapSeries/index.html?appid=ab8597d96ece43be97e718f919e79194>
-
 -   Data Source B:
     <https://opendataphilly.org/datasets/neighborhood-food-retail/>
-
 -   Data Source C: Dataaxle
 
 **Your Task:**
@@ -931,9 +925,15 @@ understand the basics**
 
 Write a clear research statement that your analysis will answer.
 
-**Examples:** - "Do vulnerable tracts have adequate public transit access to
-hospitals?" - "Are EMS stations appropriately located near vulnerable
-populations?" - "Do areas with low vehicle access have worse hospital access?"
+**My Research Question:**
+
+**Examples:**
+
+-   "Do vulnerable tracts have adequate public transit access to hospitals?"
+
+-   Are EMS stations appropriately located near vulnerable populations?"
+
+-   "Do areas with low vehicle access have worse hospital access?"
 
 --------------------------------------------------------------------------------
 
@@ -986,10 +986,15 @@ Use at least TWO spatial operations to answer your research question.
 ## Finally - A few comments about your incorporation of feedback!
 
 Take a few moments to clean up your markdown document and then write a line or
-two or three about how you may have incorporated feedback that you recieved
+two or three about how you may have incorporated feedback that you received
 after your first assignment.
 
-*\[Incorporation of Feedback\]*
+*TA Feedback on Lab 1:*
+
+1.  Hide the setup code block. The Census API key is not supposed to be shared
+    publicly.
+2.  Printing in Console instead of RMD: if you want to print something, provide
+    a brief explanation
 
 --------------------------------------------------------------------------------
 
