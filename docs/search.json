@@ -744,42 +744,42 @@
   {
     "objectID": "weekly-notes/week-05-notes.html",
     "href": "weekly-notes/week-05-notes.html",
-    "title": "Week 5 Notes - TBD",
+    "title": "Week 5 Notes - Intro to Linear Regression",
     "section": "",
-    "text": "TBD"
+    "text": "The Statistical Learning Framework: What are we actually doing?\nTwo goals: Understanding relationships vs Making predictions\nBuilding your first model with PA census data\nModel evaluation: How do we know if it’s any good?\nChecking assumptions: When can we trust the model?\nImproving predictions: Transformations, multiple variables\n\n\n\nt-statistic: How many standard errors away from 0?\n\nBigger |t| = more confidence the relationship is real\n\np-value: Probability of seeing our estimate if H₀ is true\n\nSmall p → reject H₀, conclude relationship exists\n\n\n\n\n\nHow well does it fit the data we used? (in-sample fit using R²)\nHow well would it predict new data? (out-of-sample performance)"
   },
   {
     "objectID": "weekly-notes/week-05-notes.html#key-concepts-learned",
     "href": "weekly-notes/week-05-notes.html#key-concepts-learned",
-    "title": "Week 5 Notes - TBD",
+    "title": "Week 5 Notes - Intro to Linear Regression",
     "section": "",
-    "text": "TBD"
+    "text": "The Statistical Learning Framework: What are we actually doing?\nTwo goals: Understanding relationships vs Making predictions\nBuilding your first model with PA census data\nModel evaluation: How do we know if it’s any good?\nChecking assumptions: When can we trust the model?\nImproving predictions: Transformations, multiple variables\n\n\n\nt-statistic: How many standard errors away from 0?\n\nBigger |t| = more confidence the relationship is real\n\np-value: Probability of seeing our estimate if H₀ is true\n\nSmall p → reject H₀, conclude relationship exists\n\n\n\n\n\nHow well does it fit the data we used? (in-sample fit using R²)\nHow well would it predict new data? (out-of-sample performance)"
   },
   {
     "objectID": "weekly-notes/week-05-notes.html#coding-techniques",
     "href": "weekly-notes/week-05-notes.html#coding-techniques",
-    "title": "Week 5 Notes - TBD",
+    "title": "Week 5 Notes - Intro to Linear Regression",
     "section": "Coding Techniques",
-    "text": "Coding Techniques\n\nTBD"
+    "text": "Coding Techniques\n\nLinear Regression Train/Test Split\n\n\n\nCode\nset.seed(123)\nn &lt;- nrow(pa_data)\n\n# 70% training, 30% testing\ntrain_indices &lt;- sample(1:n, size = 0.7 * n)\ntrain_data &lt;- pa_data[train_indices, ]\ntest_data &lt;- pa_data[-train_indices, ]\n\n# Fit on training data only\nmodel_train &lt;- lm(median_incomeE ~ total_popE, data = train_data)\n\n# Predict on test data\ntest_predictions &lt;- predict(model_train, newdata = test_data)\n\n\n\nEvaluate Predictions\n\n\n\nCode\nrmse_test &lt;- sqrt(mean((test_data$median_incomeE - test_predictions)^2))\nrmse_train &lt;- summary(model_train)$sigma\n\ncat(\"Training RMSE:\", round(rmse_train, 0), \"\\n\")\ncat(\"Test RMSE:\", round(rmse_test, 0), \"\\n\")\n\n\n\n10-Fold Cross Validation\n\n\n\nCode\n{r}\nlibrary(caret)\n\ntrain_control &lt;- trainControl(method = \"cv\", number = 10)\n\ncv_model &lt;- train(median_incomeE ~ total_popE,\n                  data = pa_data,\n                  method = \"lm\",\n                  trControl = train_control)\n\ncv_model$results"
   },
   {
     "objectID": "weekly-notes/week-05-notes.html#questions-challenges",
     "href": "weekly-notes/week-05-notes.html#questions-challenges",
-    "title": "Week 5 Notes - TBD",
+    "title": "Week 5 Notes - Intro to Linear Regression",
     "section": "Questions & Challenges",
     "text": "Questions & Challenges"
   },
   {
     "objectID": "weekly-notes/week-05-notes.html#connections-to-policy",
     "href": "weekly-notes/week-05-notes.html#connections-to-policy",
-    "title": "Week 5 Notes - TBD",
+    "title": "Week 5 Notes - Intro to Linear Regression",
     "section": "Connections to Policy",
     "text": "Connections to Policy"
   },
   {
     "objectID": "weekly-notes/week-05-notes.html#reflection",
     "href": "weekly-notes/week-05-notes.html#reflection",
-    "title": "Week 5 Notes - TBD",
+    "title": "Week 5 Notes - Intro to Linear Regression",
     "section": "Reflection",
     "text": "Reflection"
   },

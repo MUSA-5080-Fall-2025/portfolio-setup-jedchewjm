@@ -1,18 +1,77 @@
 ---
-title: "Week 5 Notes - TBD"
+title: "Week 5 Notes - Intro to Linear Regression"
 date: "2025-10-06"
 ---
 
 ## Key Concepts Learned
 
--   TBD
+1.  **The Statistical Learning Framework:** What are we actually doing?
+2.  **Two goals:** Understanding relationships vs Making predictions
+3.  **Building your first model** with PA census data
+4.  **Model evaluation:** How do we know if it's any good?
+5.  **Checking assumptions:** When can we trust the model?
+6.  **Improving predictions:** Transformations, multiple variables
+
+### **Statistical Significance**
+
+**t-statistic:** How many standard errors away from 0?
+
+-   Bigger \|t\| = more confidence the relationship is real
+
+**p-value:** Probability of seeing our estimate if H₀ is true
+
+-   Small p → reject H₀, conclude relationship exists
+
+### Model Evaluation
+
+-   **How well does it fit the data we used?** (in-sample fit using R²)
+
+-   **How well would it predict new data?** (out-of-sample performance)
 
 ## Coding Techniques
 
--   TBD
+-   **Linear Regression Train/Test Split**
+
+```{r, eval = FALSE}
+set.seed(123)
+n <- nrow(pa_data)
+
+# 70% training, 30% testing
+train_indices <- sample(1:n, size = 0.7 * n)
+train_data <- pa_data[train_indices, ]
+test_data <- pa_data[-train_indices, ]
+
+# Fit on training data only
+model_train <- lm(median_incomeE ~ total_popE, data = train_data)
+
+# Predict on test data
+test_predictions <- predict(model_train, newdata = test_data)
+```
+
+-   **Evaluate Predictions**
+
+```{r, eval = FALSE}
+rmse_test <- sqrt(mean((test_data$median_incomeE - test_predictions)^2))
+rmse_train <- summary(model_train)$sigma
+
+cat("Training RMSE:", round(rmse_train, 0), "\n")
+cat("Test RMSE:", round(rmse_test, 0), "\n")
+```
+
+-   **10-Fold Cross Validation**
 
 ```{r, eval= FALSE}
+{r}
+library(caret)
 
+train_control <- trainControl(method = "cv", number = 10)
+
+cv_model <- train(median_incomeE ~ total_popE,
+                  data = pa_data,
+                  method = "lm",
+                  trControl = train_control)
+
+cv_model$results
 ```
 
 ## Questions & Challenges
