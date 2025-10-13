@@ -19,6 +19,12 @@ date: "2025-10-13"
 
 -   Neighborhoods bundle many unmeasured factors (e.g. school districts, job access, amenities, "cool factor")
 
+### Tips for Success
+
+![](images/clipboard-3819921299.png)
+
+------------------------------------------------------------------------
+
 ## Coding Techniques
 
 -   **Make Data with X/Y Coordinates Spatial**
@@ -134,6 +140,41 @@ reg5 <- lm(
   data = boston.sf
 )
 ```
+
+**Cross Validation Workflow**
+
+```{r, eval = FALSE}
+# 1. Check category sizes
+boston.sf %>%
+  st_drop_geometry() %>%
+  count(name) %>%
+  arrange(n) %>%
+  print()
+
+# 2. Group if needed
+boston.sf <- boston.sf %>%
+  add_count(name) %>%
+  mutate(
+    name_cv = if_else(n < 10, "Small_Neighborhoods", as.character(name)),
+    name_cv = as.factor(name_cv)
+  )
+
+# 3. Set up CV
+ctrl <- trainControl(method = "cv", number = 10)
+
+# 4. Use grouped neighborhoods in ALL models with FE
+model <- train(
+  SalePrice ~ LivingArea + Age + crimes_500ft + as.factor(name_cv),
+  data = boston.sf,
+  method = "lm",
+  trControl = ctrl
+)
+
+# 5. Report
+cat("10-fold CV RMSE:", round(model$results$RMSE, 0), "\n")
+```
+
+------------------------------------------------------------------------
 
 ## Questions & Challenges
 
