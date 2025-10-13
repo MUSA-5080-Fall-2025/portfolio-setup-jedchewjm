@@ -80,20 +80,22 @@ census_api_key("fe841b7ef0aa73d9579f0517bd1c8f26d33c789b")
 getwd()
 ```
 
-```{r}
+```{r, results = 'hide'}
 # Load spatial data
 pa_counties <- st_read("data/Pennsylvania_County_Boundaries.shp")
 districts <- st_read("data/districts.geojson")
 hospitals <- st_read("data/hospitals.geojson")
-census_tracts <- tracts(state = "PA", cb = TRUE)
-metro_areas <- core_based_statistical_areas(cb = TRUE)
+census_tracts <- tracts(state = "PA", cb = TRUE, progress = FALSE)
+metro_areas <- core_based_statistical_areas(cb = TRUE, progress = FALSE)
 
 # Standardize CRS
 hospitals <- st_transform(hospitals, st_crs(pa_counties))
 census_tracts <- st_transform(census_tracts, st_crs(pa_counties))
 metro_areas <- st_transform(metro_areas, st_crs(pa_counties))
 districts <- st_transform(districts, st_crs(census_tracts))
+```
 
+```{r}
 # Check that all data loaded correctly
 ggplot(pa_counties) +
   geom_sf() +
@@ -959,7 +961,7 @@ ggplot(phl_school_points) +
 
 -   What CRS is it in? Did you need to transform it? – WGS 84
 
-```{r}
+```{r, results = 'hide'}
 # Helper Variables for Summing Population Values for Children aged 5-19
 child_pop = c("B01001_004", "B01001_005", "B01001_006", "B01001_007", 
                 "B01001_028", "B01001_029", "B01001_030", "B01001_031")
