@@ -61,7 +61,7 @@ Load the required spatial data:
 
 **Your Task:**
 
-```{r}
+```{r, echo = FALSE, include = FALSE}
 # Load required packages
 library(tidyverse)
 library(tidycensus)
@@ -78,7 +78,9 @@ census_api_key("fe841b7ef0aa73d9579f0517bd1c8f26d33c789b")
 
 # Get working directory
 getwd()
+```
 
+```{r}
 # Load spatial data
 pa_counties <- st_read("data/Pennsylvania_County_Boundaries.shp")
 districts <- st_read("data/districts.geojson")
@@ -771,7 +773,9 @@ attribute operations to answer a relatively straightforward question**
 -   **Operations:** Buffer parks (10-minute walk = 0.5 mile), calculate tree
     canopy or park acreage per capita, compare by demographics
 -   **Policy relevance:** Climate resilience, environmental justice, urban
-    forestry investment - ---
+    forestry investment
+
+--------------------------------------------------------------------------------
 
 #### Public Safety & Justice
 
@@ -785,6 +789,8 @@ attribute operations to answer a relatively straightforward question**
     count community resources per area, spatial correlation analysis
 
 -   **Policy relevance:** Community investment, violence prevention strategies
+
+--------------------------------------------------------------------------------
 
 #### Infrastructure & Services
 
@@ -884,15 +890,22 @@ understand the basics**
 
 ### Your Analysis
 
-**My Chosen Question: Small Businesses**
+**My Chosen Question: School Access and School Choice in City of Philadelphia**
 
--   **Question:** "Is lack of recreation access associated with vulnerable
+-   **Data**: Schools, Census Tracts (race/income demographics)
+    -   School Parcels: <https://opendataphilly.org/datasets/schools-parcels/> –
+        parcel location of schools in the City of Philadelphia with attribute
+        information for address, grade level, type, and status
+    -   Schools: <https://opendataphilly.org/datasets/schools/> – points
+        identifying public schools, charter schools, many private schools,
+        school annexes, and athletic fields and facilities
+-   **Question:** "Is lack of school access associated with vulnerable
     populations?"
--   Data Source A:
-    <https://phl.maps.arcgis.com/apps/MapSeries/index.html?appid=ab8597d96ece43be97e718f919e79194>
--   Data Source B:
-    <https://opendataphilly.org/datasets/neighborhood-food-retail/>
--   Data Source C: Dataaxle
+-   **Operations:**
+    -   Clean datasets
+    -   Distance to nearest school
+    -   Buffer schools (10-minute walk = 0.5 mile)
+    -   Compare types and enrollment of schools by demographics
 
 **Your Task:**
 
@@ -903,21 +916,136 @@ understand the basics**
 
 ```{r}
 # Load your additional dataset
+getwd()
+phl_schools <- st_read("data/parcels.geojson")
+phl_school_points <- st_read("data/points.geojson")
+```
 
+```{r}
+#Standardize CRS
+phl_schools <- st_transform(phl_schools, st_crs(pa_counties))
+phl_school_points <- st_transform(phl_school_points, st_crs(pa_counties))
 
+ggplot(phl_schools) +
+  geom_sf() +
+  labs(title = "PHL School Parcels") +
+  theme_void()
 
-
+ggplot(phl_school_points) +
+  geom_sf() +
+  labs(title = "PHL School Points") +
+  theme_void()
 ```
 
 **Questions to answer:**
 
 -   What dataset did you choose and why?
 
+    -   School locations to answer my research question on school access
+
 -   What is the data source and date?
+
+    -   Data Source: Open Data Philly
+
+    -   Date of School Parcels – last updated 02/02/2024 (from metadata)
+
+    -   Data of School Points – last updated 02/02/2024 (from metadata)
 
 -   How many features does it contain?
 
--   What CRS is it in? Did you need to transform it?
+    -   School Parcels – 17 features
+
+    -   School Points – 14 features
+
+-   What CRS is it in? Did you need to transform it? – WGS 84
+
+```{r}
+# Helper Variables for Summing Population Values for Children aged 5-19
+child_pop = c("B01001_004", "B01001_005", "B01001_006", "B01001_007", 
+                "B01001_028", "B01001_029", "B01001_030", "B01001_031")
+
+# Get tract-level demographic data from 2022 ACS 5-Yr Estimates for Philadelphia
+phl_data <- get_acs(
+  geography = "tract",
+  variables = c(
+    total_pop = "B01003_001",
+    child_pop = child_pop,
+    median_income = "B19013_001",
+    poverty = "B17001_001",
+    White     = "B03002_003",
+    Black     = "B03002_004",
+    Hispanic  = "B03002_012"
+  ),
+  state = "PA",
+  county = "Philadelphia",
+  year = 2022,
+  survey = "acs5",
+  output = "wide",
+  geometry = TRUE
+)
+
+# Clean the county names to remove state name and "County"
+phl_clean <- phl_data |> 
+  separate(
+    NAME, 
+    into = c("tract_name", "county_name", "state_name"), 
+    sep = "; "
+  ) |> 
+  mutate(
+    tract_name = str_remove(tract_name, "Census Tract "),
+    county_name = str_remove(county_name, " County")
+  ) 
+phl_clean
+```
+
+```{r}
+# Summarize Raw Data
+phl_summary <- phl_clean |>
+  mutate(
+    child_popE = rowSums(across(matches("^child_pop\\d+E$")), na.rm = TRUE),
+    child_popM = sqrt(rowSums(across(matches("^child_pop\\d+M$"))^2, na.rm = 
+                                  TRUE)),
+    pct_child = round((child_popE/total_popE) * 100, 2),
+    pct_poverty = round((povertyE/total_popE) * 100, 2),
+    pct_white = round((WhiteE/total_popE) * 100, 2),
+    pct_black = round((BlackE/total_popE) * 100, 2),
+    pct_hispanic = round((HispanicE/total_popE) * 100, 2)
+  ) |>
+  select(GEOID, tract_name, median_incomeE, median_incomeM, total_popE, total_popM,
+         child_popE, child_popM, pct_child, pct_poverty, 
+         pct_white, pct_black, pct_hispanic)
+head(phl_summary)
+
+# Map to confirm
+phl_summary <- st_transform(phl_summary, st_crs(pa_counties))
+
+ggplot(phl_summary) + 
+  geom_sf(aes(fill = median_incomeE), linewidth = 0) +
+  scale_fill_continuous(labels = label_dollar()) + 
+  labs(
+    title = "PHL Census Tracts",
+    fill = "Median Income") + 
+  theme_void()
+```
+
+Note: Philadelphia has 408 census tracts, but as the map above visualizes, some
+of these census tracts have missing/incomplete data. Hence, the next part of
+this analysis will only use the 383 census tracts that do not have missing/NaN
+values
+
+```{r}
+phl_summary_clean <- phl_summary |>
+  # Drop rows with NA/NaN in any estimate column (keeps rows even if MOE is NA)
+  filter(!if_any(ends_with("E"), ~ is.na(.) | is.nan(.)))
+
+ggplot(phl_summary_clean) + 
+  geom_sf(aes(fill = median_incomeE), linewidth = 0) +
+  scale_fill_continuous(labels = label_dollar()) + 
+  labs(
+    title = "PHL Census Tracts (Cleaned)",
+    fill = "Median Income") + 
+  theme_void()
+```
 
 --------------------------------------------------------------------------------
 
@@ -925,7 +1053,8 @@ understand the basics**
 
 Write a clear research statement that your analysis will answer.
 
-**My Research Question:**
+**My Research Question: Is lack of school access associated with vulnerable
+populations?**
 
 **Examples:**
 
@@ -954,17 +1083,44 @@ Use at least TWO spatial operations to answer your research question.
 **Your Task:**
 
 ```{r}
-# Your spatial analysis
+# Calculate the Distance from each Census tract to the nearest School
+centroids <- st_centroid(phl_summary_clean, of_largest_polygon = TRUE)            
+nn_idx    <- st_nearest_feature(centroids, phl_school_points)         
+dist_m    <- st_distance(centroids, phl_school_points[nn_idx, ], by_element = TRUE)
 
+phl_summary_clean$dist_sch_mi <- set_units(dist_m, "mi") |> drop_units()
 
+phl_summary_clean |>
+  st_drop_geometry() |>
+  select(GEOID, tract_name, dist_sch_mi, pct_child, pct_poverty) |>
+  arrange(desc(dist_sch_mi)) |>
+  head(20)
+```
 
+Note: From this initial exploration, there is no clear linear relationship
+between the distance to the nearest school and the poverty percentage of a
+census tract. Instead, it might be useful to first identify underserved tracts
+that are more than 0.5 miles (i.e. a 10-minute walking distance) from the
+nearest school
 
+**Identify Underserved Tracts**
 
+```{r}
+underserved_threshold <- 0.5
+phl_underserved <- phl_summary_clean |>
+  filter(dist_sch_mi > underserved_threshold)
+phl_underserved
 
-
-
-
-
+# Map Visualization
+ggplot() + 
+  geom_sf(data = phl_summary, fill = "gray95", color = "black", linewidth = 0.1, inherit.aes = FALSE) +
+  geom_sf(data = phl_underserved, aes(fill = pct_poverty)) +
+  geom_sf(data = phl_school_points, color = "black", size = 0.5, alpha = 0.75) +
+  scale_fill_continuous() + 
+  labs(
+    title = "Philadelphia Tracts Underserved by Schools",
+    fill = "Poverty %") + 
+  theme_void()
 ```
 
 **Analysis requirements:**
@@ -989,7 +1145,7 @@ Take a few moments to clean up your markdown document and then write a line or
 two or three about how you may have incorporated feedback that you received
 after your first assignment.
 
-*TA Feedback on Lab 1:*
+*TA Feedback from Lab 1:*
 
 1.  Hide the setup code block. The Census API key is not supposed to be shared
     publicly.
