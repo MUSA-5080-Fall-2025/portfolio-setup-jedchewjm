@@ -123,17 +123,22 @@ ggplot(hospitals) +
 -   How many hospitals are in your dataset? – **223 hospitals**
 
 ```{r}
-print(hospitals) 
+glimpse(hospitals) 
 ```
 
 -   How many census tracts? – **3445 census tracts**
 
 ```{r}
-print(census_tracts)
+glimpse(census_tracts)
 ```
 
 -   What coordinate reference system is each dataset in? – **all datasets have
     been projected to WGS 84 / Psuedo-Mercator**
+
+```{r}
+st_crs(hospitals)$Name
+st_crs(census_tracts)$Name
+```
 
 --------------------------------------------------------------------------------
 
@@ -239,7 +244,7 @@ pa_tract_income_qns
 Identify census tracts with vulnerable populations based on TWO criteria:
 
 1.  Low median household income (choose an appropriate threshold) – **\$70,000**
-2.  Significant elderly population (choose an appropriate threshold) – **25%**;
+2.  Significant elderly population (choose an appropriate threshold) – **25%**
 
 **Your Task:**
 
@@ -610,7 +615,6 @@ vulnerable populations.
 
 ```{r}
 # Create distribution visualization
-
 vul_regions <- vul_proj |> 
   mutate(underserved = dist_nearest_hosp_mi > underserved_threshold_mi)
 
@@ -695,8 +699,6 @@ p_scatter <- ggplot(vul_regions,
     caption = "Dashed curve shows the local trend"
   ) +
   theme_minimal(base_size = 12)
-
-
 ```
 
 ```{r}
@@ -918,7 +920,6 @@ understand the basics**
 
 ```{r}
 # Load your additional dataset
-getwd()
 phl_schools <- st_read("data/parcels.geojson")
 phl_school_points <- st_read("data/points.geojson")
 ```
@@ -1103,7 +1104,7 @@ Note: From this initial exploration, there is no clear linear relationship
 between the distance to the nearest school and the poverty percentage of a
 census tract. Instead, it might be useful to first identify underserved tracts
 that are more than 0.5 miles (i.e. a 10-minute walking distance) from the
-nearest school
+nearest school.
 
 **Identify Underserved Tracts**
 
@@ -1111,16 +1112,116 @@ nearest school
 underserved_threshold <- 0.5
 phl_underserved <- phl_summary_clean |>
   filter(dist_sch_mi > underserved_threshold)
-phl_underserved
+
+phl_underserved_table <- phl_underserved |>
+  st_drop_geometry() |>
+  select(GEOID, tract_name, dist_sch_mi, pct_child, pct_poverty) |>
+  arrange(desc(dist_sch_mi))
+
+# Map Visualization by School Type
+ggplot() + 
+  geom_sf(data = phl_summary, fill = "gray95", color = "black", linewidth = 0.1, inherit.aes = FALSE) +
+  geom_sf(data = phl_underserved, aes(fill = pct_poverty)) +
+  geom_sf(data = phl_school_points, color = "black", size = 0.5, alpha = 0.75) +
+  facet_wrap(~type_specific) +
+  scale_fill_continuous() + 
+  labs(
+    title = "Philadelphia Census Tracts Underserved by Schools (by school type)",
+    fill = "Poverty %") + 
+  theme_void()
+
+# Scatter Plot: distance vs. percentage of children (per tract)
+phl_sch_scatter <- ggplot(phl_summary_clean,
+                    aes(x = dist_sch_mi,
+                        y = pct_child,
+                        )) +
+  geom_point(alpha = 0.5) +
+  coord_cartesian(xlim = c(0, 1.2)) +
+  geom_vline(xintercept = 0.5) +
+  labs(
+    title   = "Distance vs. Percentage of Children in Population (Tracts)",
+    x       = "Distance to nearest school (miles)",
+    y       = "Percentage of Children in Population",
+  ) +
+  theme_minimal(base_size = 12)
+phl_sch_scatter
+
+# Scatter Plot: distance vs. poverty percentage (per tract)
+phl_poverty_sch_scatter <- ggplot(phl_summary_clean,
+                    aes(x = dist_sch_mi,
+                        y = pct_poverty,
+                        )) +
+  geom_point(alpha = 0.5) +
+  coord_cartesian(xlim = c(0, 1.2)) +
+  geom_vline(xintercept = 0.5) +
+  labs(
+    title   = "Distance vs. Percentage of Population in Poverty (Tracts)",
+    x       = "Distance to nearest school (miles)",
+    y       = "Percentage of Population in Poverty",
+  ) +
+  theme_minimal(base_size = 12)
+phl_poverty_sch_scatter
+```
+
+As shown in the scatter plots above, there is no single clear relationship
+between the distance to the nearest school and the percentage of children or the
+level of poverty in a census tract. However, we can still do some explanatory
+analysis to further classify schools by their average attendance levels.
+
+```{r}
+# Load School Attendance Data
+attendance <- read_csv("data/SDP_Student_ADA_School_20241127.csv")
+head(attendance)
+
+# Filter School Attendance Data
+attendance_clean <- attendance |>
+  rename(
+    sch_yr = `School Year`,
+    sch_name = `School Name`,
+    attendance = `Average Daily Attendance (YTD)`
+  ) |> 
+  filter(sch_yr == "2022-2023") |> 
+  select (sch_yr, sch_name, attendance) |> 
+  mutate(
+    attendance_type = case_when(
+      attendance < 80        ~ "Low",
+      attendance <= 90       ~ "Medium",
+      attendance > 90        ~ "High"),
+    attendance_type = factor(attendance_type,
+                            levels = c("Low", "Medium", "High"),
+                            ordered = TRUE)
+  )
+head(attendance_clean)
+```
+
+```{r}
+# Spatial Join Attendance to School Locations
+phl_school_points_clean <- phl_school_points |> 
+  mutate(sch_name = str_squish(str_to_lower(school_name_label)))
+
+attendance_clean <- attendance_clean |> 
+  mutate(sch_name = str_squish(str_to_lower(sch_name)))
+
+phl_school_points_attendance <- phl_school_points_clean |> 
+  left_join(attendance_clean |>  select(sch_name, attendance, attendance_type), by = "sch_name")
 
 # Map Visualization
 ggplot() + 
   geom_sf(data = phl_summary, fill = "gray95", color = "black", linewidth = 0.1, inherit.aes = FALSE) +
   geom_sf(data = phl_underserved, aes(fill = pct_poverty)) +
-  geom_sf(data = phl_school_points, color = "black", size = 0.5, alpha = 0.75) +
-  scale_fill_continuous() + 
+  geom_sf(data = phl_school_points_attendance, aes(color = attendance_type), size = 0.5, alpha = 0.9) +
+ scale_fill_distiller(
+  name = "Poverty %",
+  palette = "Reds", 
+  direction = 1,
+  na.value = "grey90",
+  labels = scales::label_number(accuracy = 1, suffix = "%")
+  ) +
+  scale_color_brewer(name = "Attendance", palette = "Set2", na.value = "grey50") +
   labs(
-    title = "Philadelphia Tracts Underserved by Schools",
+    title = "Philadelphia Census Tracts Underserved by Schools",
+    subtitle = "Tracts shaded by poverty rate; schools colored by attendance 
+    category",
     fill = "Poverty %") + 
   theme_void()
 ```
@@ -1137,10 +1238,6 @@ ggplot() +
 
 -   Brief interpretation of results (3-5 sentences)
 
-**Your interpretation:**
-
-*\[Write your findings here\]*
-
 ## Finally - A few comments about your incorporation of feedback!
 
 Take a few moments to clean up your markdown document and then write a line or
@@ -1150,7 +1247,8 @@ after your first assignment.
 *TA Feedback from Lab 1:*
 
 1.  Hide the setup code block. The Census API key is not supposed to be shared
-    publicly.
+    publicly. I used "include = FALSE" and "results = 'hide'" in the relevant R
+    code chunks
 2.  Printing in Console instead of RMD: if you want to print something, provide
     a brief explanation
 
