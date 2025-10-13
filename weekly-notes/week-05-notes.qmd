@@ -75,7 +75,7 @@ cv_model <- train(median_incomeE ~ total_popE,
 cv_model$results
 ```
 
--    **Residual Plot**
+-   **Residual Plot**
 
 ```{r, eval = FALSE}
 pa_data$residuals <- residuals(model1)

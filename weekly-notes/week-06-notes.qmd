@@ -1,0 +1,148 @@
+---
+title: "Week 6 Notes - Spatial ML and Advanced Regression"
+date: "2025-10-13"
+---
+
+## Key Concepts Learned
+
+### Types of Variables
+
+**Continuous:** square feet, age of house, income levels, distance to downtown
+
+**Categorical:** neighborhood, school district, building type, has garage (binary Y/N)
+
+### Fixed Effects
+
+-   Definition: Categorical variables that capture all unmeasured characteristics of a group
+
+-   Powerful but they’re a *black box* 
+
+-   Neighborhoods bundle many unmeasured factors (e.g. school districts, job access, amenities, "cool factor")
+
+## Coding Techniques
+
+-   **Make Data with X/Y Coordinates Spatial**
+
+```{r, eval = FALSE}
+# Convert boston data to sf object
+boston.sf <- boston |> 
+  st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) |> 
+  st_transform('ESRI:102286')  # MA State Plane (feet)
+```
+
+-   **Add Dummy/Categorical Variables (e.g. Neighborhoods)**
+
+The n-1 rule: One neighborhood is automatically chosen as the *reference category* (omitted)! R picks the first alphabetically unless you specify otherwise.
+
+```{r, eval = FALSE}
+boston.sf <- boston.sf |> 
+  mutate(name = as.factor(name))
+
+# Fit model with neighborhood fixed effects
+model_neighborhoods <- lm(SalePrice ~ LivingArea + name, data = boston.sf)
+```
+
+-   **Interaction Effects**
+
+![](images/clipboard-2183883732.png)
+
+```{r, eval = FALSE}
+# Define wealthy neighborhoods based on median prices
+wealthy_hoods <- c("Back Bay", "Beacon Hill", "South End", "Bay Village")
+
+# Create binary indicator
+boston.sf <- boston.sf %>%
+  mutate(
+    wealthy_neighborhood = ifelse(name %in% wealthy_hoods, "Wealthy", "Not Wealthy"),
+    wealthy_neighborhood = as.factor(wealthy_neighborhood)
+  )
+
+# Check the split
+boston.sf %>%
+  st_drop_geometry() %>%
+  count(wealthy_neighborhood)
+```
+
+-   **Polynomials – e.g. Square Age Variable**
+
+```{r, eval= FALSE}
+# Quadratic model (Age²)
+model_age_quad <- lm(SalePrice ~ Age + I(Age^2) + LivingArea, data = boston.sf)
+summary(model_age_quad)$coef
+
+# Check Residual Plot
+par(mfrow = c(1, 2))
+
+# Linear model residuals
+plot(fitted(model_age_linear), residuals(model_age_linear),
+     main = "Linear Model Residuals",
+     xlab = "Fitted Values", ylab = "Residuals")
+abline(h = 0, col = "red", lty = 2)
+
+# Quadratic model residuals  
+plot(fitted(model_age_quad), residuals(model_age_quad),
+     main = "Quadratic Model Residuals",
+     xlab = "Fitted Values", ylab = "Residuals")
+abline(h = 0, col = "red", lty = 2)
+```
+
+-   **kNN**
+
+```{r, eval = FALSE}
+# Calculate distance matrix (houses to crimes)
+dist_matrix <- st_distance(boston.sf, crimes.sf)
+
+# Function to get mean distance to k nearest neighbors
+get_knn_distance <- function(dist_matrix, k) {
+  apply(dist_matrix, 1, function(distances) {
+    # Sort and take first k, then average
+    mean(as.numeric(sort(distances)[1:k]))
+  })
+}
+
+# Create multiple kNN features
+boston.sf <- boston.sf %>%
+  mutate(
+    crime_nn1 = get_knn_distance(dist_matrix, k = 1),
+    crime_nn3 = get_knn_distance(dist_matrix, k = 3),
+    crime_nn5 = get_knn_distance(dist_matrix, k = 5)
+  )
+
+# Check results
+summary(boston.sf %>% st_drop_geometry() %>% select(starts_with("crime_nn")))
+
+# Which k value correlates most with price?
+boston.sf %>%
+  st_drop_geometry() %>%
+  select(SalePrice, crime_nn1, crime_nn3, crime_nn5) %>%
+  cor(use = "complete.obs") %>%
+  as.data.frame() %>%
+  select(SalePrice)
+```
+
+**Neighborhood Fixed Effects**
+
+-   R creates a dummy for each neighborhood automatically
+
+```{r, eval = FALSE}
+# Add neighborhood fixed effects
+reg5 <- lm(
+  SalePrice ~ LivingArea + Age + 
+              crimes_500ft + 
+              parks_nn3 + 
+              as.factor(name),  # FE
+  data = boston.sf
+)
+```
+
+## Questions & Challenges
+
+-   
+
+## Connections to Policy
+
+-   
+
+## Reflection
+
+-   Fixed Effects - Black Box
