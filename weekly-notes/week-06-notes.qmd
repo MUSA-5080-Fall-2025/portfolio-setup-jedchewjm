@@ -11,6 +11,10 @@ date: "2025-10-13"
 
 **Categorical:** neighborhood, school district, building type, has garage (binary Y/N)
 
+### Limitations of Models using only Baseline Indicators 
+
+![](images/clipboard-488756333.png){width="990"}
+
 ### Fixed Effects
 
 -   Definition: Categorical variables that capture all unmeasured characteristics of a group
@@ -19,9 +23,15 @@ date: "2025-10-13"
 
 -   Neighborhoods bundle many unmeasured factors (e.g. school districts, job access, amenities, "cool factor")
 
+### **Three Approaches to Spatial Features**
+
+1.  Buffer Aggregation
+2.  kNN
+3.  Distance to Specific Points
+
 ### Tips for Success
 
-![](images/clipboard-3819921299.png)
+![](images/clipboard-3819921299.png){width="601"}
 
 ------------------------------------------------------------------------
 
@@ -34,11 +44,21 @@ date: "2025-10-13"
 boston.sf <- boston |> 
   st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) |> 
   st_transform('ESRI:102286')  # MA State Plane (feet)
+
+# Spatial join: Assign each house to its neighborhood
+boston.sf <- boston.sf |> 
+  st_join(nhoods, join = st_intersects)
+
+# Check results
+boston.sf |> 
+  st_drop_geometry() |> 
+  count(name) |> 
+  arrange(desc(n))
 ```
 
 -   **Add Dummy/Categorical Variables (e.g. Neighborhoods)**
 
-The n-1 rule: One neighborhood is automatically chosen as the *reference category* (omitted)! R picks the first alphabetically unless you specify otherwise.
+The *n-1 rule*: One neighborhood is automatically chosen as the *reference category* (omitted)! R picks the first alphabetically unless you specify otherwise.
 
 ```{r, eval = FALSE}
 boston.sf <- boston.sf |> 
@@ -50,31 +70,50 @@ model_neighborhoods <- lm(SalePrice ~ LivingArea + name, data = boston.sf)
 
 -   **Interaction Effects**
 
+![](images/clipboard-1292342269.png)
+
 ![](images/clipboard-2183883732.png)
+
+![](images/clipboard-3566884761.png)
 
 ```{r, eval = FALSE}
 # Define wealthy neighborhoods based on median prices
 wealthy_hoods <- c("Back Bay", "Beacon Hill", "South End", "Bay Village")
 
 # Create binary indicator
-boston.sf <- boston.sf %>%
+boston.sf <- boston.sf |> 
   mutate(
     wealthy_neighborhood = ifelse(name %in% wealthy_hoods, "Wealthy", "Not Wealthy"),
     wealthy_neighborhood = as.factor(wealthy_neighborhood)
   )
 
 # Check the split
-boston.sf %>%
-  st_drop_geometry() %>%
+boston.sf |> 
+  st_drop_geometry() |> 
   count(wealthy_neighborhood)
 ```
 
--   **Polynomials – e.g. Square Age Variable**
+-   **Polynomials – e.g. Square Age Variable because of U-Shaped Effect**
+    -   New Houses (0-20 years): modern amenities, high value, steep depreciation
+    -   Middle-Aged (20-80 years): wear and tear, lowest value
+    -   Historic/Vintage (80+ years): historic districts, rising value, "vintage premium"
+
+![](images/clipboard-1141008675.png)
 
 ```{r, eval= FALSE}
-# Quadratic model (Age²)
+# Calculate age from year built
+boston.sf <- boston.sf |> 
+  mutate(Age = 2025 - YR_BUILT) |>  filter(Age <2000)
+
+# Check the distribution of age
+summary(boston.sf$Age)
+
+# Add Polynomial Term - use I(Age^2) for Quadratic Model
 model_age_quad <- lm(SalePrice ~ Age + I(Age^2) + LivingArea, data = boston.sf)
 summary(model_age_quad)$coef
+
+# Compare Linear vs Quadratic Model in terms of R-squared
+summary(model_age_quad)$r.squared
 
 # Check Residual Plot
 par(mfrow = c(1, 2))
@@ -92,7 +131,24 @@ plot(fitted(model_age_quad), residuals(model_age_quad),
 abline(h = 0, col = "red", lty = 2)
 ```
 
+-   **Buffer Aggregation**
+
+```{r, eval = FALSE}
+boston.sf <- boston.sf |> 
+  mutate(
+    crimes.Buffer = lengths(st_intersects(
+      st_buffer(geometry, 660),
+      crimes.sf
+    )),
+    crimes_500ft = lengths(st_intersects(
+      st_buffer(geometry, 500),
+      crimes.sf
+    ))
+  )
+```
+
 -   **kNN**
+    -   The kNN feature with the strongest correlation tells us the relevant “zone of influence” for crime perception
 
 ```{r, eval = FALSE}
 # Calculate distance matrix (houses to crimes)
@@ -126,8 +182,37 @@ boston.sf %>%
   select(SalePrice)
 ```
 
+-   **Distance**
+
+```{r, eval = FALSE}
+# Define downtown Boston (Boston Common: 42.3551° N, 71.0656° W)
+downtown <- st_sfc(st_point(c(-71.0656, 42.3551)), crs = "EPSG:4326") %>%
+  st_transform('ESRI:102286')
+
+# Calculate distance from each house to downtown
+boston.sf <- boston.sf |> 
+  mutate(
+    dist_downtown_ft = as.numeric(st_distance(geometry, downtown)),
+    dist_downtown_mi = dist_downtown_ft / 5280
+  )
+
+# Summary
+summary(boston.sf$dist_downtown_mi)
+```
+
+-   **All Spatial Features Together**
+
+```{r, eval = FALSE}
+spatial_summary <- boston.sf |> 
+  st_drop_geometry() |> 
+  select(crimes.Buffer, crimes_500ft, crime_nn3, dist_downtown_mi) |>
+  summary()
+spatial_summary
+```
+
 **Neighborhood Fixed Effects**
 
+-   Fixed Effects = categorical variables that capture all unmeasured characteristics of a group
 -   R creates a dummy for each neighborhood automatically
 
 ```{r, eval = FALSE}
@@ -144,6 +229,19 @@ reg5 <- lm(
 **Cross Validation Workflow**
 
 ```{r, eval = FALSE}
+category_check <- boston.sf |> 
+  st_drop_geometry() |> 
+  count(name) |> 
+  arrange(n)
+
+print(category_check)
+```
+
+-   Categories with n \< 10 for categorical variables will likely cause CV problems
+
+![](images/clipboard-1022214413.png){width="263"}
+
+```{r, eval = FALSE}
 # 1. Check category sizes
 boston.sf %>%
   st_drop_geometry() %>%
@@ -151,7 +249,7 @@ boston.sf %>%
   arrange(n) %>%
   print()
 
-# 2. Group if needed
+# 2. Group small neighborhoods if needed
 boston.sf <- boston.sf %>%
   add_count(name) %>%
   mutate(
@@ -178,12 +276,12 @@ cat("10-fold CV RMSE:", round(model$results$RMSE, 0), "\n")
 
 ## Questions & Challenges
 
--   
+-   None for this week
 
 ## Connections to Policy
 
--   
+-   Market Segmentation: property tax assessments should account for neighborhood-specific valuation. Housing assistance needs vary dramatically by area.
 
 ## Reflection
 
--   Fixed Effects - Black Box
+-   Fixed Effects are powerful but they’re a **black box**. When I work on housing policy and housing markets, we often describe neighborhood fixed effects but I have never really quantified them.
