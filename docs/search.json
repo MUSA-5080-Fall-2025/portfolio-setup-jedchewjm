@@ -704,14 +704,14 @@
     "href": "weekly-notes/week-04-notes.html",
     "title": "Week 4 Notes - Spatial Data & GIS",
     "section": "",
-    "text": "Spatial Data Fundamentals\n\nVector data model and sf objects\nESRI Shapefile format: .shp (geometry – lat/long); .dbf (attribute); .sbx (binary spatial index file)\n\nSpatial Operations\n\nSpatial subsetting and filtering\nSpatial joins and relationships\nMeasuring distances and areas\n\nGeometry Operations\n\nBuffers, intersections, and unions\nSpatial aggregation\n\nCoordinate Reference Systems (CRS)\n\nUnderstanding projections & transforming between CRS\nGeographic Coordinate Systems (GCS) utilize lat/long coordinates with angular units in decimal degrees\n\nWGS84 (EPSG:4326):GPS standard, global coverage, good for web mapping, data sharing\n\nProject Coordinate Systems (PCS) utilize X/Y coordinates on a flat plane with units in metres/feet\n\nWeb Mercator (EPSG:3857): Web mapping standard, heavily distorts areas near poles\nState Plane / UTM zones: local accuracy, different zones for different regions, optimized for specific geographic areas\n\n\nSpatial Analysis Workflow\n\nLoad data → Get spatial boundaries and attribute data\nCheck projections → Transform to appropriate CRS\nJoin datasets → Combine spatial and non-spatial data\nSpatial operations → Buffers, intersections, distance calculations\nAggregation → Summarize across spatial units\nVisualization → Maps and charts\nInterpretation → Policy recommendations"
+    "text": "Spatial Data Fundamentals\n\nVector data model and sf objects\nESRI Shapefile format: .shp (geometry – lat/long); .dbf (attribute); .sbx (binary spatial index file)\n\nSpatial Operations\n\nSpatial subsetting and filtering\nSpatial joins and relationships\nMeasuring distances and areas\n\nGeometry Operations\n\nBuffers, intersections, and unions\nSpatial aggregation\n\nCoordinate Reference Systems (CRS)\n\nUnderstanding projections & transforming between CRS\nGeographic Coordinate Systems (GCS) utilize lat/long coordinates with angular units in decimal degrees\n\nWGS84 (EPSG:4326):GPS standard, global coverage, good for web mapping, data sharing\n\nProject Coordinate Systems (PCS) utilize X/Y coordinates on a flat plane with units in metres/feet\n\nWeb Mercator (EPSG:3857): Web mapping standard, heavily distorts areas near poles\nState Plane / UTM zones: local accuracy, different zones for different regions, optimized for specific geographic areas"
   },
   {
     "objectID": "weekly-notes/week-04-notes.html#key-concepts-learned",
     "href": "weekly-notes/week-04-notes.html#key-concepts-learned",
     "title": "Week 4 Notes - Spatial Data & GIS",
     "section": "",
-    "text": "Spatial Data Fundamentals\n\nVector data model and sf objects\nESRI Shapefile format: .shp (geometry – lat/long); .dbf (attribute); .sbx (binary spatial index file)\n\nSpatial Operations\n\nSpatial subsetting and filtering\nSpatial joins and relationships\nMeasuring distances and areas\n\nGeometry Operations\n\nBuffers, intersections, and unions\nSpatial aggregation\n\nCoordinate Reference Systems (CRS)\n\nUnderstanding projections & transforming between CRS\nGeographic Coordinate Systems (GCS) utilize lat/long coordinates with angular units in decimal degrees\n\nWGS84 (EPSG:4326):GPS standard, global coverage, good for web mapping, data sharing\n\nProject Coordinate Systems (PCS) utilize X/Y coordinates on a flat plane with units in metres/feet\n\nWeb Mercator (EPSG:3857): Web mapping standard, heavily distorts areas near poles\nState Plane / UTM zones: local accuracy, different zones for different regions, optimized for specific geographic areas\n\n\nSpatial Analysis Workflow\n\nLoad data → Get spatial boundaries and attribute data\nCheck projections → Transform to appropriate CRS\nJoin datasets → Combine spatial and non-spatial data\nSpatial operations → Buffers, intersections, distance calculations\nAggregation → Summarize across spatial units\nVisualization → Maps and charts\nInterpretation → Policy recommendations"
+    "text": "Spatial Data Fundamentals\n\nVector data model and sf objects\nESRI Shapefile format: .shp (geometry – lat/long); .dbf (attribute); .sbx (binary spatial index file)\n\nSpatial Operations\n\nSpatial subsetting and filtering\nSpatial joins and relationships\nMeasuring distances and areas\n\nGeometry Operations\n\nBuffers, intersections, and unions\nSpatial aggregation\n\nCoordinate Reference Systems (CRS)\n\nUnderstanding projections & transforming between CRS\nGeographic Coordinate Systems (GCS) utilize lat/long coordinates with angular units in decimal degrees\n\nWGS84 (EPSG:4326):GPS standard, global coverage, good for web mapping, data sharing\n\nProject Coordinate Systems (PCS) utilize X/Y coordinates on a flat plane with units in metres/feet\n\nWeb Mercator (EPSG:3857): Web mapping standard, heavily distorts areas near poles\nState Plane / UTM zones: local accuracy, different zones for different regions, optimized for specific geographic areas"
   },
   {
     "objectID": "weekly-notes/week-04-notes.html#coding-techniques",
@@ -725,63 +725,63 @@
     "href": "weekly-notes/week-04-notes.html#questions-challenges",
     "title": "Week 4 Notes - Spatial Data & GIS",
     "section": "Questions & Challenges",
-    "text": "Questions & Challenges"
+    "text": "Questions & Challenges\n\nNo questions for this week"
   },
   {
     "objectID": "weekly-notes/week-04-notes.html#connections-to-policy",
     "href": "weekly-notes/week-04-notes.html#connections-to-policy",
     "title": "Week 4 Notes - Spatial Data & GIS",
     "section": "Connections to Policy",
-    "text": "Connections to Policy"
+    "text": "Connections to Policy\n\nSpatial Policy Analysis Workflow\n\nLoad data → Get spatial boundaries and attribute data\nCheck projections → Transform to appropriate CRS\nJoin datasets → Combine spatial and non-spatial data\nSpatial operations → Buffers, intersections, distance calculations\nAggregation → Summarize across spatial units\nVisualization → Maps and charts\nInterpretation → Policy recommendations"
   },
   {
     "objectID": "weekly-notes/week-04-notes.html#reflection",
     "href": "weekly-notes/week-04-notes.html#reflection",
     "title": "Week 4 Notes - Spatial Data & GIS",
     "section": "Reflection",
-    "text": "Reflection"
+    "text": "Reflection\n\nI was surprised at how intuitive and quick it was to develop maps and visualizations using packages in R as compared to ArcGIS. I discussed this with Prof. Delmelle during Office Hours, and she shared that she has relied exclusively on R for the past two years after switching to a Macbook.\nWhile ArcGIS is still a useful tool and has many cool additional features such as StoryMaps or animations, I believe that R is the way forward for core data wrangling, visualization, and machine learning work."
   },
   {
     "objectID": "weekly-notes/week-05-notes.html",
     "href": "weekly-notes/week-05-notes.html",
     "title": "Week 5 Notes - Intro to Linear Regression",
     "section": "",
-    "text": "The Statistical Learning Framework: What are we actually doing?\nTwo goals: Understanding relationships vs Making predictions\nBuilding your first model with PA census data\nModel evaluation: How do we know if it’s any good?\nChecking assumptions: When can we trust the model?\nImproving predictions: Transformations, multiple variables\n\n\n\nt-statistic: How many standard errors away from 0?\n\nBigger |t| = more confidence the relationship is real\n\np-value: Probability of seeing our estimate if H₀ is true\n\nSmall p → reject H₀, conclude relationship exists\n\n\n\n\n\nHow well does it fit the data we used? (in-sample fit using R²)\nHow well would it predict new data? (out-of-sample performance)\n\n\n\n\nResiduals = observed − fitted. They’re your best proxy for the error term. Good models leave residuals that look like random noise."
+    "text": "The Statistical Learning Framework: What are we actually doing?\nTwo goals: Understanding relationships vs Making predictions\nBuilding your first model with PA census data\nModel evaluation: How do we know if it’s any good?\nChecking assumptions: When can we trust the model?\nImproving predictions: Transformations, multiple variables\n\n\n\nt-statistic: How many standard errors away from 0?\n\nBigger |t| = more confidence the relationship is real\n\np-value: Probability of seeing our estimate if H₀ is true\n\nSmall p → reject H₀, conclude relationship exists\n\n\n\n\n\nHow well does it fit the data we used? (in-sample fit using R²)\nHow well would it predict new data? (out-of-sample performance)\n\n\n\n\n\nAssumption 1: Linear Relationship\n\nCheck with Residual Plot\nResiduals = observed − fitted. They’re your best proxy for the error term. Good models leave residuals that look like random noise.\n\nAssumption 2: Constant Variance\n\nCheck heteroscedasticity (i.e. variance changes across X\nImpact: standard errors are wrong -&gt; p values are misleading\n\nAssumption 3: Normality of Residuals\n\nCheck with Q-Q Plot (quantile-quantile plot) of residuals\nImportant for confidence & prediction intervals\nNeeded for valid hypothesis tests (t-test and F-test)\n\nAssumption 4: No Multicollinearity\n\nCoefficients become unstable and hard to interpret\n\nAssumption 5: No Influential Outliers\n\nInfluential Outliers: those with high leverage and large residuals\nVisual Diagnostic using Cook’s Distance (Cook’s D)\n\n\n\n\n\n\nAdding more predictors\nLog Transformations\nCategorical Variables"
   },
   {
     "objectID": "weekly-notes/week-05-notes.html#key-concepts-learned",
     "href": "weekly-notes/week-05-notes.html#key-concepts-learned",
     "title": "Week 5 Notes - Intro to Linear Regression",
     "section": "",
-    "text": "The Statistical Learning Framework: What are we actually doing?\nTwo goals: Understanding relationships vs Making predictions\nBuilding your first model with PA census data\nModel evaluation: How do we know if it’s any good?\nChecking assumptions: When can we trust the model?\nImproving predictions: Transformations, multiple variables\n\n\n\nt-statistic: How many standard errors away from 0?\n\nBigger |t| = more confidence the relationship is real\n\np-value: Probability of seeing our estimate if H₀ is true\n\nSmall p → reject H₀, conclude relationship exists\n\n\n\n\n\nHow well does it fit the data we used? (in-sample fit using R²)\nHow well would it predict new data? (out-of-sample performance)\n\n\n\n\nResiduals = observed − fitted. They’re your best proxy for the error term. Good models leave residuals that look like random noise."
+    "text": "The Statistical Learning Framework: What are we actually doing?\nTwo goals: Understanding relationships vs Making predictions\nBuilding your first model with PA census data\nModel evaluation: How do we know if it’s any good?\nChecking assumptions: When can we trust the model?\nImproving predictions: Transformations, multiple variables\n\n\n\nt-statistic: How many standard errors away from 0?\n\nBigger |t| = more confidence the relationship is real\n\np-value: Probability of seeing our estimate if H₀ is true\n\nSmall p → reject H₀, conclude relationship exists\n\n\n\n\n\nHow well does it fit the data we used? (in-sample fit using R²)\nHow well would it predict new data? (out-of-sample performance)\n\n\n\n\n\nAssumption 1: Linear Relationship\n\nCheck with Residual Plot\nResiduals = observed − fitted. They’re your best proxy for the error term. Good models leave residuals that look like random noise.\n\nAssumption 2: Constant Variance\n\nCheck heteroscedasticity (i.e. variance changes across X\nImpact: standard errors are wrong -&gt; p values are misleading\n\nAssumption 3: Normality of Residuals\n\nCheck with Q-Q Plot (quantile-quantile plot) of residuals\nImportant for confidence & prediction intervals\nNeeded for valid hypothesis tests (t-test and F-test)\n\nAssumption 4: No Multicollinearity\n\nCoefficients become unstable and hard to interpret\n\nAssumption 5: No Influential Outliers\n\nInfluential Outliers: those with high leverage and large residuals\nVisual Diagnostic using Cook’s Distance (Cook’s D)\n\n\n\n\n\n\nAdding more predictors\nLog Transformations\nCategorical Variables"
   },
   {
     "objectID": "weekly-notes/week-05-notes.html#coding-techniques",
     "href": "weekly-notes/week-05-notes.html#coding-techniques",
     "title": "Week 5 Notes - Intro to Linear Regression",
     "section": "Coding Techniques",
-    "text": "Coding Techniques\n\nLinear Regression Train/Test Split\n\n\n\nCode\nset.seed(123)\nn &lt;- nrow(pa_data)\n\n# 70% training, 30% testing\ntrain_indices &lt;- sample(1:n, size = 0.7 * n)\ntrain_data &lt;- pa_data[train_indices, ]\ntest_data &lt;- pa_data[-train_indices, ]\n\n# Fit on training data only\nmodel_train &lt;- lm(median_incomeE ~ total_popE, data = train_data)\n\n# Predict on test data\ntest_predictions &lt;- predict(model_train, newdata = test_data)\n\n\n\nEvaluate Predictions\n\n\n\nCode\nrmse_test &lt;- sqrt(mean((test_data$median_incomeE - test_predictions)^2))\nrmse_train &lt;- summary(model_train)$sigma\n\ncat(\"Training RMSE:\", round(rmse_train, 0), \"\\n\")\ncat(\"Test RMSE:\", round(rmse_test, 0), \"\\n\")\n\n\n\n10-Fold Cross Validation\n\n\n\nCode\nlibrary(caret)\n\ntrain_control &lt;- trainControl(method = \"cv\", number = 10)\ncv_model &lt;- train(median_incomeE ~ total_popE,\n                  data = pa_data,\n                  method = \"lm\",\n                  trControl = train_control)\ncv_model$results\n\n\n\nResidual Plot\n\n\n\nCode\npa_data$residuals &lt;- residuals(model1)\npa_data$fitted &lt;- fitted(model1)\n\nggplot(pa_data, aes(x = fitted, y = residuals)) +\n  geom_point() +\n  geom_hline(yintercept = 0, color = \"red\", linetype = \"dashed\") +\n  labs(title = \"Residual Plot\", x = \"Fitted Values\", y = \"Residuals\") +\n  theme_minimal()\n\n\nResiduals vs Fitted\n\n\nGoal: a random, horizontal band around 0. Residual plots should show random scatter - any pattern means your model is missing something systematic\nRed flags:\n\nCurvature → missing nonlinear term (try polynomials/splines or transform xxx).\nFunnel/wedge shape → heteroskedasticity (use log/Box–Cox on yyy, weighted least squares, or robust SEs).\nClusters/bands → omitted categorical/group effects or interaction terms.\n\n\nConstant Variance and Heteroskedacity\n\nHeteroskedasticity is a condition in regression analysis where the variance of the error terms is not constant but changes as the value of one or more independent variables changes\n\nModel fits well for some values (e.g., small counties) but poorly for others (large counties)\nMay indicate missing variables that matter more at certain X values\nAsk: “What’s different about observations with large residuals?”\n\n\nFormal Test: Breusch-Pagan\n\n\nCode\nlibrary(lmtest) \nbptest(model1)\n\n\nInterpretation:\n\np &gt; 0.05: Constant variance assumption OK\np &lt; 0.05: Evidence of heteroscedasticity\n\nIf detected, solutions:\n\nTransform Y (try log(income))\nRobust standard errors\nAdd missing variables\nAccept it (point predictions still OK for prediction goals)"
+    "text": "Coding Techniques\n\nLinear Regression Train/Test Split\n\n\n\nCode\nset.seed(123)\nn &lt;- nrow(pa_data)\n\n# 70% training, 30% testing\ntrain_indices &lt;- sample(1:n, size = 0.7 * n)\ntrain_data &lt;- pa_data[train_indices, ]\ntest_data &lt;- pa_data[-train_indices, ]\n\n# Fit on training data only\nmodel_train &lt;- lm(median_incomeE ~ total_popE, data = train_data)\n\n# Predict on test data\ntest_predictions &lt;- predict(model_train, newdata = test_data)\n\n\n\nEvaluate Predictions\n\n\n\nCode\nrmse_test &lt;- sqrt(mean((test_data$median_incomeE - test_predictions)^2))\nrmse_train &lt;- summary(model_train)$sigma\n\ncat(\"Training RMSE:\", round(rmse_train, 0), \"\\n\")\ncat(\"Test RMSE:\", round(rmse_test, 0), \"\\n\")\n\n\n\n10-Fold Cross Validation\n\n\n\nCode\nlibrary(caret)\n\ntrain_control &lt;- trainControl(method = \"cv\", number = 10)\ncv_model &lt;- train(median_incomeE ~ total_popE,\n                  data = pa_data,\n                  method = \"lm\",\n                  trControl = train_control)\ncv_model$results\n\n\n\nResidual Plot\n\n\n\nCode\npa_data$residuals &lt;- residuals(model1)\npa_data$fitted &lt;- fitted(model1)\n\nggplot(pa_data, aes(x = fitted, y = residuals)) +\n  geom_point() +\n  geom_hline(yintercept = 0, color = \"red\", linetype = \"dashed\") +\n  labs(title = \"Residual Plot\", x = \"Fitted Values\", y = \"Residuals\") +\n  theme_minimal()\n\n\nResiduals vs Fitted\n\n\nGoal: a random, horizontal band around 0. Residual plots should show random scatter - any pattern means your model is missing something systematic\nRed flags:\n\nCurvature → missing nonlinear term (try polynomials/splines or transform xxx).\nFunnel/wedge shape → heteroskedasticity (use log/Box–Cox on yyy, weighted least squares, or robust SEs).\nClusters/bands → omitted categorical/group effects or interaction terms.\n\n\nConstant Variance and Heteroskedacity\n\nHeteroskedasticity is a condition in regression analysis where the variance of the error terms is not constant but changes as the value of one or more independent variables changes\n\nModel fits well for some values (e.g., small counties) but poorly for others (large counties)\nMay indicate missing variables that matter more at certain X values\nAsk: “What’s different about observations with large residuals?”\n\n\n\nFormal Test: Breusch-Pagan\n\n\nCode\nlibrary(lmtest) \nbptest(model1)\n\n\n\nInterpretation:\n\np &gt; 0.05: Constant variance assumption OK\np &lt; 0.05: Evidence of heteroscedasticity\n\n\nIf detected, solutions:\n\nTransform Y (try log(income))\nRobust standard errors\nAdd missing variables\nAccept it (point predictions still OK for prediction goals)\n\nMulticollinearity & Variance Inflation Factor (vif)\n\n\nCode\nlibrary(car)\nvif(model1)  # Variance Inflation Factor\n\n# Rule of thumb: VIF &gt; 10 suggests problems\n# Not relevant with only 1 predictor!\n\n\nInfluential Outliers – Cook’s D &gt; 4/n"
   },
   {
     "objectID": "weekly-notes/week-05-notes.html#questions-challenges",
     "href": "weekly-notes/week-05-notes.html#questions-challenges",
     "title": "Week 5 Notes - Intro to Linear Regression",
     "section": "Questions & Challenges",
-    "text": "Questions & Challenges"
+    "text": "Questions & Challenges\n\nI am also interested in learning more about non-parametric approaches in future weeks"
   },
   {
     "objectID": "weekly-notes/week-05-notes.html#connections-to-policy",
     "href": "weekly-notes/week-05-notes.html#connections-to-policy",
     "title": "Week 5 Notes - Intro to Linear Regression",
     "section": "Connections to Policy",
-    "text": "Connections to Policy"
+    "text": "Connections to Policy\n\nIt is important to understand the assumptions behind a model. For example, heteroskedasticity is often an indicator of model misspecification – it indicates missing variables that matter more at certain X values. Population alone predicts income well in rural counties, but large urban counties need additional variables (education, industry) to predict accurately."
   },
   {
     "objectID": "weekly-notes/week-05-notes.html#reflection",
     "href": "weekly-notes/week-05-notes.html#reflection",
     "title": "Week 5 Notes - Intro to Linear Regression",
     "section": "Reflection",
-    "text": "Reflection"
+    "text": "Reflection\n\nExcited to put these skills to the test with the midterm home price prediction challenge!"
   },
   {
     "objectID": "labs/lab_2/assignment2_template.html",
@@ -873,5 +873,47 @@
     "title": "Week 6 Notes - Spatial ML and Advanced Regression",
     "section": "Reflection",
     "text": "Reflection\n\nFixed Effects - Black Box"
+  },
+  {
+    "objectID": "weekly-notes/week-07-notes.html",
+    "href": "weekly-notes/week-07-notes.html",
+    "title": "Week 7 Notes - Spatial ML and Spatial Autocorrelation",
+    "section": "",
+    "text": "Continuous: square feet, age of house, income levels, distance to downtown\nCategorical: neighborhood, school district, building type, has garage (binary Y/N)\n\n\n\n\nDefinition: Categorical variables that capture all unmeasured characteristics of a group\nPowerful but they’re a black box \nNeighborhoods bundle many unmeasured factors (e.g. school districts, job access, amenities, “cool factor”)"
+  },
+  {
+    "objectID": "weekly-notes/week-07-notes.html#key-concepts-learned",
+    "href": "weekly-notes/week-07-notes.html#key-concepts-learned",
+    "title": "Week 7 Notes - Spatial ML and Spatial Autocorrelation",
+    "section": "",
+    "text": "Continuous: square feet, age of house, income levels, distance to downtown\nCategorical: neighborhood, school district, building type, has garage (binary Y/N)\n\n\n\n\nDefinition: Categorical variables that capture all unmeasured characteristics of a group\nPowerful but they’re a black box \nNeighborhoods bundle many unmeasured factors (e.g. school districts, job access, amenities, “cool factor”)"
+  },
+  {
+    "objectID": "weekly-notes/week-07-notes.html#coding-techniques",
+    "href": "weekly-notes/week-07-notes.html#coding-techniques",
+    "title": "Week 7 Notes - Spatial ML and Spatial Autocorrelation",
+    "section": "Coding Techniques",
+    "text": "Coding Techniques\n\nMake Data with X/Y Coordinates Spatial\n\n\nAdd Dummy/Categorical Variables (e.g. Neighborhoods)\n\nThe n-1 rule: One neighborhood is automatically chosen as the reference category (omitted)! R picks the first alphabetically unless you specify otherwise.\n\nInteraction Effects\n\n\n\nCode\n# \n\n\n\nPolynomials – e.g. Square Age Variable\n\n\n\nCode\n# \n\n\n\nkNN\n\n\n\nCode\n#"
+  },
+  {
+    "objectID": "weekly-notes/week-07-notes.html#questions-challenges",
+    "href": "weekly-notes/week-07-notes.html#questions-challenges",
+    "title": "Week 7 Notes - Spatial ML and Spatial Autocorrelation",
+    "section": "Questions & Challenges",
+    "text": "Questions & Challenges"
+  },
+  {
+    "objectID": "weekly-notes/week-07-notes.html#connections-to-policy",
+    "href": "weekly-notes/week-07-notes.html#connections-to-policy",
+    "title": "Week 7 Notes - Spatial ML and Spatial Autocorrelation",
+    "section": "Connections to Policy",
+    "text": "Connections to Policy"
+  },
+  {
+    "objectID": "weekly-notes/week-07-notes.html#reflection",
+    "href": "weekly-notes/week-07-notes.html#reflection",
+    "title": "Week 7 Notes - Spatial ML and Spatial Autocorrelation",
+    "section": "Reflection",
+    "text": "Reflection"
   }
 ]

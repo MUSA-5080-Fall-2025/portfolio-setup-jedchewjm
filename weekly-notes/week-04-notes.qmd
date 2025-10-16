@@ -31,14 +31,6 @@ date: "2025-09-29"
         -   *Web Mercator (EPSG:3857):* Web mapping standard, heavily distorts areas near poles
 
         -   *State Plane / UTM zones:* local accuracy, different zones for different regions, optimized for specific geographic areas
--   **Spatial Analysis Workflow**
-    -   **Load data** → Get spatial boundaries and attribute data
-    -   **Check projections** → Transform to appropriate CRS
-    -   **Join datasets** → Combine spatial and non-spatial data
-    -   **Spatial operations** → Buffers, intersections, distance calculations
-    -   **Aggregation** → Summarize across spatial units
-    -   **Visualization** → Maps and charts
-    -   **Interpretation** → Policy recommendations
 
 ## Coding Techniques
 
@@ -158,12 +150,22 @@ print(access_summary)
 
 ## Questions & Challenges
 
--   
+-   No questions for this week
 
 ## Connections to Policy
 
--   
+-   **Spatial Policy Analysis Workflow**
+
+    -   **Load data** → Get spatial boundaries and attribute data
+    -   **Check projections** → Transform to appropriate CRS
+    -   **Join datasets** → Combine spatial and non-spatial data
+    -   **Spatial operations** → Buffers, intersections, distance calculations
+    -   **Aggregation** → Summarize across spatial units
+    -   **Visualization** → Maps and charts
+    -   **Interpretation** → Policy recommendations
 
 ## Reflection
 
--   
+-   I was surprised at how intuitive and quick it was to develop maps and visualizations using packages in R as compared to ArcGIS. I discussed this with Prof. Delmelle during Office Hours, and she shared that she has relied exclusively on R for the past two years after switching to a Macbook.
+
+-   While ArcGIS is still a useful tool and has many cool additional features such as StoryMaps or animations, I believe that R is the way forward for core data wrangling, visualization, and machine learning work.

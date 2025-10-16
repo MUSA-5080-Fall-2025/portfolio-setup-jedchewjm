@@ -1,0 +1,15 @@
+{
+  "hash": "dba07f905cdacf219eb26286625eab9d",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Week 7 Notes - Spatial ML and Spatial Autocorrelation\"\ndate: \"2025-10-20\"\n---\n\n## Key Concepts Learned\n\n### Types of Variables\n\n**Continuous:** square feet, age of house, income levels, distance to downtown\n\n**Categorical:** neighborhood, school district, building type, has garage (binary Y/N)\n\n### Fixed Effects\n\n-   Definition: Categorical variables that capture all unmeasured characteristics of a group\n\n-   Powerful but they’re a *black box* \n\n-   Neighborhoods bundle many unmeasured factors (e.g. school districts, job access, amenities, \"cool factor\")\n\n## Coding Techniques\n\n-   **Make Data with X/Y Coordinates Spatial**\n\n\n::: {.cell}\n\n:::\n\n\n-   **Add Dummy/Categorical Variables (e.g. Neighborhoods)**\n\nThe n-1 rule: One neighborhood is automatically chosen as the *reference category* (omitted)! R picks the first alphabetically unless you specify otherwise.\n\n\n::: {.cell}\n\n:::\n\n\n-   **Interaction Effects**\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# \n```\n:::\n\n\n-   **Polynomials – e.g. Square Age Variable**\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# \n```\n:::\n\n\n-   **kNN**\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# \n```\n:::\n\n\n## Questions & Challenges\n\n-   \n\n## Connections to Policy\n\n-   \n\n## Reflection\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

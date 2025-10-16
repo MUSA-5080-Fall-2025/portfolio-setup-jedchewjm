@@ -1,0 +1,64 @@
+---
+title: "Week 7 Notes - Spatial ML and Spatial Autocorrelation"
+date: "2025-10-20"
+---
+
+## Key Concepts Learned
+
+### Types of Variables
+
+**Continuous:** square feet, age of house, income levels, distance to downtown
+
+**Categorical:** neighborhood, school district, building type, has garage (binary Y/N)
+
+### Fixed Effects
+
+-   Definition: Categorical variables that capture all unmeasured characteristics of a group
+
+-   Powerful but they’re a *black box* 
+
+-   Neighborhoods bundle many unmeasured factors (e.g. school districts, job access, amenities, "cool factor")
+
+## Coding Techniques
+
+-   **Make Data with X/Y Coordinates Spatial**
+
+```{r, eval = FALSE}
+
+```
+
+-   **Add Dummy/Categorical Variables (e.g. Neighborhoods)**
+
+The n-1 rule: One neighborhood is automatically chosen as the *reference category* (omitted)! R picks the first alphabetically unless you specify otherwise.
+
+```{r, eval = FALSE}
+
+```
+
+-   **Interaction Effects**
+
+```{r, eval = FALSE}
+# 
+```
+
+-   **Polynomials – e.g. Square Age Variable**
+
+```{r, eval= FALSE}
+# 
+```
+
+-   **kNN**
+
+```{r, eval = FALSE}
+# 
+```
+
+## Questions & Challenges
+
+-   
+
+## Connections to Policy
+
+-   
+
+## Reflection

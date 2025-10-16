@@ -105,6 +105,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -160,6 +189,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../weekly-notes/week-06-notes.html">
  <span class="dropdown-text">Week 6 Notes - Spatial ML and Advanced Regression</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../weekly-notes/week-07-notes.html">
+ <span class="dropdown-text">Week 7 Notes - Spatial ML and Spatial Autocorrelation</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -206,7 +239,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#statistical-significance" id="toc-statistical-significance" class="nav-link" data-scroll-target="#statistical-significance"><strong>Statistical Significance</strong></a></li>
   <li><a href="#model-evaluation" id="toc-model-evaluation" class="nav-link" data-scroll-target="#model-evaluation">Model Evaluation</a></li>
-  <li><a href="#checking-assumptions-residuals" id="toc-checking-assumptions-residuals" class="nav-link" data-scroll-target="#checking-assumptions-residuals">Checking Assumptions: Residuals</a></li>
+  <li><a href="#checking-assumptions-plots-reveal-what-r2-hides" id="toc-checking-assumptions-plots-reveal-what-r2-hides" class="nav-link" data-scroll-target="#checking-assumptions-plots-reveal-what-r2-hides">Checking Assumptions: Plots reveal what <span class="math display">\[R^2\]</span> hides</a></li>
+  <li><a href="#improving-the-model" id="toc-improving-the-model" class="nav-link" data-scroll-target="#improving-the-model">Improving the Model</a></li>
   </ul></li>
   <li><a href="#coding-techniques" id="toc-coding-techniques" class="nav-link" data-scroll-target="#coding-techniques">Coding Techniques</a></li>
   <li><a href="#questions-challenges" id="toc-questions-challenges" class="nav-link" data-scroll-target="#questions-challenges">Questions &amp; Challenges</a></li>
@@ -271,9 +305,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p><strong>How well would it predict new data?</strong> (out-of-sample performance)</p></li>
 </ul>
 </section>
-<section id="checking-assumptions-residuals" class="level3">
-<h3 class="anchored" data-anchor-id="checking-assumptions-residuals">Checking Assumptions: Residuals</h3>
-<p>Residuals = observed − fitted. They’re your best proxy for the error term. Good models leave residuals that look like random noise.</p>
+<section id="checking-assumptions-plots-reveal-what-r2-hides" class="level3">
+<h3 class="anchored" data-anchor-id="checking-assumptions-plots-reveal-what-r2-hides">Checking Assumptions: Plots reveal what <span class="math display">\[R^2\]</span> hides</h3>
+<ul>
+<li><p><strong>Assumption 1: Linear Relationship</strong></p>
+<ul>
+<li><p>Check with Residual Plot</p></li>
+<li><p>Residuals = observed − fitted. They’re your best proxy for the error term. Good models leave residuals that look like random noise.</p></li>
+</ul></li>
+<li><p><strong>Assumption 2: Constant Variance</strong></p>
+<ul>
+<li><p>Check heteroscedasticity (i.e.&nbsp;variance changes across X</p></li>
+<li><p>Impact: standard errors are wrong -&gt; p values are misleading</p></li>
+</ul></li>
+<li><p><strong>Assumption 3: Normality of Residuals</strong></p>
+<ul>
+<li><p>Check with Q-Q Plot (quantile-quantile plot) of residuals</p></li>
+<li><p>Important for confidence &amp; prediction intervals</p></li>
+<li><p>Needed for valid hypothesis tests (t-test and F-test)</p></li>
+</ul></li>
+<li><p><strong>Assumption 4: No Multicollinearity</strong></p>
+<ul>
+<li>Coefficients become unstable and hard to interpret</li>
+</ul></li>
+<li><p><strong>Assumption 5: No Influential Outliers</strong></p>
+<ul>
+<li><p>Influential Outliers: those with high leverage and large residuals</p></li>
+<li><p>Visual Diagnostic using Cook’s Distance (<em>Cook’s D</em>)</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="improving-the-model" class="level3">
+<h3 class="anchored" data-anchor-id="improving-the-model">Improving the Model</h3>
+<ul>
+<li><p>Adding more predictors</p></li>
+<li><p>Log Transformations</p></li>
+<li><p>Categorical Variables</p></li>
+</ul>
 </section>
 </section>
 <section id="coding-techniques" class="level2">
@@ -345,7 +413,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 <p><strong>Residuals vs Fitted</strong></p>
-<p><img src="images/clipboard-3467357846.png" class="img-fluid"></p>
+<p><img src="images/clipboard-3467357846.png" class="img-fluid" width="902"></p>
 <ul>
 <li><p><strong>Goal:</strong> a random, horizontal band around 0. Residual plots should show <strong>random scatter</strong> - any pattern means your model is missing something systematic</p></li>
 <li><p><strong>Red flags:</strong></p>
@@ -364,6 +432,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Ask: “What’s different about observations with large residuals?”</p></li>
 </ul></li>
 </ul>
+<p><img src="images/clipboard-3798739105.png" class="img-fluid" width="619"></p>
 <p><strong>Formal Test: Breusch-Pagan</strong></p>
 <div class="cell">
 <details class="code-fold">
@@ -372,10 +441,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(model1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p><strong>Interpretation:</strong></p>
 <ul>
-<li><strong>p &gt; 0.05:</strong> Constant variance assumption OK</li>
-<li><strong>p &lt; 0.05:</strong> Evidence of heteroscedasticity</li>
+<li><p><strong>Interpretation:</strong></p>
+<ul>
+<li><p><strong>p &gt; 0.05:</strong> Constant variance assumption OK</p></li>
+<li><p><strong>p &lt; 0.05:</strong> Evidence of heteroscedasticity</p></li>
+</ul></li>
 </ul>
 <p><strong>If detected, solutions:</strong></p>
 <ol type="1">
@@ -384,23 +455,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Add missing variables</li>
 <li>Accept it (point predictions still OK for prediction goals)</li>
 </ol>
+<p><strong>Multicollinearity &amp; Variance Inflation Factor (vif)</strong></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vif</span>(model1)  <span class="co"># Variance Inflation Factor</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rule of thumb: VIF &gt; 10 suggests problems</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Not relevant with only 1 predictor!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p><strong>Influential Outliers – Cook’s D &gt; 4/n</strong></p>
+<p><img src="images/clipboard-3480630247.png" class="img-fluid" width="563"></p>
 </section>
 <section id="questions-challenges" class="level2">
 <h2 class="anchored" data-anchor-id="questions-challenges">Questions &amp; Challenges</h2>
 <ul>
-<li></li>
+<li>I am also interested in learning more about non-parametric approaches in future weeks</li>
 </ul>
 </section>
 <section id="connections-to-policy" class="level2">
 <h2 class="anchored" data-anchor-id="connections-to-policy">Connections to Policy</h2>
 <ul>
-<li></li>
+<li>It is important to understand the assumptions behind a model. For example, heteroskedasticity is often an indicator of model misspecification – it indicates missing variables that matter more at certain X values. Population alone predicts income well in rural counties, but large urban counties need additional variables (education, industry) to predict accurately.</li>
 </ul>
 </section>
 <section id="reflection" class="level2">
 <h2 class="anchored" data-anchor-id="reflection">Reflection</h2>
 <ul>
-<li></li>
+<li>Excited to put these skills to the test with the midterm home price prediction challenge!</li>
 </ul>
 
 

@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-09-29">
+<meta name="dcterms.date" content="2025-10-20">
 
-<title>Week 4 Notes - Spatial Data &amp; GIS – Jed Chew - MUSA 5080 Portfolio</title>
+<title>Week 7 Notes - Spatial ML and Spatial Autocorrelation – Jed Chew - MUSA 5080 Portfolio</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -162,7 +162,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="../weekly-notes/week-07-notes.html">
- <span class="dropdown-text">Week 6 Notes - Spatial ML and Advanced Regression</span></a>
+ <span class="dropdown-text">Week 7 Notes - Spatial ML and Spatial Autocorrelation</span></a>
   </li>  
     </ul>
   </li>
@@ -206,7 +206,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#key-concepts-learned" id="toc-key-concepts-learned" class="nav-link active" data-scroll-target="#key-concepts-learned">Key Concepts Learned</a></li>
+  <li><a href="#key-concepts-learned" id="toc-key-concepts-learned" class="nav-link active" data-scroll-target="#key-concepts-learned">Key Concepts Learned</a>
+  <ul class="collapse">
+  <li><a href="#types-of-variables" id="toc-types-of-variables" class="nav-link" data-scroll-target="#types-of-variables">Types of Variables</a></li>
+  <li><a href="#fixed-effects" id="toc-fixed-effects" class="nav-link" data-scroll-target="#fixed-effects">Fixed Effects</a></li>
+  </ul></li>
   <li><a href="#coding-techniques" id="toc-coding-techniques" class="nav-link" data-scroll-target="#coding-techniques">Coding Techniques</a></li>
   <li><a href="#questions-challenges" id="toc-questions-challenges" class="nav-link" data-scroll-target="#questions-challenges">Questions &amp; Challenges</a></li>
   <li><a href="#connections-to-policy" id="toc-connections-to-policy" class="nav-link" data-scroll-target="#connections-to-policy">Connections to Policy</a></li>
@@ -219,7 +223,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Week 4 Notes - Spatial Data &amp; GIS</h1>
+<h1 class="title">Week 7 Notes - Spatial ML and Spatial Autocorrelation</h1>
 </div>
 
 
@@ -230,7 +234,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 29, 2025</p>
+      <p class="date">October 20, 2025</p>
     </div>
   </div>
   
@@ -244,185 +248,71 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="key-concepts-learned" class="level2">
 <h2 class="anchored" data-anchor-id="key-concepts-learned">Key Concepts Learned</h2>
+<section id="types-of-variables" class="level3">
+<h3 class="anchored" data-anchor-id="types-of-variables">Types of Variables</h3>
+<p><strong>Continuous:</strong> square feet, age of house, income levels, distance to downtown</p>
+<p><strong>Categorical:</strong> neighborhood, school district, building type, has garage (binary Y/N)</p>
+</section>
+<section id="fixed-effects" class="level3">
+<h3 class="anchored" data-anchor-id="fixed-effects">Fixed Effects</h3>
 <ul>
-<li><strong>Spatial Data Fundamentals</strong>
-<ul>
-<li><p>Vector data model and sf objects</p></li>
-<li><p>ESRI Shapefile format: <code>.shp</code> (geometry – lat/long); <code>.dbf</code> (attribute); <code>.sbx</code> (binary spatial index file)</p></li>
-</ul></li>
-<li><strong>Spatial Operations</strong>
-<ul>
-<li><p>Spatial subsetting and filtering</p></li>
-<li><p>Spatial joins and relationships</p></li>
-<li><p>Measuring distances and areas</p></li>
-</ul></li>
-<li><strong>Geometry Operations</strong>
-<ul>
-<li><p>Buffers, intersections, and unions</p></li>
-<li><p>Spatial aggregation</p></li>
-</ul></li>
-<li><strong>Coordinate Reference Systems (CRS)</strong>
-<ul>
-<li><p>Understanding projections &amp; transforming between CRS</p></li>
-<li><p><strong>Geographic Coordinate Systems (GCS)</strong> utilize lat/long coordinates with angular units in decimal degrees</p>
-<ul>
-<li><em>WGS84 (EPSG:4326):</em>GPS standard, global coverage, good for web mapping, data sharing</li>
-</ul></li>
-<li><p><strong>Project Coordinate Systems (PCS)</strong> utilize X/Y coordinates on a flat plane with units in metres/feet</p>
-<ul>
-<li><p><em>Web Mercator (EPSG:3857):</em> Web mapping standard, heavily distorts areas near poles</p></li>
-<li><p><em>State Plane / UTM zones:</em> local accuracy, different zones for different regions, optimized for specific geographic areas</p></li>
-</ul></li>
-</ul></li>
+<li><p>Definition: Categorical variables that capture all unmeasured characteristics of a group</p></li>
+<li><p>Powerful but they’re a&nbsp;<em>black box</em>&nbsp;</p></li>
+<li><p>Neighborhoods bundle many unmeasured factors (e.g.&nbsp;school districts, job access, amenities, “cool factor”)</p></li>
 </ul>
+</section>
 </section>
 <section id="coding-techniques" class="level2">
 <h2 class="anchored" data-anchor-id="coding-techniques">Coding Techniques</h2>
-<p><strong>Read Spatial Data:</strong> <code>st_read</code></p>
-<p><strong>Spatial Subsetting: extract features based on spatial relationships</strong></p>
 <ul>
-<li><p>Which counties border Allegheny?&nbsp;→&nbsp;<code>st_touches</code> looks for neighbors</p></li>
-<li><p>Which tracts are IN Allegheny?&nbsp;→&nbsp;<code>st_within</code></p></li>
-<li><p>Which tracts overlap a metro area? → <code>st_intersects</code> includes the reference feature itself</p></li>
-<li><p>If no&nbsp;<code>.predicate</code>&nbsp;specified, uses&nbsp;<code>st_intersects</code></p></li>
+<li><strong>Make Data with X/Y Coordinates Spatial</strong></li>
 </ul>
-<p><img src="images/clipboard-3051935903.png" class="img-fluid"></p>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Key Functions</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">st_filter</span>(data_to_filter, reference_geometry, <span class="at">.predicate =</span> relationship)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># .predicate = ""</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">st_intersects</span>()</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">st_touches</span>()</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">st_within</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<p><strong>Checking and Setting CRS</strong></p>
 <ul>
-<li><p>To simply check current CRS <code>st_crs(pa_counties)</code></p></li>
-<li><p>To set CRS (ONLY if missing) <code>pa_counties &lt;- st_set_crs(pa_counties, 4326)</code></p></li>
+<li><strong>Add Dummy/Categorical Variables (e.g.&nbsp;Neighborhoods)</strong></li>
+</ul>
+<p>The n-1 rule: One neighborhood is automatically chosen as the <em>reference category</em> (omitted)! R picks the first alphabetically unless you specify otherwise.</p>
+<ul>
+<li><strong>Interaction Effects</strong></li>
 </ul>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># st_transform</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>census_tracts <span class="ot">&lt;-</span> census_tracts <span class="sc">%&gt;%</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(pa_counties))</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform to Pennsylvania South State Plane (good for PA analysis)</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>pa_counties_projected <span class="ot">&lt;-</span> pa_counties <span class="sc">%&gt;%</span>   <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">3365</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform to Albers Equal Area (good for area calculations) </span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>pa_counties_albers <span class="ot">&lt;-</span> pa_counties <span class="sc">%&gt;%</span>   <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">5070</span>) <span class="st">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p><strong>Plot Maps</strong></p>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pa_counties) <span class="sc">+</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<p><strong>Spatial Joins</strong></p>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tracts_with_counties <span class="ot">&lt;-</span> census_tracts <span class="sc">%&gt;%</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_join</span>(pa_counties)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<p><strong>Area Calculations</strong></p>
 <ul>
-<li><p>The dot (.) is a placeholder that represents the data being passed through the pipe</p></li>
-<li><p>In the code example below, the dot (.) refers to <code>pa_counties</code></p></li>
+<li><strong>Polynomials – e.g.&nbsp;Square Age Variable</strong></li>
 </ul>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to Sq Km</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>pa_counties <span class="ot">&lt;-</span> pa_counties <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">area_sqkm =</span> <span class="fu">as.numeric</span>(<span class="fu">st_area</span>(.)) <span class="sc">/</span> <span class="dv">1000000</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p><strong>Distance and Buffers</strong></p>
 <ul>
-<li>buffer units depend on coordinate reference system</li>
+<li><strong>kNN</strong></li>
 </ul>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 10km buffer around all hospitals</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>hospitals_projected <span class="ot">&lt;-</span> hospitals <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">3365</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(hospitals_projected)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>hospital_buffers <span class="ot">&lt;-</span> hospitals_projected <span class="sc">%&gt;%</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_buffer</span>(<span class="at">dist =</span> <span class="fl">32808.4</span>)  <span class="co"># 10,000 meters = 32808.4 feet</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(hospital_buffers)<span class="sc">+</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Different buffer sizes by hospital type (this is hypothetical, we don't have that column!)</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>hospital_buffers <span class="ot">&lt;-</span> hospitals <span class="sc">%&gt;%</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">buffer_size =</span> <span class="fu">case_when</span>(</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>      type <span class="sc">==</span> <span class="st">"Major Medical Center"</span> <span class="sc">~</span> <span class="dv">15000</span>,</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>      type <span class="sc">==</span> <span class="st">"Community Hospital"</span> <span class="sc">~</span> <span class="dv">10000</span>,</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>      type <span class="sc">==</span> <span class="st">"Clinic"</span> <span class="sc">~</span> <span class="dv">5000</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_buffer</span>(<span class="at">dist =</span> .<span class="sc">$</span>buffer_size)</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Use Unions to calculate what percentage of low-income tracts have access</span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>access_summary <span class="ot">&lt;-</span> low_income_tracts <span class="sc">%&gt;%</span></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">has_access =</span> <span class="fu">st_intersects</span>(., <span class="fu">st_union</span>(hospital_buffers), <span class="at">sparse =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_tracts =</span> <span class="fu">n</span>(),</span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">tracts_with_access =</span> <span class="fu">sum</span>(has_access),</span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">pct_with_access =</span> (tracts_with_access <span class="sc">/</span> total_tracts) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(access_summary)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section>
 <section id="questions-challenges" class="level2">
 <h2 class="anchored" data-anchor-id="questions-challenges">Questions &amp; Challenges</h2>
 <ul>
-<li>No questions for this week</li>
+<li></li>
 </ul>
 </section>
 <section id="connections-to-policy" class="level2">
 <h2 class="anchored" data-anchor-id="connections-to-policy">Connections to Policy</h2>
 <ul>
-<li><p><strong>Spatial Policy Analysis Workflow</strong></p>
-<ul>
-<li><strong>Load data</strong> → Get spatial boundaries and attribute data</li>
-<li><strong>Check projections</strong> → Transform to appropriate CRS</li>
-<li><strong>Join datasets</strong> → Combine spatial and non-spatial data</li>
-<li><strong>Spatial operations</strong> → Buffers, intersections, distance calculations</li>
-<li><strong>Aggregation</strong> → Summarize across spatial units</li>
-<li><strong>Visualization</strong> → Maps and charts</li>
-<li><strong>Interpretation</strong> → Policy recommendations</li>
-</ul></li>
+<li></li>
 </ul>
 </section>
 <section id="reflection" class="level2">
 <h2 class="anchored" data-anchor-id="reflection">Reflection</h2>
-<ul>
-<li><p>I was surprised at how intuitive and quick it was to develop maps and visualizations using packages in R as compared to ArcGIS. I discussed this with Prof.&nbsp;Delmelle during Office Hours, and she shared that she has relied exclusively on R for the past two years after switching to a Macbook.</p></li>
-<li><p>While ArcGIS is still a useful tool and has many cool additional features such as StoryMaps or animations, I believe that R is the way forward for core data wrangling, visualization, and machine learning work.</p></li>
-</ul>
 
 
 </section>
