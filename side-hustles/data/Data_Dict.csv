@@ -1,0 +1,134 @@
+Field Name,Field Description
+Company Name,Name of Company or Professional Name
+Executive First Name,First Name of Contact
+Executive Last Name,Last Name of Contact
+Address,Location address of the company
+City,Location city address of the company
+State,Location state address of the company
+ZIP Code,Location zip code address of the company
+Record Type,"Type of record - Verified, Unverified, Closed or Out of Business"
+Professional Title,Professional title of contact on executive detail - if available
+Executive Title,Title of contact on Executive Detail
+Executive Gender,Gender of contact on Executive Detail
+Executive Biography,Biography of contact on Executive Detail
+Executive Ethnicity,Ethnicity of contact on Executive Detail
+House Number,Location address house number of the company
+Street Pre-directional,Location address street pre-directional of the company
+Street Name,Location address street name of the company
+Street post-directional,Location address street post-directional of the company
+Street Suffix,Location address street suffix of the company
+ZIP Four,Location address zip four of the company
+Carrier Route,Location address carrier route of the company
+Delivery Point Barcode,Location address delivery point barcode of the company
+County,County name based upon location address zip plus four postal
+Metro Area,Name of the metropolitan statistical area where the company is located
+Neighborhood,Name of the neighborhood where the company is located
+Phone Number Combined,"Complete 10 digit phone number including -  the area code, prefix, and exchange"
+Phone Number Area Code,Area code of primary phone number
+Phone Number,Primary phone number of company
+Fax Number Combined,"Complete 10 digit fax number including -  the area code, prefix, and exchange"
+Fax Area Code,Area code of fax number
+Fax Number,Fax number of company
+Census Block Group,2010 Census Block Group of the company location
+Census Tract,2010 Census Tract of the company location
+Toll Free Number Combined,"Complete 10 digit phone number including -  the area code, prefix, and exchange"
+Toll Free Area Code,Area code to Toll Free number
+Toll Free Phone Number,Toll Free Number of company
+Website,"The web address for the company, no prefix is attached to this field"
+Company Description,A complete description of the company in words
+Primary SIC Code,Primary line of business code the company engages in
+Primary SIC Description,Primary line of business description the company engages in
+Primary SIC Ad Size,The ad size for this company's line of business in the Yellow Page book
+Primary SIC Year Appeared,The year this SIC Code first appeared in the Yellow Page book
+SIC Code,Code for an additional line of business the company engages in - up to 10 lines available for output
+SIC Code Description,Description for an additional line of business the company engages in - up to 10 descriptions available for output
+SIC Code Ad Size,Indicates the size of the ad for this company's line of business in the Yellow Page book - up to 10 ads available for output
+SIC Code Year Appeared,Indicates the year this SIC Code first appeared in the Yellow Page book - up to 10 years available for output
+Primary NAICS,"The primary line of business code used by a government agency for the purpose of collecting, analyzing, and publishing statistical data related to the U.S. business economy."
+Primary NAICS Description,"The primary line of business description used by a government agency for the purpose of collecting, analyzing, and publishing statistical data related to the U.S. business economy."
+NAICS,"A line of business code used by a government agency for the purpose of collecting, analyzing, and publishing statistical data related to the U.S. business economy - up to 10 available for output"
+NAICS Description,"A line of business description used by a government agency for the purpose of collecting, analyzing, and publishing statistical data related to the U.S. business economy - up to 10 available for output"
+Franchise Description,The description of a franchise for this company - up to 5 available for output
+Cuisine Code,The cuisine code for this company
+Cuisine Code Description,The cuisine description for this company
+Location Employee Size Range,A number range of employees at the location address.  Data is modeled.
+Location Employee Size Actual,"Actual number of employees at the location address, if available."
+Location Sales Volume Range,A number range of sales by the company at the location address.  Data is modeled.
+Location Sales Volume Actual,"Actual number of sales by the company at the location address, if available."
+Corporate Employee Size Range,"A number range of employees at a corporate address.  Only populated for corporation records, else blank.  Data is modeled."
+Corporate Employee Size Actual,"Actual number of employees at a corporate address.  Only populated for corporation records, else blank.  Data is modeled."
+Corporate Sales Volume Range,"Actual number range of sales for a corporate address.  Only populated for corporation records, else blank.  Data is modeled."
+Corporate Sales Volume Actual,"Actual number of sales for a corporate address.  Only populated for corporation records, else blank.  Data is modeled."
+Type of Business,"Indicates if the company is a public company, private company, or a branch."
+Location Type,"Indicates if the company is a single location, head quarter, branch or subsidiary."
+IUSA Number,A unique identifier for each company
+Parent IUSA Number,A unique identifier number for linkage purposes of a parent company
+Subsidiary IUSA Number,A unique identifier number for linkage purposes of a subsidiary company
+Foreign Parent Flag,Indicates if the parent company is located outside the USA
+EIN 1,Employer Identification number 1
+EIN 2,Employer Identification number 2
+EIN 3,Employer Identification number 3
+Fortune 1000 Ranking,Indicates the fortune 1000 ranking of the company if it has one.
+Credit Cards Accepted,Type of credit cards accepted by the company.
+Last Updated On,Last date associated with the record and any changes made by Infogroup.
+Years In Database,Number of years the record has been in the Infogroup database.
+Year Established,Year the company began operating.
+Square Footage,Indicates the square footage of company's location.
+Number of PC's,Indicates the actual number of PCs at the company.
+Home Business,Indicates if the record is a business operating out of a home.
+Credit Rating,Credit rating of company.
+Credit Rating Score,Credit rating numeric score of company.
+Credit Score Alpha,Alpha Credit rating of company.
+Credit Score Numeric ,Numeric Credit rating of company.
+Government Office,Indicates if the company is a government office.
+Import Export Flag,"A flag that indicates if the company is an importer, exporter or both."
+Own or Lease,Indicates if the company is located in its owned or leased location.
+Firm or Individual,Indicates if the company is a firm or a professional individual.
+Monday Open,Day and time the company is open for business
+Monday Close,Day the company is closed for business
+Tuesday Open,Day and time the company is open for business
+Tuesday Close,Day the company is closed for business
+Wednesday Open,Day and time the company is open for business
+Wednesday Close,Day the company is closed for business
+Thursday Open,Day and time the company is open for business
+Thursday Close,Day the company is closed for business
+Friday Open,Day and time the company is open for business
+Friday Close,Day the company is closed for business
+Saturday Open,Day and time the company is open for business
+Saturday Close,Day the company is closed for business
+Sunday Open,Day and time the company is open for business
+Sunday Close,Day the company is closed for business
+Executive First Name,First name of contact on Executive Detail - up to 50 available for output
+Executive Last Name,Last name of contact on Executive Detail  - up to 50 available for output
+Executive Title,Title of contact on Executive Detail  - up to 50 available for output
+Executive Gender,Gender of contact on Executive Detail  - up to 50 available for output
+Executive Biography,Biography of contact on Executive Detail - up to 50 available for output
+Executive Ethnicity,Ethnicity of contact on Executive Detail  - up to 50 available for output
+Ticker Symbol,Ticker symbol of company.
+Stock Exchange,Code indicating what stock exchange company is trading on.
+Accounting Expenses,"The total cost of accounting, auditing, and bookkeeping services purchased from other firms. estimation of annual expense based upon industry and size."
+Advertising  Expenses,"Includes the cost of purchased advertising and promotional services for media coverage, promotional, marketing, public relation services, and other advertising services purchased from others. estimation of annual  expense based upon industry and  size."
+Computer Expenses,Includes the cost of all associated computer expenses.
+Contract Labor Expenses,"Payments to other firms for the contractual use of their employees. these employees are supplied by other firms to perform specific jobs, and include temporary help and leased employees. estimation of annual expense based upon industry and size."
+Insurance Expenses,This item includes the cost of payments made on insurance policies. It does not include the costs of insurance incurred on behalf of employees. estimation of annual expense based upon industry and size.
+Legal Expenses,Legal services purchased from other firms. estimation of annual expense based upon industry and size.
+Office Supplies Expense,"Includes the cost of other supplies, materials and parts purchased for a company's own use, excluding computer and packaging supplies. estimation of annual expense based upon industry and size."
+Management/Administration Expenses,"Management, consulting, administrative, and other professional services purchased from other firms, excluding advertising, legal, accounting and computer services. estimation of annual expense based upon industry and size."
+Package Container Expense,"Purchases of containers, wrapping, packing and selling supplies used in packaging, processing, shipping, and selling of goods. estimation of annual expense based upon industry and size."
+Payroll and Benefits Expenses,The gross earnings of all employees paid during the calendar year including fringe benefits. estimation of annual expense based upon industry and size.
+Purchase Print Expenses,The cost of purchased or contracted printing services. estimation of annual expense based upon industry and size.
+Rent Expenses,"Payments made to other companies for the rental or leasing of land, buildings, offices and related structures. estimation of annual expense based upon industry and size."
+Telcom Expenses,"All costs for communication services purchased from other companies, including cost of telephone, data transmission, fax, and all other communications services. estimation of annual expense based upon industry and size."
+Utilities Expenses,"Includes the cost of electricity and fuels for heating, power or generation of electricity. it also includes the cost of water, sewer and refuse removal. estimation of annual expense based upon industry and size."
+Mailing Address,Location mailing address of the company.
+Mailing City,Location mailing city of the company.
+Mailing State,Location mailing state of the company.
+Mailing Zip Code,Location mailing zip code of the company.
+Mailing Zip Four,Location mailing zip plus four of the company.
+Mailing Carrier Route,Location mailing carrier route of the company.
+Mailing Delivery Point Bar Code,Location mailing delivery point bar code of the company.
+Twitter,Company's twitter handle - if available
+Linked-In,Company's LinkedIn page - if available
+Facebook,Company's Facebook page - if available
+Affiliated Locations,Indicates the number of branches under a Parent.
+Affiliated Records,Indicates the number of branches under a Subsidiary.

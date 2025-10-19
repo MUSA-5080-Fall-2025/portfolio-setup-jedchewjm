@@ -26,6 +26,8 @@ website:
         - href: labs/lab_2/assignment2_template.qmd
         
       - text: Side Hustles
+        menu:
+        - href: side-hustles/dataaxle.qmd
         
           
 
