@@ -2,7 +2,7 @@
 title: "Data Axle - Businesses in Sharswood"
 subtitle: "URBS 4000: Urban Studies Thesis"
 author: "Jed Chew"
-date: "October 2025"
+date: today
 format: 
   html:
     code-fold: false
@@ -18,7 +18,9 @@ editor:
     wrap: 80
 ---
 
-## Project Title: Mixed by Design – A Case Study of the Philadelphia Housing Authority's (PHA) Choice Neighborhoods Redevelopment of Sharswood
+## Project Title: Mixed by Design 
+
+### *A Case Study of the Philadelphia Housing Authority's (PHA) Choice Neighborhoods Redevelopment of Sharswood*
 
 For my Urban Studies thesis, I am researching the PHA's Choice Neighborhoods
 redevelopment of the Sharswood neighborhood in North Philadelphia. I have two
@@ -48,7 +50,7 @@ I retrieved my raw data files from Data Axle through Penn Libraries and Wharton
 Research and Data Services (WRDS) on October 15, 2025. The interface of Data
 Axle is shown below.
 
-![](images/clipboard-3282527950.png)
+![](images/clipboard-3282527950.png){width="887"}
 
 ### Record Types
 
@@ -76,12 +78,11 @@ Axle is shown below.
 
 -   Philadelphia census tracts and neighborhood boundaries
 
-**Your Task:**
-
 ```{r, echo = FALSE, include = FALSE}
 # Load required packages
 library(tidyverse)
 library(tidycensus)
+library(janitor)
 library(sf)
 library(tigris)
 library(scales)
@@ -115,6 +116,27 @@ unverified2
 unverified_combined <- bind_rows(unverified1, unverified2)
 glimpse(unverified_combined)
 write_csv(unverified_combined, "data/Sharswood_Unverified_Biz_Combined.csv")
+```
+
+```{r}
+# rename column headings
+verified <- verified |> clean_names()
+unverified_combined <- unverified_combined |> clean_names()
+
+# filter out small businesses with irrelevant SIC Codes
+drop_SIC <- c("Atm-Automated Teller Machines", "Schools", "Churches", "Nonclassified Establishments", "Real Estate Management", "Townhouses", "Mailing & Shipping Kiosks")
+
+verified_clean <- verified |>
+  filter(!primary_sic_description %in% drop_SIC) |>
+  select(company_name, address, latitude, longitude, census_block_group, primary_sic_code, primary_sic_description, primary_naics, primary_naics_description, 
+         years_in_database, location_type, location_employee_size_range, square_footage, record_type)
+verified_clean
+
+unverified_clean <- unverified_combined |>
+  filter(!primary_sic_description %in% drop_SIC) |>
+  select(company_name, address, latitude, longitude, census_block_group, primary_sic_code, primary_sic_description, primary_naics, primary_naics_description, 
+         years_in_database, location_type, location_employee_size_range, square_footage, record_type)
+unverified_clean
 ```
 
 ```{r, results = 'hide'}
@@ -198,7 +220,7 @@ phl_tract_summary <- phl_tract_clean |>
     # for MOE, ACS guidance is to combine by quadrature
     elderly_popM = sqrt(rowSums(across(matches("^elderly_pop\\d+M$"))^2, na.rm = 
                                   TRUE)),
-    pct_elderly = elderly_popE / total_popE,
+    pct_elderly = round((elderly_popE / total_popE) *100, 2),
     child_popE = rowSums(across(matches("^child_pop\\d+E$")), na.rm = TRUE),
     child_popM = sqrt(rowSums(across(matches("^child_pop\\d+M$"))^2, na.rm = 
                                   TRUE)),
@@ -208,25 +230,82 @@ phl_tract_summary <- phl_tract_clean |>
          elderly_popM, pct_elderly, child_popE, child_popM, pct_child)
 ```
 
+--------------------------------------------------------------------------------
+
+#### Step 3: Make Data Axle dataset Spatial
+
 ```{r}
-head(phl_tract_summary)
+# Convert Data Axle dataset to sf object
+verified.sf <- verified_clean |> 
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |> # WGS 84 
+  st_transform(2272) # PA State Plane (in US Survey Feet)
+
+unverified.sf <- unverified_clean |> 
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |> 
+  st_transform(2272)
+```
+
+**Join Data Axle Shapefiles to Philadelphia Census Tracts**
+
+```{r}
+# Filter Census Tracts for Sharswood
+sharswood_tract_sf <- phl_tract_summary |> 
+  filter(tract_name == c("138", "139"))
+
+ggplot(sharswood_tract_sf) +
+  geom_sf() +
+  theme_void()
+
+sharswood_tract <- sharswood_tract_sf |> 
+  st_drop_geometry()
+sharswood_tract
+```
+
+```{r}
+# Filter Block Groups for Sharswood
+ids <- c("421010138001","421010138002","421010139001",
+         "421010139002","421010139003")
+
+sharswood_bg <- block_grps |>
+ filter(GEOID %in% ids)
+
+ggplot(sharswood_bg) +
+  geom_sf() +
+  theme_void()
+```
+
+```{r}
+# Join Shapefiles and Plot Map
+sharswood_bg <- st_transform(sharswood_bg, st_crs(verified.sf))
+
+ggplot() +
+  geom_sf(data = sharswood_bg, fill = "gray97", color = "gray50", linewidth = 0.3) +
+  geom_sf(data = verified.sf, aes(fill = primary_sic_description), shape = 21, size = 2, alpha = 0.9) +
+  labs(
+    title = "Verified Businesses in Sharswood — Data Axle",
+    subtitle = "PA South State Plane (ftUS)",
+    caption = paste0("CRS: ", st_crs(block_grps)$input %||% st_crs(block_grps)$epsg)
+  ) +
+  theme_void()
+
+ggplot() +
+  geom_sf(data = sharswood_bg, fill = "gray97", color = "gray50", linewidth = 0.3) +
+  geom_sf(data = unverified.sf, shape = 21, size = 2, fill = "black", alpha = 0.9) +
+  labs(
+    title = "Unverified Businesses in Sharswood — Data Axle",
+    subtitle = "PA South State Plane (ftUS)",
+    caption = paste0("CRS: ", st_crs(block_grps)$input %||% st_crs(block_grps)$epsg)
+  ) +
+  theme_void()
 ```
 
 --------------------------------------------------------------------------------
 
-#### Step 3: Define Vulnerable Populations
+#### Step 4: Map Businesses to Home Parcels
 
 --------------------------------------------------------------------------------
 
-#### Step 4: Calculate Distance to Hospitals
-
---------------------------------------------------------------------------------
-
-#### Step 5: Identify Underserved Areas
-
---------------------------------------------------------------------------------
-
-#### Step 6: Create Summary Table
+#### Step 5: Create Summary Table
 
 --------------------------------------------------------------------------------
 
