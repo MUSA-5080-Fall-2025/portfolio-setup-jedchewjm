@@ -68,7 +68,7 @@ Axle is shown below.
 
     -   addresses are unverified (e.g. a business may have moved)
 
-#### Step 1: Load Raw Data as csv files
+### Step 1: Load Raw Data as csv files
 
 -   DataAxle's U.S. Businesses Data Dictionary
 
@@ -161,7 +161,7 @@ ggplot(block_grps) +
 
 --------------------------------------------------------------------------------
 
-#### Step 2: Get Philadelphia Demographic Data using `tidycensus`
+### Step 2: Get Philadelphia Demographic Data using `tidycensus`
 
 ```{r, eval = FALSE}
 # Load all available variables for ACS 5-year 2022
@@ -231,7 +231,7 @@ phl_tract_summary <- phl_tract_clean |>
 
 --------------------------------------------------------------------------------
 
-#### Step 3: Make Data Axle dataset Spatial
+### Step 3: Make Data Axle dataset Spatial
 
 ```{r}
 # Convert Data Axle dataset to sf object
@@ -310,7 +310,7 @@ ggplot() +
 
 --------------------------------------------------------------------------------
 
-#### Step 4: Map Businesses to Property Parcels and Affordable Housing Projects
+### Step 4: Map Businesses to Property Parcels and Affordable Housing Projects
 
 -   Data Source: Department of Records Property Parcels
 

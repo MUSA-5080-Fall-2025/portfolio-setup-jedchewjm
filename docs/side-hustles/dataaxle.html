@@ -3981,6 +3981,10 @@ vertical-align: -.125em;
   <li><a href="#part-1-raw-data-from-data-axle" id="toc-part-1-raw-data-from-data-axle" class="nav-link" data-scroll-target="#part-1-raw-data-from-data-axle">Part 1: Raw Data from Data Axle</a>
   <ul class="collapse">
   <li><a href="#record-types" id="toc-record-types" class="nav-link" data-scroll-target="#record-types">Record Types</a></li>
+  <li><a href="#step-1-load-raw-data-as-csv-files" id="toc-step-1-load-raw-data-as-csv-files" class="nav-link" data-scroll-target="#step-1-load-raw-data-as-csv-files">Step 1: Load Raw Data as csv files</a></li>
+  <li><a href="#step-2-get-philadelphia-demographic-data-using-tidycensus" id="toc-step-2-get-philadelphia-demographic-data-using-tidycensus" class="nav-link" data-scroll-target="#step-2-get-philadelphia-demographic-data-using-tidycensus">Step 2: Get Philadelphia Demographic Data using <code>tidycensus</code></a></li>
+  <li><a href="#step-3-make-data-axle-dataset-spatial" id="toc-step-3-make-data-axle-dataset-spatial" class="nav-link" data-scroll-target="#step-3-make-data-axle-dataset-spatial">Step 3: Make Data Axle dataset Spatial</a></li>
+  <li><a href="#step-4-map-businesses-to-property-parcels-and-affordable-housing-projects" id="toc-step-4-map-businesses-to-property-parcels-and-affordable-housing-projects" class="nav-link" data-scroll-target="#step-4-map-businesses-to-property-parcels-and-affordable-housing-projects">Step 4: Map Businesses to Property Parcels and Affordable Housing Projects</a></li>
   </ul></li>
   <li><a href="#part-2-comprehensive-visualization-and-analysis" id="toc-part-2-comprehensive-visualization-and-analysis" class="nav-link" data-scroll-target="#part-2-comprehensive-visualization-and-analysis">Part 2: Comprehensive Visualization and Analysis</a></li>
   </ul>
@@ -4054,8 +4058,9 @@ vertical-align: -.125em;
 <li><p>addresses are unverified (e.g. a business may have moved)</p></li>
 </ul></li>
 </ul>
-<section id="step-1-load-raw-data-as-csv-files" class="level4">
-<h4 class="anchored" data-anchor-id="step-1-load-raw-data-as-csv-files">Step 1: Load Raw Data as csv files</h4>
+</section>
+<section id="step-1-load-raw-data-as-csv-files" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-load-raw-data-as-csv-files">Step 1: Load Raw Data as csv files</h3>
 <ul>
 <li><p>DataAxle’s U.S. Businesses Data Dictionary</p></li>
 <li><p>Verified Businesses in Sharswood Neighborhood</p></li>
@@ -4253,8 +4258,8 @@ vertical-align: -.125em;
 </div>
 <hr>
 </section>
-<section id="step-2-get-philadelphia-demographic-data-using-tidycensus" class="level4">
-<h4 class="anchored" data-anchor-id="step-2-get-philadelphia-demographic-data-using-tidycensus">Step 2: Get Philadelphia Demographic Data using <code>tidycensus</code></h4>
+<section id="step-2-get-philadelphia-demographic-data-using-tidycensus" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-get-philadelphia-demographic-data-using-tidycensus">Step 2: Get Philadelphia Demographic Data using <code>tidycensus</code></h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load all available variables for ACS 5-year 2022</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>acs_vars_2022 <span class="ot">&lt;-</span> <span class="fu">load_variables</span>(<span class="dv">2022</span>, <span class="st">&quot;acs5&quot;</span>, <span class="at">cache =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -4321,8 +4326,8 @@ vertical-align: -.125em;
 </div>
 <hr>
 </section>
-<section id="step-3-make-data-axle-dataset-spatial" class="level4">
-<h4 class="anchored" data-anchor-id="step-3-make-data-axle-dataset-spatial">Step 3: Make Data Axle dataset Spatial</h4>
+<section id="step-3-make-data-axle-dataset-spatial" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-make-data-axle-dataset-spatial">Step 3: Make Data Axle dataset Spatial</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert Data Axle dataset to sf object</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>verified.sf <span class="ot">&lt;-</span> verified_clean <span class="sc">|&gt;</span> </span>
@@ -4440,8 +4445,8 @@ vertical-align: -.125em;
 </div>
 <hr>
 </section>
-<section id="step-4-map-businesses-to-property-parcels-and-affordable-housing-projects" class="level4">
-<h4 class="anchored" data-anchor-id="step-4-map-businesses-to-property-parcels-and-affordable-housing-projects">Step 4: Map Businesses to Property Parcels and Affordable Housing Projects</h4>
+<section id="step-4-map-businesses-to-property-parcels-and-affordable-housing-projects" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-map-businesses-to-property-parcels-and-affordable-housing-projects">Step 4: Map Businesses to Property Parcels and Affordable Housing Projects</h3>
 <ul>
 <li><p>Data Source: Department of Records Property Parcels</p></li>
 <li><p>Date Downloaded: Oct 19, 2025</p></li>
@@ -4588,7 +4593,6 @@ Geodetic CRS:  WGS 84</code></pre>
 <li>Schools: <a href="https://opendataphilly.org/datasets/schools/" class="uri">https://opendataphilly.org/datasets/schools/</a> – points identifying public schools, charter schools, many private schools, school annexes, and athletic fields and facilities</li>
 </ul>
 <hr>
-</section>
 </section>
 </section>
 <section id="part-2-comprehensive-visualization-and-analysis" class="level2">
