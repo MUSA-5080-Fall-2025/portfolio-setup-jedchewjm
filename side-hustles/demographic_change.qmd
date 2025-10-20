@@ -326,3 +326,136 @@ sharswood_2012_tract
 ## Part 2: Comprehensive Visualization and Analysis
 
 --------------------------------------------------------------------------------
+
+### Step 1: Rename Columns for ACS Year
+
+```{r}
+cols_to_suffix <- c(
+  "total_popE","median_incomeE",
+  "elderly_popE","elderly_popM","pct_elderly",
+  "child_popE","child_popM","pct_child"
+)
+
+s12_sf <- sharswood_2012_tract_sf |>
+  rename_with(~ paste0(.x, "_2012"), any_of(cols_to_suffix))
+s12 <- sharswood_2012_tract |>
+  rename_with(~ paste0(.x, "_2012"), any_of(cols_to_suffix))
+s17_sf <- sharswood_2017_tract_sf |>
+  rename_with(~ paste0(.x, "_2017"), any_of(cols_to_suffix))
+s17 <- sharswood_2017_tract |>
+  rename_with(~ paste0(.x, "_2017"), any_of(cols_to_suffix))
+s22_sf <- sharswood_2022_tract_sf |>
+  rename_with(~ paste0(.x, "_2022"), any_of(cols_to_suffix))
+s22 <- sharswood_2022_tract |>
+  rename_with(~ paste0(.x, "_2022"), any_of(cols_to_suffix))
+```
+
+```{r}
+compare_sf <- s12_sf |>
+  select(GEOID, tract_name, county_name, geometry, ends_with("_2012")) |>
+  left_join(select(s17, GEOID, ends_with("_2017")), by = "GEOID") |>
+  left_join(select(s22, GEOID, ends_with("_2022")), by = "GEOID") |>
+  mutate(
+    pop_change_12_22       = total_popE_2022 - total_popE_2012,
+    pop_pct_change_12_22   = 100 * (total_popE_2022 - total_popE_2012) / pmax(1, total_popE_2012),
+
+    child_pct_change_12_22   = pct_child_2022   - pct_child_2012,
+    elderly_pct_change_12_22 = pct_elderly_2022 - pct_elderly_2012,
+
+    income_change_12_22 = median_incomeE_2022 - median_incomeE_2012,
+    income_change_12_17 = median_incomeE_2017 - median_incomeE_2012,
+    income_change_17_22 = median_incomeE_2022 - median_incomeE_2017
+  )
+
+compare_table <- compare_sf |>
+  st_drop_geometry() |>
+  select(
+    GEOID, tract_name,
+    total_popE_2012, total_popE_2017, total_popE_2022, pop_change_12_22, pop_pct_change_12_22,
+    pct_child_2012, pct_child_2017, pct_child_2022, child_pct_change_12_22,
+    pct_elderly_2012, pct_elderly_2017, pct_elderly_2022, elderly_pct_change_12_22,
+    median_incomeE_2012, median_incomeE_2017, median_incomeE_2022,
+    income_change_12_17, income_change_17_22, income_change_12_22
+  )
+kable(compare_table, digits = 2, caption = "Sharswood tracts: ACS 2008–12 vs 2013–17 vs 2018–22")
+```
+
+### Step 2: Facet Maps by Period
+
+```{r}
+long_panel <- compare_sf |>
+  pivot_longer(
+    cols = matches("_(2012|2017|2022)$"),
+    names_to = c("metric","period"),
+    names_pattern = "(.+)_([0-9]{4})$",
+    values_to = "value"
+  )
+
+# (A) % Children
+ggplot(filter(long_panel, metric == "pct_child")) +
+  geom_sf(aes(fill = value), color = "grey25", linewidth = 0.25) +
+  facet_wrap(~ period, nrow = 1) +
+  scale_fill_viridis_c(name = "% age 5–19") +
+  labs(title = "Sharswood: % Children by ACS period",
+       subtitle = "2008–12 (2012), 2013–17 (2017), 2018–22 (2022)",
+       caption = "ACS 5-year estimates") +
+  theme_void() + theme(legend.position = "right")
+
+# (B) % Elderly
+ggplot(filter(long_panel, metric == "pct_elderly")) +
+  geom_sf(aes(fill = value), color = "grey25", linewidth = 0.25) +
+  facet_wrap(~ period, nrow = 1) +
+  scale_fill_viridis_c(name = "% age 65+") +
+  labs(title = "Sharswood: % Elderly by ACS period") +
+  theme_void()
+
+# (C) Median income (note comparability caveat)
+ggplot(filter(long_panel, metric == "median_incomeE")) +
+  geom_sf(aes(fill = value), color = "grey25", linewidth = 0.25) +
+  facet_wrap(~ period, nrow = 1) +
+  scale_fill_viridis_c(name = "Median HH income",
+                       labels = dollar_format(accuracy = 1)) +
+  labs(title = "Sharswood: Median Household Income",
+       subtitle = "Each period’s dollars (not adjusted to a common base year)") +
+  theme_void()
+```
+
+### Step 3: Change Maps
+
+```{r}
+# Δ % Children
+ggplot(compare_sf) +
+  geom_sf(aes(fill = child_pct_change_12_22), color = "grey25", linewidth = 0.25) +
+  scale_fill_gradient2(name = "Δ % children\n(2022 – 2012)", midpoint = 0) +
+  labs(title = "Change in % Children, 2008–12 → 2018–22") +
+  theme_void()
+
+# Δ % Elderly
+ggplot(compare_sf) +
+  geom_sf(aes(fill = elderly_pct_change_12_22), color = "grey25", linewidth = 0.25) +
+  scale_fill_gradient2(name = "Δ % elderly\n(2022 – 2012)", midpoint = 0) +
+  labs(title = "Change in % Elderly, 2008–12 → 2018–22") +
+  theme_void()
+
+# Population % change
+ggplot(compare_sf) +
+  geom_sf(aes(fill = pop_pct_change_12_22), color = "grey25", linewidth = 0.25) +
+  scale_fill_gradient2(name = "Population % change\n(2022 – 2012)", midpoint = 0,
+                       labels = label_percent(scale = 1, accuracy = 1)) +
+  labs(title = "Population % Change, 2008–12 → 2018–22") +
+  theme_void()
+```
+
+```{r}
+bars <- long_panel |>
+  filter(metric %in% c("pct_child","pct_elderly")) |>
+  mutate(metric = recode(metric, pct_child = "% Children (5–19)", pct_elderly = "% Elderly (65+)"))
+
+ggplot(bars, aes(x = period, y = value, fill = period)) +
+  geom_col(width = 0.7) +
+  facet_grid(metric ~ tract_name, scales = "free_y") +
+  scale_y_continuous(labels = label_number(accuracy = 0.1)) +
+  labs(title = "Before–After Comparison by Tract and Period",
+       x = NULL, y = "Percent") +
+  theme_minimal() + theme(legend.position = "none")
+```
