@@ -38,7 +38,7 @@ Initiative (CNI) vision of mixed-partners, mixed-use, and mixed-income
 
 \<insert information from
 
-#### Step 1: Load Raw Data as csv files
+### Step 1: Load Raw Data as csv files
 
 -   Philadelphia census tracts, block groups, and neighborhood boundaries
 
@@ -73,14 +73,14 @@ block_grps <- block_groups(state = "PA", county = "Philadelphia", year = 2020, c
 
 --------------------------------------------------------------------------------
 
-#### Step 2: Get Philadelphia Demographic Data using `tidycensus`
+### Step 2: Get Philadelphia Demographic Data using `tidycensus`
 
 ```{r, eval = FALSE}
 # Load all available variables for ACS 5-year 2022
 acs_vars_2022 <- load_variables(2022, "acs5", cache = TRUE)
 ```
 
-```{r, eval = FALSE, results = 'hide'}
+```{r, results = 'hide'}
 # Helper Variables for Summing Population Values for Children aged 5-19
 child_pop = c("B01001_004", "B01001_005", "B01001_006", "B01001_007", 
                 "B01001_028", "B01001_029", "B01001_030", "B01001_031")
@@ -93,7 +93,7 @@ elderly_pop = c("B01001_020", "B01001_021", "B01001_022", "B01001_023",
                 "B01001_047", "B01001_048", "B01001_049")
 
 # Get tract-level demographic data from 2022 ACS 5-Yr Estimates for Philadelphia
-phl_tract_data <- get_acs(
+phl_tract_2022_data <- get_acs(
   geography = "tract",
   variables = c(
     total_pop = "B01003_001",
@@ -114,7 +114,7 @@ phl_tract_data <- get_acs(
 )
 
 # Clean the county names to remove state name and "County" 
-phl_tract_clean <- phl_tract_data |> 
+phl_tract_2022_clean <- phl_tract_2022_data |> 
   separate(
     NAME, 
     into = c("tract_name", "county_name", "state_name"), 
@@ -125,7 +125,7 @@ phl_tract_clean <- phl_tract_data |>
     county_name = str_remove(county_name, " County")
   )
 
-phl_tract_summary <- phl_tract_clean |>
+phl_tract_2022_summary <- phl_tract_2022_clean |>
   mutate(
     elderly_popE = rowSums(across(matches("^elderly_pop\\d+E$")), na.rm = TRUE),
     # for MOE, ACS guidance is to combine by quadrature
@@ -143,52 +143,183 @@ phl_tract_summary <- phl_tract_clean |>
 
 --------------------------------------------------------------------------------
 
-#### Step 3: Filter Data for Sharswood
+### Step 3: Filter Data for Sharswood
 
 ```{r}
-sharswood_tract_2018_2022 <- read_csv("data/Sharswood_Tracts.csv")
-sharswood_tract_2018_2022
-```
-
-```{r, eval = FALSE}
 # Filter Census Tracts for Sharswood
-sharswood_tract_sf <- phl_tract_summary |> 
-  filter(tract_name == c("138", "139"))
+sharswood_2022_tract_sf <- phl_tract_2022_summary |> 
+  filter(tract_name %in% c("138", "139"))
 
-ggplot(sharswood_tract_sf) +
+ggplot(sharswood_2022_tract_sf) +
   geom_sf() +
   theme_void()
 
-sharswood_tract <- sharswood_tract_sf |> 
+sharswood_2022_tract <- sharswood_2022_tract_sf |> 
   st_drop_geometry()
-sharswood_tract
-```
-
-```{r, eval = FALSE}
-# Filter Block Groups for Sharswood
-ids <- c("421010138001","421010138002","421010139001",
-         "421010139002","421010139003")
-
-sharswood_bg_sf <- block_grps |>
- filter(GEOID %in% ids)
-
-ggplot(sharswood_bg_sf) +
-  geom_sf() +
-  theme_void()
-
-sharswood_bg <- sharswood_bg_sf |> 
-  st_drop_geometry()
-sharswood_bg
-```
-
-```{r, eval = FALSE}
-# Join Shapefiles and Plot Map
-
+sharswood_2022_tract
 ```
 
 --------------------------------------------------------------------------------
 
-#### Step 4:
+### Step 4: Repeat Process for 2013-2017 ACS 5-Yr Estimates
+
+```{r, results = 'hide'}
+# Helper Variables for Summing Population Values for Children aged 5-19
+child_pop = c("B01001_004", "B01001_005", "B01001_006", "B01001_007", 
+                "B01001_028", "B01001_029", "B01001_030", "B01001_031")
+
+
+# Helper Variable for Summing Population Values for Elderly Population
+elderly_pop = c("B01001_020", "B01001_021", "B01001_022", "B01001_023", 
+                "B01001_024", "B01001_025", 
+                "B01001_044", "B01001_045", "B01001_046", 
+                "B01001_047", "B01001_048", "B01001_049")
+
+# Get tract-level demographic data from 2022 ACS 5-Yr Estimates for Philadelphia
+phl_2017_tract_data <- get_acs(
+  geography = "tract",
+  variables = c(
+    total_pop = "B01003_001",
+    child_pop = child_pop,
+    elderly_pop = elderly_pop,
+    median_income = "B19013_001",
+    poverty = "B17001_001",
+    White     = "B03002_003",
+    Black     = "B03002_004",
+    Hispanic  = "B03002_012"
+  ),
+  state = "PA",
+  county = "Philadelphia",
+  year = 2017,
+  survey = "acs5",
+  output = "wide",
+  geometry = TRUE
+)
+```
+
+```{r}
+# Clean the county names to remove state name and "County" 
+phl_2017_tract_clean <- phl_2017_tract_data |> 
+  separate(
+    NAME, 
+    into = c("tract_name", "county_name", "state_name"), 
+    sep = ", "
+  ) |> 
+  mutate(
+    tract_name = str_remove(tract_name, "Census Tract "),
+    county_name = str_remove(county_name, " County")
+  )
+```
+
+```{r}
+phl_2017_tract_summary <- phl_2017_tract_clean |>
+  mutate(
+    elderly_popE = rowSums(across(matches("^elderly_pop\\d+E$")), na.rm = TRUE),
+    # for MOE, ACS guidance is to combine by quadrature
+    elderly_popM = sqrt(rowSums(across(matches("^elderly_pop\\d+M$"))^2, na.rm = 
+                                  TRUE)),
+    pct_elderly = round((elderly_popE / total_popE) *100, 2),
+    child_popE = rowSums(across(matches("^child_pop\\d+E$")), na.rm = TRUE),
+    child_popM = sqrt(rowSums(across(matches("^child_pop\\d+M$"))^2, na.rm = 
+                                  TRUE)),
+    pct_child = round((child_popE/total_popE) * 100, 2),
+  ) |>
+  select(GEOID, tract_name, county_name, total_popE, median_incomeE, elderly_popE,
+         elderly_popM, pct_elderly, child_popE, child_popM, pct_child)
+```
+
+```{r}
+# Filter Census Tracts for Sharswood
+sharswood_2017_tract_sf <- phl_2017_tract_summary |> 
+  filter(tract_name == c("138", "139"))
+
+ggplot(sharswood_2017_tract_sf) +
+  geom_sf() +
+  theme_void()
+
+sharswood_2017_tract <- sharswood_2017_tract_sf |> 
+  st_drop_geometry()
+sharswood_2017_tract
+```
+
+### Step 5: Repeat Process for 2008-2012 ACS 5-Yr Estimates
+
+```{r, results = 'hide'}
+# Helper Variables for Summing Population Values for Children aged 5-19
+child_pop = c("B01001_004", "B01001_005", "B01001_006", "B01001_007", 
+                "B01001_028", "B01001_029", "B01001_030", "B01001_031")
+
+
+# Helper Variable for Summing Population Values for Elderly Population
+elderly_pop = c("B01001_020", "B01001_021", "B01001_022", "B01001_023", 
+                "B01001_024", "B01001_025", 
+                "B01001_044", "B01001_045", "B01001_046", 
+                "B01001_047", "B01001_048", "B01001_049")
+
+# Get tract-level demographic data from 2022 ACS 5-Yr Estimates for Philadelphia
+phl_2012_tract_data <- get_acs(
+  geography = "tract",
+  variables = c(
+    total_pop = "B01003_001",
+    child_pop = child_pop,
+    elderly_pop = elderly_pop,
+    median_income = "B19013_001",
+    poverty = "B17001_001",
+    White     = "B03002_003",
+    Black     = "B03002_004",
+    Hispanic  = "B03002_012"
+  ),
+  state = "PA",
+  county = "Philadelphia",
+  year = 2012,
+  survey = "acs5",
+  output = "wide",
+  geometry = TRUE
+)
+```
+
+```{r}
+# Clean the county names to remove state name and "County" 
+phl_2012_tract_clean <- phl_2012_tract_data |> 
+  separate(
+    NAME, 
+    into = c("tract_name", "county_name", "state_name"), 
+    sep = ", "
+  ) |> 
+  mutate(
+    tract_name = str_remove(tract_name, "Census Tract "),
+    county_name = str_remove(county_name, " County")
+  )
+
+phl_2012_tract_summary <- phl_2012_tract_clean |>
+  mutate(
+    elderly_popE = rowSums(across(matches("^elderly_pop\\d+E$")), na.rm = TRUE),
+    # for MOE, ACS guidance is to combine by quadrature
+    elderly_popM = sqrt(rowSums(across(matches("^elderly_pop\\d+M$"))^2, na.rm = 
+                                  TRUE)),
+    pct_elderly = round((elderly_popE / total_popE) *100, 2),
+    child_popE = rowSums(across(matches("^child_pop\\d+E$")), na.rm = TRUE),
+    child_popM = sqrt(rowSums(across(matches("^child_pop\\d+M$"))^2, na.rm = 
+                                  TRUE)),
+    pct_child = round((child_popE/total_popE) * 100, 2),
+  ) |>
+  select(GEOID, tract_name, county_name, total_popE, median_incomeE, elderly_popE,
+         elderly_popM, pct_elderly, child_popE, child_popM, pct_child)
+```
+
+```{r}
+# Filter Census Tracts for Sharswood
+sharswood_2012_tract_sf <- phl_2012_tract_summary |> 
+  filter(tract_name %in% c("138", "139"))
+
+ggplot(sharswood_2012_tract_sf) +
+  geom_sf() +
+  theme_void()
+
+sharswood_2012_tract <- sharswood_2012_tract_sf |> 
+  st_drop_geometry()
+sharswood_2012_tract
+```
 
 --------------------------------------------------------------------------------
 
