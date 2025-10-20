@@ -18,7 +18,7 @@ editor:
     wrap: 80
 ---
 
-## Project Title: Mixed by Design 
+## Project Title: Mixed by Design
 
 ### *A Case Study of the Philadelphia Housing Authority's (PHA) Choice Neighborhoods Redevelopment of Sharswood*
 
@@ -110,11 +110,10 @@ verified
 unverified1 <- read_csv("data/Sharswood_Unverified_Biz_Pg1to10.csv")
 unverified1
 
-unverified2 <- read_csv("data/Sharswood_Unverified_Biz_Pg1to10.csv")
+unverified2 <- read_csv("data/Sharswood_Unverified_Biz_Pg11to17.csv")
 unverified2
 
 unverified_combined <- bind_rows(unverified1, unverified2)
-glimpse(unverified_combined)
 write_csv(unverified_combined, "data/Sharswood_Unverified_Biz_Combined.csv")
 ```
 
@@ -245,7 +244,7 @@ unverified.sf <- unverified_clean |>
   st_transform(2272)
 ```
 
-**Join Data Axle Shapefiles to Philadelphia Census Tracts**
+**Join Data Axle Shapefiles to Philadelphia Census Tracts and Block Groups**
 
 ```{r}
 # Filter Census Tracts for Sharswood
@@ -259,6 +258,9 @@ ggplot(sharswood_tract_sf) +
 sharswood_tract <- sharswood_tract_sf |> 
   st_drop_geometry()
 sharswood_tract
+
+# Create CSV File
+write_csv(sharswood_tract, "data/Sharswood_Tracts.csv")
 ```
 
 ```{r}
@@ -266,20 +268,27 @@ sharswood_tract
 ids <- c("421010138001","421010138002","421010139001",
          "421010139002","421010139003")
 
-sharswood_bg <- block_grps |>
+sharswood_bg_sf <- block_grps |>
  filter(GEOID %in% ids)
 
-ggplot(sharswood_bg) +
+ggplot(sharswood_bg_sf) +
   geom_sf() +
   theme_void()
+
+sharswood_bg <- sharswood_bg_sf |> 
+  st_drop_geometry()
+sharswood_bg
+
+# Create CSV File
+write_csv(sharswood_bg, "data/Sharswood_Block_Grps.csv")
 ```
 
 ```{r}
 # Join Shapefiles and Plot Map
-sharswood_bg <- st_transform(sharswood_bg, st_crs(verified.sf))
+sharswood_bg_sf <- st_transform(sharswood_bg_sf, st_crs(verified.sf))
 
 ggplot() +
-  geom_sf(data = sharswood_bg, fill = "gray97", color = "gray50", linewidth = 0.3) +
+  geom_sf(data = sharswood_bg_sf, fill = "gray97", color = "gray50", linewidth = 0.3) +
   geom_sf(data = verified.sf, aes(fill = primary_sic_description), shape = 21, size = 2, alpha = 0.9) +
   labs(
     title = "Verified Businesses in Sharswood — Data Axle",
@@ -289,7 +298,7 @@ ggplot() +
   theme_void()
 
 ggplot() +
-  geom_sf(data = sharswood_bg, fill = "gray97", color = "gray50", linewidth = 0.3) +
+  geom_sf(data = sharswood_bg_sf, fill = "gray97", color = "gray50", linewidth = 0.3) +
   geom_sf(data = unverified.sf, shape = 21, size = 2, fill = "black", alpha = 0.9) +
   labs(
     title = "Unverified Businesses in Sharswood — Data Axle",
@@ -301,39 +310,86 @@ ggplot() +
 
 --------------------------------------------------------------------------------
 
-#### Step 4: Map Businesses to Home Parcels
+#### Step 4: Map Businesses to Property Parcels and Affordable Housing Projects
 
---------------------------------------------------------------------------------
+-   Data Source: Department of Records Property Parcels
 
-#### Step 5: Create Summary Table
+-   Date Downloaded: Oct 19, 2025
 
---------------------------------------------------------------------------------
+-   Link:
+    <https://opendataphilly.org/datasets/department-of-records-property-parcels/>
 
-## Part 2: Comprehensive Visualization
+```{r, eval = FALSE}
+# Code to Filter out Sharswood Parcels from Philadelphia Records
+# Code not Executed because Philadelphia Records File exceeds 100 MB
+prop_parcels <- st_read("data/DOR_Parcel.geojson") |>
+  st_transform(st_crs(sharswood_bg_sf))
 
-```{r}
-
+sharswood_prop_parcels <- st_filter(prop_parcels, sharswood_bg_sf, .predicate = st_intersects)
 ```
 
+```{r}
+sharswood_parcels <- st_read("data/sharswood_parcels.geojson")
+
+ggplot() +
+  geom_sf(data = sharswood_bg_sf, fill = "gray97", color = "gray50", linewidth = 0.3) +
+  geom_sf(data = sharswood_parcels, fill = NA, color = "gray50", linewidth = 0.6) +
+  labs(title = "Property Parcels in Sharswood") +
+  theme_void()
+```
+
+-   Data Source: Division of Housing and Community Development (DHCD)
+
+-   Date Downloaded: Oct 19, 2025
+
+-   Link: <https://opendataphilly.org/datasets/affordable-housing-production/>
+
+```{r}
+affordable_housing_parcels <- st_read("data/Affordable_housing.geojson") |>
+  st_transform(st_crs(sharswood_bg_sf))
+
+sharswood_affordable <- st_filter(affordable_housing_parcels, sharswood_bg_sf, 
+                                  .predicate = st_within)
+
+sharswood_affordable |>
+  st_drop_geometry()
+
+ggplot() +
+  geom_sf(data = sharswood_bg_sf, fill = "gray97", color = "gray50", linewidth = 0.3) +
+  geom_sf(data = sharswood_affordable, aes(size = total_units), 
+          fill = NA, color = "firebrick", linewidth = 0.6) +
+  geom_sf_text(data = sharswood_affordable, aes(label = project_name),
+               size = 3, check_overlap = TRUE) +
+  labs(title = "Affordable Housing Projects in Sharswood (1994–2024)") +
+  theme_void()
+```
+
+**Putting it All Together**
+
+```{r}
+ggplot() +
+  geom_sf(data = sharswood_bg_sf, fill = "gray97", color = "gray50", linewidth = 0.3) +
+  geom_sf(data = sharswood_parcels, fill = NA, color = "gray50", linewidth = 0.6) +
+  geom_sf(data = sharswood_affordable, fill = NA, color = "firebrick", linewidth = 1) +
+  geom_sf_text(data = sharswood_affordable, aes(label = project_name),
+               size = 3, check_overlap = TRUE) +
+  geom_sf(data = verified.sf, fill = "blue", shape = 21, size = 1.5, alpha = 0.9) + 
+  geom_sf(data = unverified.sf, fill = "darkgreen", shape = 21, size = 1.5, alpha = 0.9) +
+  labs(title = "Businesses and Affordable Housing Projects in Sharswood") +
+  theme_void()
+```
+
+**Other Datasets**
+
+-   School Parcels: <https://opendataphilly.org/datasets/schools-parcels/> –
+    parcel location of schools in the City of Philadelphia with attribute
+    information for address, grade level, type, and status
+-   Schools: <https://opendataphilly.org/datasets/schools/> – points identifying
+    public schools, charter schools, many private schools, school annexes, and
+    athletic fields and facilities
+
 --------------------------------------------------------------------------------
 
-## Part 3: Open Data Philly
+## Part 2: Comprehensive Visualization and Analysis
 
-Choose your own additional spatial dataset and conduct a supplementary analysis.
-
-**My Chosen Question: School Access and School Choice in City of Philadelphia**
-
--   **Data**: Schools, Census Tracts (race/income demographics)
-    -   School Parcels: <https://opendataphilly.org/datasets/schools-parcels/> –
-        parcel location of schools in the City of Philadelphia with attribute
-        information for address, grade level, type, and status
-    -   Schools: <https://opendataphilly.org/datasets/schools/> – points
-        identifying public schools, charter schools, many private schools,
-        school annexes, and athletic fields and facilities
--   **Question:** "Is lack of school access associated with vulnerable
-    populations?"
--   **Operations:**
-    -   Clean datasets
-    -   Distance to nearest school
-    -   Buffer schools (10-minute walk = 0.5 mile)
-    -   Compare types and enrollment of schools by demographics
+--------------------------------------------------------------------------------

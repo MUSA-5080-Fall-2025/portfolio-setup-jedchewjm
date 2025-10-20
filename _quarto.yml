@@ -28,6 +28,7 @@ website:
       - text: Side Hustles
         menu:
         - href: side-hustles/dataaxle.qmd
+        - href: side-hustles/demographic_change.qmd
         
           
 

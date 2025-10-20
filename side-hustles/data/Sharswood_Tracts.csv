@@ -1,0 +1,3 @@
+GEOID,tract_name,county_name,total_popE,median_incomeE,elderly_popE,elderly_popM,pct_elderly,child_popE,child_popM,pct_child
+42101013800,138,Philadelphia,2077,68864,126,78.56207736560943,6.07,255,127.11018841933954,12.28
+42101013900,139,Philadelphia,2585,41042,391,142.44999122499095,15.13,421,255.58755838264116,16.29
