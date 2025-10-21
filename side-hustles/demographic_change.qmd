@@ -55,9 +55,7 @@ There are two main limitations with this methodology:
     multiple years, and it is challenging to identify the critical junctures in
     the redevelopment process and their direct impact on the neighborhood
 
-### Step 1: Load Raw Data as csv files
-
--   Philadelphia census tracts, block groups, and neighborhood boundaries
+### Step 1: Load Philadelphia Demographic Data using `tidycensus`
 
 ```{r, echo = FALSE, include = FALSE}
 # Load required packages
@@ -80,18 +78,6 @@ census_api_key("fe841b7ef0aa73d9579f0517bd1c8f26d33c789b")
 getwd()
 ```
 
-```{r, results = 'hide'}
-# Load spatial data
-census_tracts <- tracts(state = "PA", county = "Philadelphia", year = 2020, class = "sf", cb = TRUE, progress = FALSE)
-block_grps <- block_groups(state = "PA", county = "Philadelphia", year = 2020, class = "sf",cb = TRUE, progress = FALSE)
-
-# Standardize CRS
-```
-
---------------------------------------------------------------------------------
-
-### Step 2: Get Philadelphia Demographic Data using `tidycensus`
-
 ```{r, eval = FALSE}
 # Load all available variables for ACS 5-year 2022
 acs_vars_2022 <- load_variables(2022, "acs5", cache = TRUE)
@@ -109,19 +95,50 @@ elderly_pop = c("B01001_020", "B01001_021", "B01001_022", "B01001_023",
                 "B01001_044", "B01001_045", "B01001_046", 
                 "B01001_047", "B01001_048", "B01001_049")
 
+# Helper Function for Variables
+vars <- c(
+  total_pop = "B01003_001",
+  child_pop = child_pop,
+  elderly_pop = elderly_pop,
+  median_income = "B19013_001",
+  poverty_total = "B17001_001",
+  poverty_level = "B17001_002",
+  White     = "B03002_003",
+  Black     = "B03002_004",
+  Hispanic  = "B03002_012"
+)
+
+# Helper Function for Summarizing ACS
+summarize_acs <- function(df) {
+  df |> 
+       mutate(
+      # totals (E) and MOEs (M; combined by quadrature)
+      elderly_popE = rowSums(across(matches("^elderly_pop\\d+E$")), na.rm = TRUE),
+      elderly_popM = sqrt(rowSums(across(matches("^elderly_pop\\d+M$"), ~ (.x)^2), na.rm = TRUE)),
+      child_popE   = rowSums(across(matches("^child_pop\\d+E$")),   na.rm = TRUE),
+      child_popM   = sqrt(rowSums(across(matches("^child_pop\\d+M$"),   ~ (.x)^2), na.rm = TRUE)),
+
+      # percentages
+      pct_elderly  = round((elderly_popE / total_popE) * 100, 2),
+      pct_child    = round((child_popE   / total_popE) * 100, 2),
+      pct_white    = round((WhiteE       / total_popE) * 100, 2),
+      pct_black    = round((BlackE       / total_popE) * 100, 2),
+      pct_hispanic = round((HispanicE    / total_popE) * 100, 2),
+      pct_poverty  = round((poverty_levelE / poverty_totalE) * 100, 2)
+    ) |>
+    select(any_of(c(
+      "GEOID", "tract_name", "county_name", "total_popE", "median_incomeE",
+      "elderly_popE", "elderly_popM", "pct_elderly",
+      "child_popE", "child_popM", "pct_child",
+      "pct_poverty", "pct_white", "pct_black", "pct_hispanic", "geometry")))
+}
+```
+
+```{r, results = 'hide'}
 # Get tract-level demographic data from 2022 ACS 5-Yr Estimates for Philadelphia
 phl_tract_2022_data <- get_acs(
   geography = "tract",
-  variables = c(
-    total_pop = "B01003_001",
-    child_pop = child_pop,
-    elderly_pop = elderly_pop,
-    median_income = "B19013_001",
-    poverty = "B17001_001",
-    White     = "B03002_003",
-    Black     = "B03002_004",
-    Hispanic  = "B03002_012"
-  ),
+  variables = vars,
   state = "PA",
   county = "Philadelphia",
   year = 2022,
@@ -141,34 +158,12 @@ phl_tract_2022_clean <- phl_tract_2022_data |>
     tract_name = str_remove(tract_name, "Census Tract "),
     county_name = str_remove(county_name, " County")
   )
-
-phl_tract_2022_summary <- phl_tract_2022_clean |>
-  mutate(
-    # demographic variables
-    elderly_popE = rowSums(across(matches("^elderly_pop\\d+E$")), na.rm = TRUE),
-    # for MOE, ACS guidance is to combine by quadrature
-    elderly_popM = sqrt(rowSums(across(matches("^elderly_pop\\d+M$"))^2, na.rm = 
-                                  TRUE)),
-    pct_elderly = round((elderly_popE / total_popE) *100, 2),
-    child_popE = rowSums(across(matches("^child_pop\\d+E$")), na.rm = TRUE),
-    child_popM = sqrt(rowSums(across(matches("^child_pop\\d+M$"))^2, 
-                              na.rm = TRUE)),
-    pct_child = round((child_popE/total_popE) * 100, 2),
-    # race variables
-    pct_white = round((WhiteE/total_popE) * 100, 2),
-    pct_black = round((BlackE/total_popE) * 100, 2),
-    pct_hispanic = round((HispanicE/total_popE) * 100, 2),
-    
-    pct_poverty = round((povertyE/total_popE)*100, 2)
-  ) |>
-  select(GEOID, tract_name, county_name, total_popE, median_incomeE, elderly_popE, 
-         elderly_popM, pct_elderly, child_popE, child_popM, pct_child, pct_poverty,
-         pct_white, pct_black, pct_hispanic)
+phl_tract_2022_summary <- summarize_acs(phl_tract_2022_clean)
 ```
 
 --------------------------------------------------------------------------------
 
-### Step 3: Filter Data for Sharswood
+### Step 2: Filter Data for Sharswood
 
 ```{r}
 # Filter Census Tracts for Sharswood
@@ -182,33 +177,13 @@ sharswood_2022_tract
 
 --------------------------------------------------------------------------------
 
-### Step 4: Repeat Process for 2013-2017 ACS 5-Yr Estimates
+### Step 3: Repeat Process for 2013-2017 ACS 5-Yr Estimates
 
 ```{r, results = 'hide'}
-# Helper Variables for Summing Population Values for Children aged 5-19
-child_pop = c("B01001_004", "B01001_005", "B01001_006", "B01001_007", 
-                "B01001_028", "B01001_029", "B01001_030", "B01001_031")
-
-
-# Helper Variable for Summing Population Values for Elderly Population
-elderly_pop = c("B01001_020", "B01001_021", "B01001_022", "B01001_023", 
-                "B01001_024", "B01001_025", 
-                "B01001_044", "B01001_045", "B01001_046", 
-                "B01001_047", "B01001_048", "B01001_049")
-
-# Get tract-level demographic data from 2022 ACS 5-Yr Estimates for Philadelphia
+# Get tract-level demographic data from 2017 ACS 5-Yr Estimates for Philadelphia
 phl_2017_tract_data <- get_acs(
   geography = "tract",
-  variables = c(
-    total_pop = "B01003_001",
-    child_pop = child_pop,
-    elderly_pop = elderly_pop,
-    median_income = "B19013_001",
-    poverty = "B17001_001",
-    White     = "B03002_003",
-    Black     = "B03002_004",
-    Hispanic  = "B03002_012"
-  ),
+  variables = vars,
   state = "PA",
   county = "Philadelphia",
   year = 2017,
@@ -216,9 +191,7 @@ phl_2017_tract_data <- get_acs(
   output = "wide",
   geometry = TRUE
 )
-```
 
-```{r}
 # Clean the county names to remove state name and "County" 
 phl_2017_tract_clean <- phl_2017_tract_data |> 
   separate(
@@ -230,30 +203,7 @@ phl_2017_tract_clean <- phl_2017_tract_data |>
     tract_name = str_remove(tract_name, "Census Tract "),
     county_name = str_remove(county_name, " County")
   )
-```
-
-```{r}
-phl_2017_tract_summary <- phl_2017_tract_clean |>
-  mutate(
-    elderly_popE = rowSums(across(matches("^elderly_pop\\d+E$")), na.rm = TRUE),
-    # for MOE, ACS guidance is to combine by quadrature
-    elderly_popM = sqrt(rowSums(across(matches("^elderly_pop\\d+M$"))^2, na.rm = 
-                                  TRUE)),
-    pct_elderly = round((elderly_popE / total_popE) *100, 2),
-    child_popE = rowSums(across(matches("^child_pop\\d+E$")), na.rm = TRUE),
-    child_popM = sqrt(rowSums(across(matches("^child_pop\\d+M$"))^2, 
-                              na.rm = TRUE)),
-    pct_child = round((child_popE/total_popE) * 100, 2),
-    # race variables
-    pct_white = round((WhiteE/total_popE) * 100, 2),
-    pct_black = round((BlackE/total_popE) * 100, 2),
-    pct_hispanic = round((HispanicE/total_popE) * 100, 2),
-    
-    pct_poverty = round((povertyE/total_popE)*100, 2)
-  ) |>
-  select(GEOID, tract_name, county_name, total_popE, median_incomeE, elderly_popE, 
-         elderly_popM, pct_elderly, child_popE, child_popM, pct_child, pct_poverty,
-         pct_white, pct_black, pct_hispanic)
+phl_2017_tract_summary <- summarize_acs(phl_2017_tract_clean)
 ```
 
 ```{r}
@@ -266,33 +216,13 @@ sharswood_2017_tract <- sharswood_2017_tract_sf |>
 sharswood_2017_tract
 ```
 
-### Step 5: Repeat Process for 2008-2012 ACS 5-Yr Estimates
+### Step 4: Repeat Process for 2008-2012 ACS 5-Yr Estimates
 
 ```{r, results = 'hide'}
-# Helper Variables for Summing Population Values for Children aged 5-19
-child_pop = c("B01001_004", "B01001_005", "B01001_006", "B01001_007", 
-                "B01001_028", "B01001_029", "B01001_030", "B01001_031")
-
-
-# Helper Variable for Summing Population Values for Elderly Population
-elderly_pop = c("B01001_020", "B01001_021", "B01001_022", "B01001_023", 
-                "B01001_024", "B01001_025", 
-                "B01001_044", "B01001_045", "B01001_046", 
-                "B01001_047", "B01001_048", "B01001_049")
-
 # Get tract-level demographic data from 2022 ACS 5-Yr Estimates for Philadelphia
 phl_2012_tract_data <- get_acs(
   geography = "tract",
-  variables = c(
-    total_pop = "B01003_001",
-    child_pop = child_pop,
-    elderly_pop = elderly_pop,
-    median_income = "B19013_001",
-    poverty = "B17001_001",
-    White     = "B03002_003",
-    Black     = "B03002_004",
-    Hispanic  = "B03002_012"
-  ),
+  variables = vars,
   state = "PA",
   county = "Philadelphia",
   year = 2012,
@@ -300,9 +230,7 @@ phl_2012_tract_data <- get_acs(
   output = "wide",
   geometry = TRUE
 )
-```
 
-```{r}
 # Clean the county names to remove state name and "County" 
 phl_2012_tract_clean <- phl_2012_tract_data |> 
   separate(
@@ -314,28 +242,7 @@ phl_2012_tract_clean <- phl_2012_tract_data |>
     tract_name = str_remove(tract_name, "Census Tract "),
     county_name = str_remove(county_name, " County")
   )
-
-phl_2012_tract_summary <- phl_2012_tract_clean |>
-  mutate(
-    elderly_popE = rowSums(across(matches("^elderly_pop\\d+E$")), na.rm = TRUE),
-    # for MOE, ACS guidance is to combine by quadrature
-    elderly_popM = sqrt(rowSums(across(matches("^elderly_pop\\d+M$"))^2, na.rm = 
-                                  TRUE)),
-    pct_elderly = round((elderly_popE / total_popE) *100, 2),
-    child_popE = rowSums(across(matches("^child_pop\\d+E$")), na.rm = TRUE),
-    child_popM = sqrt(rowSums(across(matches("^child_pop\\d+M$"))^2, 
-                              na.rm = TRUE)),
-    pct_child = round((child_popE/total_popE) * 100, 2),
-    # race variables
-    pct_white = round((WhiteE/total_popE) * 100, 2),
-    pct_black = round((BlackE/total_popE) * 100, 2),
-    pct_hispanic = round((HispanicE/total_popE) * 100, 2),
-    
-    pct_poverty = round((povertyE/total_popE)*100, 2)
-  ) |>
-  select(GEOID, tract_name, county_name, total_popE, median_incomeE, elderly_popE, 
-         elderly_popM, pct_elderly, child_popE, child_popM, pct_child, pct_poverty,
-         pct_white, pct_black, pct_hispanic)
+phl_2012_tract_summary <- summarize_acs(phl_2012_tract_clean)
 ```
 
 ```{r}
@@ -385,7 +292,7 @@ compare_sf <- s12_sf |>
   left_join(select(s22, GEOID, ends_with("_2022")), by = "GEOID") |>
   mutate(
     pop_change_12_22       = total_popE_2022 - total_popE_2012,
-    pop_pct_change_12_22   = 100 * (total_popE_2022 - total_popE_2012) / pmax(1, total_popE_2012),
+    pop_pct_change_12_22   = 100 * (total_popE_2022 - total_popE_2012) / total_popE_2012,
 
     d_pct_child_12_22    = pct_child_2022    - pct_child_2012,
     d_pct_elderly_12_22  = pct_elderly_2022  - pct_elderly_2012,
@@ -414,6 +321,92 @@ compare_table <- compare_sf |>
     median_incomeE_2012, median_incomeE_2017, median_incomeE_2022, d_income_12_17, d_income_17_22,
   )
 kable(compare_table, digits = 2, caption = "Sharswood tracts: ACS 2008–12 vs 2013–17 vs 2018–22")
+```
+
+```{r}
+# Table 1: Population
+tbl_pop <- compare_sf |>
+  st_drop_geometry() |>
+  select(
+    GEOID, total_popE_2012, total_popE_2017, total_popE_2022,
+    pop_change_12_22, pop_pct_change_12_22,
+    pct_child_2012, pct_child_2017, pct_child_2022, d_pct_child_12_22,
+    pct_elderly_2012, pct_elderly_2017, pct_elderly_2022, d_pct_elderly_12_22
+  ) |>
+  rename(
+    `Census Tract` = GEOID,
+    `Total Pop (2012)` = total_popE_2012,
+    `Total Pop (2017)` = total_popE_2017,
+    `Total Pop (2022)` = total_popE_2022,
+    `Δ pop 12–22`      = pop_change_12_22,
+    `% change 12–22`   = pop_pct_change_12_22,
+    `Child % 2012`     = pct_child_2012,
+    `Child % 2017`     = pct_child_2017,
+    `Child % 2022`     = pct_child_2022,
+    `Δ Child (pp) 12–22` = d_pct_child_12_22,
+    `Elderly % 2012`     = pct_elderly_2012,
+    `Elderly % 2017`     = pct_elderly_2017,
+    `Elderly % 2022`     = pct_elderly_2022,
+    `Δ Elderly (pp) 12–22` = d_pct_elderly_12_22
+  )
+
+kable(tbl_pop, digits = 2, caption = "Sharswood: Changes in Population")
+```
+
+```{r}
+# Table 2: Race
+tbl_race <- compare_sf |>
+  st_drop_geometry() |>
+  select(
+    GEOID, pct_white_2012, pct_white_2017, pct_white_2022, d_pct_white_12_22,
+    pct_black_2012, pct_black_2017, pct_black_2022, d_pct_black_12_22,
+    pct_hispanic_2012, pct_hispanic_2017, pct_hispanic_2022, d_pct_hispanic_12_22
+  ) |>
+  rename(
+    `Census Tract` = GEOID,
+    `White % 2012` = pct_white_2012,
+    `White % 2017` = pct_white_2017,
+    `White % 2022` = pct_white_2022,
+    `Δ White (pp) 12–22` = d_pct_white_12_22,
+    `Black % 2012` = pct_black_2012,
+    `Black % 2017` = pct_black_2017,
+    `Black % 2022` = pct_black_2022,
+    `Δ Black (pp) 12–22` = d_pct_black_12_22,
+    `Hispanic % 2012` = pct_hispanic_2012,
+    `Hispanic % 2017` = pct_hispanic_2017,
+    `Hispanic % 2022` = pct_hispanic_2022,
+    `Δ Hispanic (pp) 12–22` = d_pct_hispanic_12_22
+  )
+
+kable(tbl_race, digits = 2, caption = "Sharswood: Changes in Race")
+```
+
+```{r}
+# Table 3: Income
+tbl_income <- compare_sf |>
+  st_drop_geometry() |>
+  select(
+    GEOID, 
+    pct_poverty_2012, pct_poverty_2017, pct_poverty_2022, d_pct_poverty_12_22,
+    median_incomeE_2012, median_incomeE_2017, median_incomeE_2022,
+    d_income_12_17, d_income_17_22, d_income_12_22
+  ) |>
+  rename(
+    `Census Tract` = GEOID,
+    `Poverty % 2012`      = pct_poverty_2012,
+    `Poverty % 2017`      = pct_poverty_2017,
+    `Poverty % 2022`      = pct_poverty_2022,
+    `Δ Poverty (pp) 12–22`= d_pct_poverty_12_22,
+    `Median income (2012)`= median_incomeE_2012,
+    `Median income (2017)`= median_incomeE_2017,
+    `Median income (2022)`= median_incomeE_2022,
+    `Δ income 12–17`      = d_income_12_17,
+    `Δ income 17–22`      = d_income_17_22,
+    `Δ income 12–22`      = d_income_12_22
+  )
+
+kable(tbl_income, digits = 2, caption = "Sharswood: Changes in Income & Poverty",
+      format.args = list(big.mark = ","))
 ```
 
 ### Step 2: Facet Maps by Period
