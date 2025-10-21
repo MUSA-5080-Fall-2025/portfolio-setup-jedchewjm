@@ -165,6 +165,10 @@ phl_tract_2022_summary <- phl_tract_2022_clean |>
 sharswood_2022_tract_sf <- phl_tract_2022_summary |> 
   filter(tract_name %in% c("138", "139"))
 
+ggplot(sharswood_2022_tract_sf) +
+  geom_sf() +
+  theme_void()
+
 sharswood_2022_tract <- sharswood_2022_tract_sf |> 
   st_drop_geometry()
 sharswood_2022_tract
@@ -290,3 +294,4 @@ ggplot(sharswood_land_use) +
 ### Step 2: Facet Maps by Period
 
 ### Step 3: Change Maps
+
