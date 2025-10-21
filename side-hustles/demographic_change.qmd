@@ -76,6 +76,9 @@ census_api_key("fe841b7ef0aa73d9579f0517bd1c8f26d33c789b")
 
 # Get working directory
 getwd()
+
+# Options
+options(warn=-1)
 ```
 
 ```{r, eval = FALSE}
@@ -306,21 +309,6 @@ compare_sf <- s12_sf |>
     d_income_17_22 = median_incomeE_2022 - median_incomeE_2017,
     d_income_12_22 = median_incomeE_2022 - median_incomeE_2012
   )
-
-compare_table <- compare_sf |>
-  st_drop_geometry() |>
-  select(
-    GEOID, tract_name,
-    total_popE_2012, total_popE_2017, total_popE_2022, pop_change_12_22, pop_pct_change_12_22,
-    pct_child_2012,  pct_child_2017,  pct_child_2022,  d_pct_child_12_22,
-    pct_elderly_2012,pct_elderly_2017,pct_elderly_2022,d_pct_elderly_12_22,
-    pct_poverty_2012,pct_poverty_2017,pct_poverty_2022,d_pct_poverty_12_22,
-    pct_white_2012,  pct_white_2017,  pct_white_2022,  d_pct_white_12_22,
-    pct_black_2012,  pct_black_2017,  pct_black_2022,  d_pct_black_12_22,
-    pct_hispanic_2012,pct_hispanic_2017,pct_hispanic_2022,d_pct_hispanic_12_22,
-    median_incomeE_2012, median_incomeE_2017, median_incomeE_2022, d_income_12_17, d_income_17_22,
-  )
-kable(compare_table, digits = 2, caption = "Sharswood tracts: ACS 2008–12 vs 2013–17 vs 2018–22")
 ```
 
 ```{r}
@@ -350,7 +338,8 @@ tbl_pop <- compare_sf |>
     `Δ Elderly (pp) 12–22` = d_pct_elderly_12_22
   )
 
-kable(tbl_pop, digits = 2, caption = "Sharswood: Changes in Population")
+kable(tbl_pop, digits = 1, caption = "Sharswood: Changes in Population",
+      format.args = list(big.mark = ","))
 ```
 
 ```{r}
@@ -378,7 +367,7 @@ tbl_race <- compare_sf |>
     `Δ Hispanic (pp) 12–22` = d_pct_hispanic_12_22
   )
 
-kable(tbl_race, digits = 2, caption = "Sharswood: Changes in Race")
+kable(tbl_race, digits = 1, caption = "Sharswood: Changes in Race")
 ```
 
 ```{r}
@@ -405,46 +394,79 @@ tbl_income <- compare_sf |>
     `Δ income 12–22`      = d_income_12_22
   )
 
-kable(tbl_income, digits = 2, caption = "Sharswood: Changes in Income & Poverty",
+kable(tbl_income, digits = 1, caption = "Sharswood: Changes in Income & Poverty",
       format.args = list(big.mark = ","))
 ```
 
 ### Step 2: Facet Maps by Period
 
-```{r}
+```{r, message = FALSE}
+# Convert from Wide to Long
 long_panel <- compare_sf |>
   pivot_longer(
     cols = matches("_(2012|2017|2022)$"),
     names_to = c("metric","period"),
     names_pattern = "(.+)_([0-9]{4})$",
     values_to = "value"
-  )
+  ) 
 
-# helper to draw a 3-panel small multiple for a metric
-facet_metric <- function(metric_name, title, fill_lab, lab_fmt = NULL) {
-  p <- long_panel %>%
-    filter(metric == metric_name) %>%
-    ggplot() +
-    geom_sf(aes(fill = value), color = "grey25", linewidth = 0.25) +
+long_panel_pts <- long_panel |> st_point_on_surface()
+
+# Facet Helper with Boxed Labels
+facet_metric <- function(metric_name, title, fill_lab,
+                         fill_lab_fmt = NULL, text_fmt = NULL,
+                         text_size = 3, box_fill = alpha("white", 0.60)) {
+
+  dat <- long_panel     |> filter(metric == metric_name)
+  lab <- long_panel_pts |> filter(metric == metric_name)
+
+  if (is.null(text_fmt)) text_fmt <- label_number(accuracy = 1)
+  lab <- lab |> mutate(lbl = text_fmt(value))
+
+  ggplot() +
+    geom_sf(data  = dat, aes(fill = value), color = "grey25", linewidth = 0.25) +
+    geom_sf_label(data  = lab, aes(label = lbl), size = text_size, 
+                  label.size = 0, label.padding = unit(1.2, "pt"),    
+                  fill = box_fill, color   = "black", label.r = unit(1.5, "pt"),
+                  check_overlap = TRUE, na.rm   = TRUE, show.legend = FALSE) +
     facet_wrap(~ period, nrow = 1) +
-    labs(title = title, subtitle = "Panels: 2012, 2017, 2022",
-         fill = fill_lab, caption = "ACS 5-year estimates") +
-    theme_void() + theme(legend.position = "right")
-  if (is.null(lab_fmt)) {
-    p + scale_fill_viridis_c()
-  } else {
-    p + scale_fill_viridis_c(labels = lab_fmt)
-  }
+    labs(
+      title = title, 
+      subtitle = "Panels: 2012, 2017, 2022",
+      fill = fill_lab,
+      caption = "ACS 5-year estimates"
+    ) +
+    theme_void() +
+    theme(legend.position = "right") +
+    {
+      if (is.null(fill_lab_fmt)) {
+        scale_fill_viridis_c()
+      } else {
+        scale_fill_viridis_c(labels = fill_lab_fmt)
+      }
+    }
 }
 
-# draw small multiples for your new variables
-facet_metric("pct_poverty",   "Sharswood: % in Poverty",           "%")
-facet_metric("pct_white",     "Sharswood: % White (race alone)",   "%")
-facet_metric("pct_black",     "Sharswood: % Black (race alone)",   "%")
-facet_metric("pct_hispanic",  "Sharswood: % Hispanic (any race)",  "%")
-facet_metric("pct_child",     "Sharswood: % Children (5–19)",      "%")
-facet_metric("pct_elderly",   "Sharswood: % Elderly (65+)",        "%")
-facet_metric("median_incomeE","Sharswood: Median Household Income","$", dollar_format())
+# Format Data Labels
+pct_fmt <- label_number(accuracy = 0.1, suffix = "%")  # your % values are 0–100
+dol_fmt <- label_dollar(accuracy = 1)
+
+# Facet Maps
+facet_metric("pct_poverty",    "Sharswood: % in Poverty", "%", 
+             fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("pct_white",      "Sharswood: % White (race alone)", "%", 
+             fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("pct_black",      "Sharswood: % Black (race alone)", "%", 
+             fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("pct_hispanic",   "Sharswood: % Hispanic (any race)", "%", 
+             fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("pct_child",      "Sharswood: % Children (5–19)", "%", 
+             fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("pct_elderly",    "Sharswood: % Elderly (65+)", "%", 
+             fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("median_incomeE", "Sharswood: Median Household Income", "$", 
+             fill_lab_fmt = dol_fmt, text_fmt = dol_fmt)
+
 ```
 
 ### Step 3: Change Maps
