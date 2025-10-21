@@ -1,56 +1,99 @@
 ---
-title: "Week 7 Notes - Spatial ML and Spatial Autocorrelation"
+title: "Week 7 Notes - Model Diagnostics and Spatial Autocorrelation"
 date: "2025-10-20"
 ---
 
 ## Key Concepts Learned
 
-### Types of Variables
+### Regression Workflow
 
-**Continuous:** square feet, age of house, income levels, distance to downtown
+**Building the model:**
 
-**Categorical:** neighborhood, school district, building type, has garage (binary Y/N)
+1.  Visualize relationships
 
-### Fixed Effects
+2.  Engineer features
 
--   Definition: Categorical variables that capture all unmeasured characteristics of a group
+3.  Fit the model
 
--   Powerful but they’re a *black box* 
+4.  Evaluate performance (RMSE, R²)
 
--   Neighborhoods bundle many unmeasured factors (e.g. school districts, job access, amenities, "cool factor")
+5.  Check assumptions
+
+**Spatial Diagnostics**
+
+6.  Are errors random or clustered?
+7.  Do we predict better in some areas?
+8.  Is there remaining spatial structure?
+
+**Spatial Autocorrelation in Errors (i.e. Clustered Errors)**
+
+-   spatial pattern visible (not random scatter)
+
+-   under/over-predict in areas
+
+-   model misses something about location
+
+**Moran's I measures Spatial Autocorrelation**
+
+*Intuition: When I’m above/below average, are my neighbors also above/below average?*
+
+**Range:** -1 to +1
+
+-   **+1** = Perfect positive correlation (clustering)
+
+-   **0** = Random spatial pattern
+
+-   **-1** = Perfect negative correlation (dispersion)
+
+**Sample Example:**
+
+![](images/clipboard-2995180422.png){width="451"}
+
+Step 1: Calculate Deviations from Mean
+
+![](images/clipboard-2249328638.png)
+
+**Positive deviation** = we over-predicted (actual \> predicted)\
+**Negative deviation** = we under-predicted (actual \< predicted)
+
+Step 2: Multiply Neighbor Pair Deviations
+
+![](images/clipboard-645011366.png)
+
+-   Lots of positive products → **High Moran’s I** (clustering)
+
+-   Products near zero → **Low Moran’s I** (random)
+
+-   Negative products → **Negative Moran’s I** (rare with errors)
 
 ## Coding Techniques
 
--   **Make Data with X/Y Coordinates Spatial**
+-   **Create and Plot the Spatial Lag**
 
 ```{r, eval = FALSE}
+library(spdep)
 
+# Define neighbors (5 nearest)
+coords <- st_coordinates(boston_test)
+neighbors <- knn2nb(knearneigh(coords, k=5))
+weights <- nb2listw(neighbors, style="W")
+
+# Calculate spatial lag of errors
+boston_test$error_lag <- lag.listw(weights, boston_test$error)
 ```
 
--   **Add Dummy/Categorical Variables (e.g. Neighborhoods)**
-
-The n-1 rule: One neighborhood is automatically chosen as the *reference category* (omitted)! R picks the first alphabetically unless you specify otherwise.
+-   **Calculate Moran's I**
 
 ```{r, eval = FALSE}
+# Test for spatial autocorrelation in errors
+moran_test <- moran.mc(
+  boston_test$error,        # Your errors
+  weights,                  # Spatial weights matrix
+  nsim = 999                # Number of permutations
+)
 
-```
-
--   **Interaction Effects**
-
-```{r, eval = FALSE}
-# 
-```
-
--   **Polynomials – e.g. Square Age Variable**
-
-```{r, eval= FALSE}
-# 
-```
-
--   **kNN**
-
-```{r, eval = FALSE}
-# 
+# View results
+moran_test$statistic         # Moran's I value
 ```
 
 ## Questions & Challenges
