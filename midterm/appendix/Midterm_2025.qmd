@@ -5,7 +5,9 @@ author: "Mohamad AlAbbas, Natan Anaqami, Jinheng Cen, Jed Chew, Henry Yang"
 date: today
 format: 
   html:
-    code-fold: false
+    code-fold: true
+    code-summary: "Show code"
+    code-tools: true
     toc: true
     toc-location: left
     theme: cosmo
@@ -17,69 +19,65 @@ editor:
   markdown: 
     wrap: 80
 ---
-
 **Content:** All the technical details:
 
--   Complete data cleaning code
--   All EDA visualizations
--   Feature engineering code
--   Full model outputs
--   Diagnostic plots
--   Detailed interpretations
+- Complete data cleaning code
+- All EDA visualizations
+- Feature engineering code
+- Full model outputs
+- Diagnostic plots
+- Detailed interpretations
 
 **Audience:** Data scientists and technical reviewers
 
---------------------------------------------------------------------------------
+---
 
 ## Data Sources
 
 ### Primary Dataset: Philadelphia Property Sales
 
-**Source:** [Philadelphia Property
-Sales](https://metadata.phila.gov/#home/datasetdetails/5543865f20583086178c4ee5/representationdetails/55d624fdad35c7e854cb21a4/)
+**Source:** [Philadelphia Property Sales](https://metadata.phila.gov/#home/datasetdetails/5543865f20583086178c4ee5/representationdetails/55d624fdad35c7e854cb21a4/)
 
-We sourced the following variables from the property sales dataset:
+We sourced the following variables from the property sales dataset: 
 
--   Sale price
--   Sale date
--   Property characteristics:
-    -   Total Area
-    -   Total Livable Area
-    -   Year Built
-    -   Census Tract
-    -   Exterior Condition
-    -   Interior Condition
-    -   Fireplaces
-    -   Garage Spaces
-    -   Market Value
-    -   Basements
-    -   Number of Bedrooms
-    -   Number of Bathrooms
-    -   Number of Stories
-    -   Shape
+- Sale price
+- Sale date
+- Property characteristics:
+  - Total Area
+  - Total Livable Area
+  - Year Built
+  - Census Tract
+  - Exterior Condition
+  - Interior Condition
+  - Fireplaces
+  - Garage Spaces
+  - Market Value
+  - Basements
+  - Number of Bedrooms
+  - Number of Bathrooms 
+  - Number of Stories
+  - Shape
 
 ### Secondary Datasets: Spatial Amenities
 
 **Source:** [OpenDataPhilly](https://opendataphilly.org)
 
-We sourced the following environmental and neighborhood characteristics:
+We sourced the following environmental and neighborhood characteristics: 
 
--   [Crime Incidents](https://opendataphilly.org/datasets/crime-incidents/):
--   [Neighborood
-    Boundaries](https://opendataphilly.org/datasets/philadelphia-neighborhoods/)
--   [SEPTA](https://opendataphilly.org/datasets/septa-routes-stops-locations/)
--   [Bike Network](https://opendataphilly.org/datasets/bike-network/)
--   [Hospital](https://opendataphilly.org/datasets/philadelphia-hospitals/)
--   [Philadelphia Park and
-    Recreation](https://opendataphilly.org/datasets/ppr-properties/)
--   [Schools](https://opendataphilly.org/datasets/schools/)
--   [Neighborhood Food
-    Markets](https://opendataphilly.org/datasets/neighborhood-food-retail/)
--   [Police Station](https://opendataphilly.org/datasets/police-stations/)
--   [Fire
-    Department](https://opendataphilly.org/datasets/fire-department-facilities/)
+- [Crime Incidents](https://opendataphilly.org/datasets/crime-incidents/):
+- [Neighborood Boundaries](https://opendataphilly.org/datasets/philadelphia-neighborhoods/)
+- [SEPTA](https://opendataphilly.org/datasets/septa-routes-stops-locations/)
+- [Bike Network](https://opendataphilly.org/datasets/bike-network/)
+- [Hospital](https://opendataphilly.org/datasets/philadelphia-hospitals/)
+- [Philadelphia Park and Recreation](https://opendataphilly.org/datasets/ppr-properties/)
+- [Schools](https://opendataphilly.org/datasets/schools/)
+- [Neighborhood Food Markets](https://opendataphilly.org/datasets/neighborhood-food-retail/)
+- [Police Station](https://opendataphilly.org/datasets/police-stations/)
+- [Fire Department](https://opendataphilly.org/datasets/fire-department-facilities/ )
 
---------------------------------------------------------------------------------
+
+
+---
 
 ### Part 1: Data Preparation
 
@@ -111,6 +109,7 @@ library(patchwork)
 library(forcats)
 library(purrr)
 library(zoo)
+library(kableExtra)
 
 options(warn = -1)
 options(tigris_use_cache = TRUE)
@@ -123,6 +122,7 @@ STATE_FIPS <- "42"
 GEOG       <- "tract"
 
 ```
+
 
 **Load and clean Philadelphia sales data:**
 
@@ -257,6 +257,7 @@ fire_raw   <- read_sf(FIRE_URL)
 
 ```
 
+
 ```{r}
 #| label: Property-Sales
 #| message: false
@@ -324,6 +325,7 @@ clean_data <- clean_data[keep_rows, ]
 
 
 ```
+
 
 ```{r}
 #| label: Spatial-Enrichment
@@ -794,6 +796,7 @@ if (nrow(fire_proc) == 0L) {
 
 ```
 
+
 ```{r}
 #| label: ACS-Integrate
 #| message: false
@@ -1010,6 +1013,7 @@ clean_data <- clean_data %>%
 
 ```
 
+
 ```{r}
 #| label: finish-data
 #| message: false
@@ -1049,78 +1053,20 @@ rm(list = setdiff(ls(), c("clean_data", "sales_data", "geom_backup" )))
 
 #### Logical Underpinning:
 
-The modeling pipeline builds a property-level dataset that doesn’t just look at
-what the house is, but where the house is — and that “where” part is doing a lot
-of work. Beyond the standard housing attributes (square footage, year built,
-condition, number of beds/baths, etc.), we engineered a bunch of spatial
-features that try to capture a home’s context in Philadelphia. Every parcel in
-the sales dataset was turned into geometry using its recorded shape, projected
-into a local coordinate reference system, and then enriched with measurements
-like “How far is this property from transit?” or “How many food retailers are
-within a mile?” The point is: we’re not just assuming the structure itself
-determines sale price. We’re explicitly measuring access, amenities, safety, and
-neighborhood context as part of value.
+The modeling pipeline builds a property-level dataset that doesn’t just look at what the house is, but where the house is — and that “where” part is doing a lot of work. Beyond the standard housing attributes (square footage, year built, condition, number of beds/baths, etc.), we engineered a bunch of spatial features that try to capture a home’s context in Philadelphia. Every parcel in the sales dataset was turned into geometry using its recorded shape, projected into a local coordinate reference system, and then enriched with measurements like “How far is this property from transit?” or “How many food retailers are within a mile?” The point is: we’re not just assuming the structure itself determines sale price. We’re explicitly measuring access, amenities, safety, and neighborhood context as part of value.
 
-Crime exposure is one of the biggest contextual signals we added. For every sold
-property, we counted the number of reported “violent” incidents within roughly
-two blocks (\~600 feet) and the number of “non-violent/misdemeanor” incidents
-within about one block (\~300 feet). We defined “violent” broadly — not only
-homicides and robberies, but any incident where a gun or weapon was mentioned in
-the police data. The logic is that buyers and appraisers implicitly price in
-perceived safety. If two houses are physically similar but one sits in an area
-with more firearm-related incidents, we expect downward pressure on sale price.
-That becomes a numeric predictor: more nearby violent incidents → potentially
-lower willingness to pay.
+Crime exposure is one of the biggest contextual signals we added. For every sold property, we counted the number of reported “violent” incidents within roughly two blocks (~600 feet) and the number of “non-violent/misdemeanor” incidents within about one block (~300 feet). We defined “violent” broadly — not only homicides and robberies, but any incident where a gun or weapon was mentioned in the police data. The logic is that buyers and appraisers implicitly price in perceived safety. If two houses are physically similar but one sits in an area with more firearm-related incidents, we expect downward pressure on sale price. That becomes a numeric predictor: more nearby violent incidents → potentially lower willingness to pay.
 
-We also quantified access to urban infrastructure and services, because
-convenience is money. For each property we measured the straight-line distance
-to the nearest transit stop, the nearest marked bike facility, the nearest
-hospital, the nearest fire station, and the nearest police station. We also
-measured distance to the nearest park, using parcel polygons against park
-polygons to approximate “are you on/next to green space or are you park-poor?”
-These distances were then standardized (feet or miles depending on context) and
-in some cases bucketed. For hospitals, for example, we didn’t just record
-distance — we classified properties into service bands: “Too Close” (\<1 mile,
-which might mean sirens/traffic and isn’t always seen as a plus), “Within
-Service” (1–5 miles, generally good coverage), and “Out of Service” (5+ miles).
-That turns an abstract geometry calculation into something interpretable as
-access vs. nuisance.
+We also quantified access to urban infrastructure and services, because convenience is money. For each property we measured the straight-line distance to the nearest transit stop, the nearest marked bike facility, the nearest hospital, the nearest fire station, and the nearest police station. We also measured distance to the nearest park, using parcel polygons against park polygons to approximate “are you on/next to green space or are you park-poor?” These distances were then standardized (feet or miles depending on context) and in some cases bucketed. For hospitals, for example, we didn’t just record distance — we classified properties into service bands: “Too Close” (<1 mile, which might mean sirens/traffic and isn’t always seen as a plus), “Within Service” (1–5 miles, generally good coverage), and “Out of Service” (5+ miles). That turns an abstract geometry calculation into something interpretable as access vs. nuisance.
 
-Food access is handled a little differently because it’s partly about proximity
-and partly about density. For each property, we calculated (1) distance to the
-nearest food retailer (grocery, etc.) and (2) how many food retail locations
-exist within a one-mile buffer around that property’s centroid. That second
-feature is important: being near just one corner store is not the same thing as
-sitting in a commercial corridor with 10+ options. A buyer will pay more, all
-else equal, for a place where groceries are easy, healthy food is available, and
-“I don’t need a car for basics” is true. That’s especially relevant in
-Philadelphia, where car-free living is common and neighborhood retail is a
-quality-of-life driver.
+Food access is handled a little differently because it’s partly about proximity and partly about density. For each property, we calculated (1) distance to the nearest food retailer (grocery, etc.) and (2) how many food retail locations exist within a one-mile buffer around that property’s centroid. That second feature is important: being near just one corner store is not the same thing as sitting in a commercial corridor with 10+ options. A buyer will pay more, all else equal, for a place where groceries are easy, healthy food is available, and “I don’t need a car for basics” is true. That’s especially relevant in Philadelphia, where car-free living is common and neighborhood retail is a quality-of-life driver.
 
-We didn’t stop at amenities and services — we also tied every property to its
-neighborhood fabric. Each parcel was spatially joined to a named neighborhood
-(via centroid-in-neighborhood polygons), and to a Census tract. From the tract,
-we attached socioeconomic context from the American Community Survey:
-racial/ethnic composition, age structure, vacancy rate, median rent, median
-household income, poverty rate, unemployment rate, and educational attainment
-(e.g. share of adults with a bachelor’s or higher). Those variables roughly
-proxy demand-side pressure and neighborhood stability. High-income, low-vacancy,
-high-education tracts tend to support higher property prices, even for
-physically modest homes. That’s not just aesthetics — lenders, buyers, and
-investors all underwrite neighborhood trajectory, not just individual bricks.
+We didn’t stop at amenities and services — we also tied every property to its neighborhood fabric. Each parcel was spatially joined to a named neighborhood (via centroid-in-neighborhood polygons), and to a Census tract. From the tract, we attached socioeconomic context from the American Community Survey: racial/ethnic composition, age structure, vacancy rate, median rent, median household income, poverty rate, unemployment rate, and educational attainment (e.g. share of adults with a bachelor’s or higher). Those variables roughly proxy demand-side pressure and neighborhood stability. High-income, low-vacancy, high-education tracts tend to support higher property prices, even for physically modest homes. That’s not just aesthetics — lenders, buyers, and investors all underwrite neighborhood trajectory, not just individual bricks.
 
-Put together, the result is a modeling dataset where sale price (or price per
-square foot) isn’t being predicted just from “bedrooms and bathrooms.” It’s
-being predicted from “bedrooms and bathrooms, plus how safe the block feels,
-plus how close you are to the El or a bike lane, plus whether you can walk to
-food, plus how your surrounding tract looks in terms of income and vacancy.”
-This is exactly how real-world housing markets behave: value is hyper-local and
-access-based. By engineering these spatial features, we’re letting the model
-learn the price premium (or penalty) associated with each of those location
-advantages — effectively turning geography into numbers the model can reason
-with.
+Put together, the result is a modeling dataset where sale price (or price per square foot) isn’t being predicted just from “bedrooms and bathrooms.” It’s being predicted from “bedrooms and bathrooms, plus how safe the block feels, plus how close you are to the El or a bike lane, plus whether you can walk to food, plus how your surrounding tract looks in terms of income and vacancy.” This is exactly how real-world housing markets behave: value is hyper-local and access-based. By engineering these spatial features, we’re letting the model learn the price premium (or penalty) associated with each of those location advantages — effectively turning geography into numbers the model can reason with.
 
---------------------------------------------------------------------------------
+
+---
 
 ### Part 2: Exploratory Data Analysis
 
@@ -1144,19 +1090,8 @@ ggplot(sales_data, aes(x = sale_price)) +
   scale_x_continuous(labels = scales::dollar)
 
 ```
+**Interpretation:** This figure shows the distribution of Philadelphia home sale prices in 2023–2024, and the key pattern is that the market is extremely skewed. Most sales are clustered well under 500K USD, and the median sale price — about 241K USD, marked on the plot — is a good summary of what a “typical” home actually sells for in the city. But there’s also a very long tail of high-value transactions that stretches into the millions. Those ultra-expensive deals are rare, but they’re so large that they would pull the average price up, which is why the mean would be misleading here. This shape tells us Philadelphia isn’t one uniform housing market: it’s a mix of lower-cost rowhomes, modest rehabs, and a smaller luxury segment. The result is a city where most buyers transact in the low hundreds of thousands, but a small number of high-end sales coexist on the fringe at several million dollars.
 
-**Interpretation:** This figure shows the distribution of Philadelphia home sale
-prices in 2023–2024, and the key pattern is that the market is extremely skewed.
-Most sales are clustered well under 500K USD, and the median sale price — about
-241K USD, marked on the plot — is a good summary of what a “typical” home
-actually sells for in the city. But there’s also a very long tail of high-value
-transactions that stretches into the millions. Those ultra-expensive deals are
-rare, but they’re so large that they would pull the average price up, which is
-why the mean would be misleading here. This shape tells us Philadelphia isn’t
-one uniform housing market: it’s a mix of lower-cost rowhomes, modest rehabs,
-and a smaller luxury segment. The result is a city where most buyers transact in
-the low hundreds of thousands, but a small number of high-end sales coexist on
-the fringe at several million dollars.
 
 **Map: Geographic distribution (map)**
 
@@ -1166,7 +1101,7 @@ the fringe at several million dollars.
 #| fig.height: 10
 
 # Re-create the neighborhood layer from the URL
-inherits(clean_data, "sf")
+
 neigh_url <- "https://raw.githubusercontent.com/opendataphilly/open-geo-data/refs/heads/master/philadelphia-neighborhoods/philadelphia-neighborhoods.geojson"
 
 neigh <- sf::read_sf(neigh_url)
@@ -1228,21 +1163,8 @@ p_price_map <-
 p_price_map
 ```
 
-**Interpretation:** This map shows that price in Philadelphia is deeply spatial.
-Each point is a property sale, colored by its sale price (on a log scale so we
-can see variation across the whole city). You can see clusters of high-value
-sales in a few tight areas — darker purple concentrations in and around Center
-City, parts of South Philly near the core, Northern Liberties/Fishtown, and
-select pockets in Northwest neighborhoods. Those are the submarkets where
-renovated or newer housing sells at a clear premium. As you move away from those
-cores, especially into large areas of Southwest, lower North, and parts of far
-Northeast and river-adjacent industrial fringe, prices shift toward the lighter
-end of the palette, meaning lower transaction values. The key insight is that
-this isn’t a smooth gradient from “expensive downtown” to “cheap outskirts.”
-Instead, it’s patchy: there are block- and neighborhood-scale price islands,
-even within the same general region of the city. That pattern is exactly why we
-model price with neighborhood fixed effects — because buyers are really choosing
-hyperlocal markets, not just “Philadelphia, broadly.”
+**Interpretation:** This map shows that price in Philadelphia is deeply spatial. Each point is a property sale, colored by its sale price (on a log scale so we can see variation across the whole city). You can see clusters of high-value sales in a few tight areas — darker purple concentrations in and around Center City, parts of South Philly near the core, Northern Liberties/Fishtown, and select pockets in Northwest neighborhoods. Those are the submarkets where renovated or newer housing sells at a clear premium. As you move away from those cores, especially into large areas of Southwest, lower North, and parts of far Northeast and river-adjacent industrial fringe, prices shift toward the lighter end of the palette, meaning lower transaction values. The key insight is that this isn’t a smooth gradient from “expensive downtown” to “cheap outskirts.” Instead, it’s patchy: there are block- and neighborhood-scale price islands, even within the same general region of the city. That pattern is exactly why we model price with neighborhood fixed effects — because buyers are really choosing hyperlocal markets, not just “Philadelphia, broadly.”
+
 
 **Scatter Plots: Price vs. structural features**
 
@@ -1326,50 +1248,16 @@ figure_3_structural
 
 ```
 
-**Interpretation:**
+**Interpretation:** 
 
--   **Price vs Bedrooms:** Each point is an individual sale, grouped by reported
-    bedroom count. The red dots mark the median sale price for that bedroom
-    category. You don’t see a smooth upward climb as beds go up. Instead, most
-    of the market activity — and most of the value — sits in the 2–4 bedroom
-    range, and adding more bedrooms beyond that doesn’t reliably buy you a more
-    expensive house. In fact, once you control for overall square footage in the
-    regression, “more bedrooms in the same box” can actually be a negative
-    signal: it often means the house has been carved up into smaller rooms
-    instead of feeling open. That shows up here as a pretty flat (and sometimes
-    even downward) median past 3–4 beds, rather than a luxury premium for “more
-    bedrooms.”
+- **Price vs Bedrooms:** Each point is an individual sale, grouped by reported bedroom count. The red dots mark the median sale price for that bedroom category. You don’t see a smooth upward climb as beds go up. Instead, most of the market activity — and most of the value — sits in the 2–4 bedroom range, and adding more bedrooms beyond that doesn’t reliably buy you a more expensive house. In fact, once you control for overall square footage in the regression, “more bedrooms in the same box” can actually be a negative signal: it often means the house has been carved up into smaller rooms instead of feeling open. That shows up here as a pretty flat (and sometimes even downward) median past 3–4 beds, rather than a luxury premium for “more bedrooms.”
 
--   **Price vs Bathrooms:** Bathrooms behave differently. As you move from 1
-    bath to 2 to 3+ baths, the red median markers jump upward in more distinct
-    steps. Buyers clearly pay for bathroom count, because bathrooms are
-    basically a livability and privacy amenity. You don’t see as much scatter in
-    the medians as you add baths — the relationship is more monotonic. That
-    lines up with the model result that, holding everything else constant, each
-    additional bathroom adds meaningful sale value. In plain English: a second
-    full bath is treated as an upgrade; a fourth bedroom is not automatically
-    treated as an upgrade.
+- **Price vs Bathrooms:** Bathrooms behave differently. As you move from 1 bath to 2 to 3+ baths, the red median markers jump upward in more distinct steps. Buyers clearly pay for bathroom count, because bathrooms are basically a livability and privacy amenity. You don’t see as much scatter in the medians as you add baths — the relationship is more monotonic. That lines up with the model result that, holding everything else constant, each additional bathroom adds meaningful sale value. In plain English: a second full bath is treated as an upgrade; a fourth bedroom is not automatically treated as an upgrade.
 
--   **Price vs Interior Size:** This panel just shows the classic size premium.
-    Larger homes almost always sell for more. Even though there’s a long tail of
-    huge outliers (multi-million dollar sales and extremely large properties),
-    the main cloud is very tight and upward sloping: once you get past about
-    1,000–1,500 square feet of living area, prices scale up quickly. The fitted
-    line through that cloud makes that slope obvious. That’s consistent with our
-    regression, where each additional square foot of interior living space is
-    worth on the order of a few dozen USD — real money — and that effect is
-    strong even after controlling for beds and baths.
+- **Price vs Interior Size:** This panel just shows the classic size premium. Larger homes almost always sell for more. Even though there’s a long tail of huge outliers (multi-million dollar sales and extremely large properties), the main cloud is very tight and upward sloping: once you get past about 1,000–1,500 square feet of living area, prices scale up quickly. The fitted line through that cloud makes that slope obvious. That’s consistent with our regression, where each additional square foot of interior living space is worth on the order of a few dozen USD — real money — and that effect is strong even after controlling for beds and baths.
 
--   **Price vs Building Age:** Age is noisy. Newer properties (low age on the
-    x-axis) can sell very high, which matches the story of new construction and
-    high-end rehab commanding premiums. But as age increases, there’s a wide
-    spread: some 100-year-old Philly rowhomes still sell for serious money, and
-    others sell cheaply. The smooth line trends slightly downward with age, but
-    the variance explodes. That tells you age alone isn’t destiny. In Philly’s
-    housing stock — a lot of which is 80–120+ years old — “old” can mean
-    “historic, updated, desirable block,” or it can mean “deferred maintenance
-    and structural risk.” The market doesn’t punish age uniformly; it punishes
-    age plus condition.
+- **Price vs Building Age:** Age is noisy. Newer properties (low age on the x-axis) can sell very high, which matches the story of new construction and high-end rehab commanding premiums. But as age increases, there’s a wide spread: some 100-year-old Philly rowhomes still sell for serious money, and others sell cheaply. The smooth line trends slightly downward with age, but the variance explodes. That tells you age alone isn’t destiny. In Philly’s housing stock — a lot of which is 80–120+ years old — “old” can mean “historic, updated, desirable block,” or it can mean “deferred maintenance and structural risk.” The market doesn’t punish age uniformly; it punishes age plus condition.
+
 
 **Scatter Plots: Price vs. spatial features**
 
@@ -1377,6 +1265,7 @@ figure_3_structural
 #| label: Spatial-features
 #| fig.width: 10
 #| fig.height: 8
+#| progress: false
 
 # Build plotting data frame for spatial/context features
 plot_spatial <- sales_data %>%
@@ -1464,47 +1353,16 @@ figure_4_spatial
 
 ```
 
-**Interpretation:**
+**Interpretation:** 
 
--   **Price vs Bedrooms:** The first panel plots sale price against distance to
-    the nearest park. There’s a weak downward pattern: homes closer to parks
-    tend to reach somewhat higher prices, while homes farther away drift
-    slightly lower. But the cloud is noisy — you can still get expensive sales
-    even 0.5–0.75 miles from a park — which tells us “park adjacency” isn’t a
-    universal price driver. It matters, but not nearly as much as core housing
-    features like condition or size. This also hints that park access is partly
-    a neighborhood-level amenity (already priced into where you’re buying), not
-    always a block-by-block differentiator.
+- **Price vs Bedrooms:** The first panel plots sale price against distance to the nearest park. There’s a weak downward pattern: homes closer to parks tend to reach somewhat higher prices, while homes farther away drift slightly lower. But the cloud is noisy — you can still get expensive sales even 0.5–0.75 miles from a park — which tells us “park adjacency” isn’t a universal price driver. It matters, but not nearly as much as core housing features like condition or size. This also hints that park access is partly a neighborhood-level amenity (already priced into where you’re buying), not always a block-by-block differentiator.
 
--   **Local Violent Crime:** Here we see sale price versus the number of violent
-    incidents within roughly 600 feet of the property. This relationship is a
-    lot more directional: higher recent violent counts are associated with
-    sharply lower sale prices. The bottom edge of the market clusters in
-    high-violence blocks, and the very high-dollar sales almost never appear
-    where violence is concentrated. This backs up what we saw in the regression:
-    even within the same nominal neighborhood, buyers are discounting blocks
-    that feel unsafe. Street-level safety is being priced into the deal.
+- **Local Violent Crime:** Here we see sale price versus the number of violent incidents within roughly 600 feet of the property. This relationship is a lot more directional: higher recent violent counts are associated with sharply lower sale prices. The bottom edge of the market clusters in high-violence blocks, and the very high-dollar sales almost never appear where violence is concentrated. This backs up what we saw in the regression: even within the same nominal neighborhood, buyers are discounting blocks that feel unsafe. Street-level safety is being priced into the deal.
 
--   **Retail Food Environment:** This panel shows how sale price varies with the
-    number of food retailers within a one-mile radius. There’s basically no
-    clean slope: properties in areas with lots of nearby grocers/delis/bodegas
-    span the full range from cheaper houses to million-dollar-plus sales. If
-    anything, very high counts of food outlets often show up in dense,
-    lower-cost parts of the city — which makes sense in Philly, where corner
-    retail is common in rowhouse neighborhoods. So “more food within a mile”
-    doesn’t automatically equal “higher value.” It’s more of a
-    neighborhood-style signal (urban, walkable, older fabric) than a direct
-    premium within that neighborhood.
+- **Retail Food Environment:** This panel shows how sale price varies with the number of food retailers within a one-mile radius. There’s basically no clean slope: properties in areas with lots of nearby grocers/delis/bodegas span the full range from cheaper houses to million-dollar-plus sales. If anything, very high counts of food outlets often show up in dense, lower-cost parts of the city — which makes sense in Philly, where corner retail is common in rowhouse neighborhoods. So “more food within a mile” doesn’t automatically equal “higher value.” It’s more of a neighborhood-style signal (urban, walkable, older fabric) than a direct premium within that neighborhood.
 
--   **Income & Home Prices:** This last panel compares Census tract median
-    household income to sale price. Here the slope is much clearer and positive:
-    higher-income tracts systematically produce higher sale prices, and you
-    almost never see ultra-high-dollar sales in the very lowest-income tracts.
-    That’s basically the social geography of value. It reflects more than house
-    quality — it’s also about perceived status, lending environment, school
-    expectations, and long-run stability. This is exactly the kind of
-    demographic gradient that still shows up in the model even after we control
-    for physical housing traits.
+- **Income & Home Prices:** This last panel compares Census tract median household income to sale price. Here the slope is much clearer and positive: higher-income tracts systematically produce higher sale prices, and you almost never see ultra-high-dollar sales in the very lowest-income tracts. That’s basically the social geography of value. It reflects more than house quality — it’s also about perceived status, lending environment, school expectations, and long-run stability. This is exactly the kind of demographic gradient that still shows up in the model even after we control for physical housing traits.
+
 
 **Bubble Plot: One creative visualization**
 
@@ -1512,9 +1370,8 @@ figure_4_spatial
 #| label: creative-bubble-map
 #| fig.width: 10
 #| fig.height: 8
-#| results: 'hide'
+#| progress: false
 
-# Get Census Tract Data from 2023 ACS 5-Yr Estimates
 acs_vars <- c(
   med_income   = "B19013_001",
   poverty_rate = "S1701_C02_001"
@@ -1559,13 +1416,7 @@ sales_neigh <- sales_data %>%
 neigh_summary_fixed <- sales_neigh %>%
   left_join(acs_to_neigh, by = c("neigh_name" = "NAME")) %>%
   drop_na(med_income_acs, poverty_rate_acs)
-```
 
-```{r}
-#| fig.width: 10
-#| fig.height: 8
-#| 
-# Plot Bubble Chart
 p_neigh_bubble_fixed <-
   ggplot(neigh_summary_fixed,
          aes(x = med_income_acs, y = median_price,
@@ -1585,27 +1436,12 @@ p_neigh_bubble_fixed <-
   theme(legend.position = "right")
 
 p_neigh_bubble_fixed
+
 ```
 
-**Interpretation:** This bubble chart is basically the “neighborhood market
-reality” view. Each dot is a Philadelphia neighborhood, and we’re plotting its
-median sale price (y-axis) against its median household income from ACS
-(x-axis). Two things jump out immediately. First, the slope is very positive:
-richer neighborhoods almost always have higher typical sale prices. You almost
-never see a low-income neighborhood with a 700K+ median sale price, and you
-don’t see high-income neighborhoods with 150K medians — so price and local
-income are tightly linked at the neighborhood scale. Second, the color shading
-(poverty rate) lines up with that same gradient: neighborhoods with high poverty
-(yellow) sit in the low-income / low-price corner, while wealthier neighborhoods
-(purple/blue, lower poverty) show higher sales prices. The dot size is how many
-homes sold, which tells you where volume is. You can see that most of the
-activity (the big circles) is happening in the middle of the distribution — not
-the ultra-rich enclaves and not the most distressed areas, but the
-working-to-middle income neighborhoods. In plain language: Philadelphia’s
-housing market is stratified by neighborhood wealth and poverty status, and that
-stratification is not subtle.
+**Interpretation:** This bubble chart is basically the “neighborhood market reality” view. Each dot is a Philadelphia neighborhood, and we’re plotting its median sale price (y-axis) against its median household income from ACS (x-axis). Two things jump out immediately. First, the slope is very positive: richer neighborhoods almost always have higher typical sale prices. You almost never see a low-income neighborhood with a 700K+ median sale price, and you don’t see high-income neighborhoods with 150K medians — so price and local income are tightly linked at the neighborhood scale. Second, the color shading (poverty rate) lines up with that same gradient: neighborhoods with high poverty (yellow) sit in the low-income / low-price corner, while wealthier neighborhoods (purple/blue, lower poverty) show higher sales prices. The dot size is how many homes sold, which tells you where volume is. You can see that most of the activity (the big circles) is happening in the middle of the distribution — not the ultra-rich enclaves and not the most distressed areas, but the working-to-middle income neighborhoods. In plain language: Philadelphia’s housing market is stratified by neighborhood wealth and poverty status, and that stratification is not subtle.
 
---------------------------------------------------------------------------------
+---
 
 ### Part 3: Feature Pruning
 
@@ -1649,34 +1485,11 @@ select_data <- sales_data |>
   )
 ```
 
-**Reasoning:** For the modeling stage we deliberately narrowed the feature set
-to variables that are (1) directly interpretable in a housing valuation context,
-(2) broadly available across observations, and (3) not redundant with each
-other. The earlier pipeline generated a huge number of spatial and contextual
-attributes — multiple school distance measures, different types of crime
-buffers, access to transit, bike lanes, fire/police proximity, hospital service
-bands, etc. That’s great for exploratory geography-of-equity questions, but it’s
-overkill (and sometimes harmful) for estimating price. Many of those features
-are highly collinear with each other or with neighborhood identity, and a lot of
-them introduce sparsity because they’re missing for certain parcels or depend on
-fragile spatial joins.
 
-Here, we keep classic structural housing characteristics (beds, baths, living
-area, age, basements, condition, garage, fireplaces), because buyers literally
-pay for those. We keep a small set of location/amenity signals that plausibly
-capitalize into price and that we trust methodologically: nearby violent
-incidents (violent_2blocks), food access density (foodretail_1mi_count), park
-proximity (dist_park_mi), and distance to schools. We also attach tract-level
-socioeconomic context from ACS (income, vacancy, education, race composition,
-poverty, unemployment, and age structure) to proxy neighborhood demand and
-perceived quality.
+**Reasoning:** For the modeling stage we deliberately narrowed the feature set to variables that are (1) directly interpretable in a housing valuation context, (2) broadly available across observations, and (3) not redundant with each other. The earlier pipeline generated a huge number of spatial and contextual attributes — multiple school distance measures, different types of crime buffers, access to transit, bike lanes, fire/police proximity, hospital service bands, etc. That’s great for exploratory geography-of-equity questions, but it’s overkill (and sometimes harmful) for estimating price. Many of those features are highly collinear with each other or with neighborhood identity, and a lot of them introduce sparsity because they’re missing for certain parcels or depend on fragile spatial joins. 
 
-Finally, we retain sale_price itself plus market_value and ratios like
-value_multiple and psf, because those let us study how assessment and unit price
-per square foot behave. In short, we’re trimming down to high-signal,
-low-missingness, economically meaningful predictors and dropping niche
-engineering steps that add noise, inflate multicollinearity, or don’t generalize
-well in a pricing model.
+Here, we keep classic structural housing characteristics (beds, baths, living area, age, basements, condition, garage, fireplaces), because buyers literally pay for those. We keep a small set of location/amenity signals that plausibly capitalize into price and that we trust methodologically: nearby violent incidents (violent_2blocks), food access density (foodretail_1mi_count), park proximity (dist_park_mi), and distance to schools. We also attach tract-level socioeconomic context from ACS (income, vacancy, education, race composition, poverty, unemployment, and age structure) to proxy neighborhood demand and perceived quality. Finally, we retain sale_price itself plus market_value and ratios like value_multiple and psf, because those let us study how assessment and unit price per square foot behave. In short, we’re trimming down to high-signal, low-missingness, economically meaningful predictors and dropping niche engineering steps that add noise, inflate multicollinearity, or don’t generalize well in a pricing model.
+
 
 ```{r}
 #| label: Real-Estate-Flags
@@ -1684,27 +1497,71 @@ well in a pricing model.
 #| warning: false
 #| Results: false
 
-# Intuition: market value should not deviate substantially 
-# from the sale price
+# Intuition: market value should not deviate substantially from the sale price
 value_range <- select_data |> 
   summarize(
-    q1 = quantile(value_multiple, 0.25, na.rm = TRUE),
-    q3 = quantile(value_multiple, 0.75, na.rm = TRUE),
-    iqr = q3 - q1,
+    q1    = quantile(value_multiple, 0.25, na.rm = TRUE),
+    q3    = quantile(value_multiple, 0.75, na.rm = TRUE),
+    iqr   = q3 - q1,
     lower = q1 - 1.5 * iqr,
-    upper = q3 + 1.5 * iqr)
-value_range
+    upper = q3 + 1.5 * iqr
+  )
+
+# Kable table for value_range
+value_range |> 
+  mutate(
+    q1    = round(q1, 2),
+    q3    = round(q3, 2),
+    iqr   = round(iqr, 2),
+    lower = round(lower, 2),
+    upper = round(upper, 2)
+  ) |>
+  kable(
+    caption = "Flag thresholds for Value Multiple (Assessed Value ÷ Sale Price)",
+    col.names = c("Q1", "Q3", "IQR", "Lower Bound", "Upper Bound"),
+    align = "c",
+    digits = 2,
+    format = "html"
+  ) |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    font_size = 13
+  )
 
 # Intuition: psf outliers are likely non-market transactions
 psf_range <- select_data |> 
   summarize(
-    q1 = quantile(psf, 0.25, na.rm = TRUE),
-    q3 = quantile(psf, 0.75, na.rm = TRUE),
-    iqr = q3 - q1,
+    q1    = quantile(psf, 0.25, na.rm = TRUE),
+    q3    = quantile(psf, 0.75, na.rm = TRUE),
+    iqr   = q3 - q1,
     lower = q1 - 1.5 * iqr,
-    upper = q3 + 1.5 * iqr)
-psf_range  
+    upper = q3 + 1.5 * iqr
+  )
 
+# Kable table for psf_range
+psf_range |>
+  mutate(
+    q1    = round(q1, 2),
+    q3    = round(q3, 2),
+    iqr   = round(iqr, 2),
+    lower = round(lower, 2),
+    upper = round(upper, 2)
+  ) |>
+  kable(
+    caption = "Flag thresholds for psf (Price per Square Foot)",
+    col.names = c("Q1", "Q3", "IQR", "Lower Bound", "Upper Bound"),
+    align = "c",
+    digits = 2,
+    format = "html"
+  ) |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    font_size = 13
+  )
+
+# Clean data used for modeling / mapping
 clean_data <- select_data |> 
   filter(
     liv_area > 500,
@@ -1713,54 +1570,39 @@ clean_data <- select_data |>
     between(value_multiple, 0.4, 2.0)
   ) |> 
   mutate(across(where(is.numeric), ~ round(.x, 2))) |> 
-  drop_na() |> 
+  tidyr::drop_na() |> 
   arrange(liv_area)
-clean_data
+
+# Nicely show the first ~10 rows
+clean_data |> 
+  slice_head(n = 10) |>
+  kable(
+    caption = "Cleaned transaction data (first 10 rows after filters)",
+    align = "c",
+    format = "html"
+  ) |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    font_size = 12
+  )
 
 ```
 
-**Interpretation:** On top of trimming the feature set, we also had to
-sanity-check which sales even look like real, arm’s-length residential
-transactions. Property data always includes junk: family transfers for 1 USD,
-sheriff sales, partial interest transfers, renovation shells, or clerical
-weirdness (like a 2,000 sq ft rowhouse supposedly selling for 9 million USD). If
-we blindly feed that into a price model, the model learns nonsense. So we added
-a set of “real estate flags” to identify and drop those bad rows.
+**Interpretation:** 
+On top of trimming the feature set, we also had to sanity-check which sales even look like real, arm’s-length residential transactions. Property data always includes junk: family transfers for 1 USD, sheriff sales, partial interest transfers, renovation shells, or clerical weirdness (like a 2,000 sq ft rowhouse supposedly selling for 9 million USD). If we blindly feed that into a price model, the model learns nonsense. So we added a set of “real estate flags” to identify and drop those bad rows.
 
-We use two main diagnostics: `value_multiple` and `psf`. `value_multiple` is the
-ratio of the city’s assessed market value to the actual recorded sale price. In
-a normal sale, the assessment may be a little high or a little low, but it
-shouldn’t be wildly off. So we look at the distribution of that ratio, get the
-interquartile range (IQR), and compute fence cutoffs (Q1 − 1.5×IQR, Q3 +
-1.5×IQR). Extreme cases — where assessed value is, say, 5× the sale price or
-0.1× the sale price — usually mean something non-market happened (distress sale,
-title correction, bundled sale, etc.). Those points don’t reflect what a typical
-buyer would pay for that one house, so we trim them. We do the same idea with
-`psf` (price per square foot of livable area). psf is a super useful “unit
-price” signal in real estate, but absurdly low psf often means interior is
-trashed/gutted or it wasn’t a real arm’s-length sale, and absurdly high psf
-often means the record is actually for a multi-parcel package or a luxury
-outlier that behaves more like commercial than typical housing. By fencing psf
-with IQR cutoffs (and then enforcing a practical range like 40–800 USD per sq
-ft), we keep what looks like real open-market housing trades in Philadelphia and
-drop pathological edge cases.
+We use two main diagnostics: `value_multiple` and `psf`. `value_multiple` is the ratio of the city’s assessed market value to the actual recorded sale price. In a normal sale, the assessment may be a little high or a little low, but it shouldn’t be wildly off. So we look at the distribution of that ratio, get the interquartile range (IQR), and compute fence cutoffs (Q1 − 1.5×IQR, Q3 + 1.5×IQR). Extreme cases — where assessed value is, say, 5× the sale price or 0.1× the sale price — usually mean something non-market happened (distress sale, title correction, bundled sale, etc.). Those points don’t reflect what a typical buyer would pay for that one house, so we trim them. 
 
-We also add basic physical filters: we require reasonable built form (livable
-area and lot area both over 500 sq ft, because “houses” with 120 sq ft recorded
-living area are usually data entry mistakes or partial condo interests). Then we
-require that all key numeric predictors exist and aren’t missing, and we round
-numeric values for cleaner interpretation. T
+We do the same idea with `psf` (price per square foot of livable area). psf is a super useful “unit price” signal in real estate, but absurdly low psf often means interior is trashed/gutted or it wasn’t a real arm’s-length sale, and absurdly high psf often means the record is actually for a multi-parcel package or a luxury outlier that behaves more like commercial than typical housing. By fencing psf with IQR cutoffs (and then enforcing a practical range like 40–800 USD per sq ft), we keep what looks like real open-market housing trades in Philadelphia and drop pathological edge cases.
 
-he result is `clean_data`: a modeling dataset that’s been denoised both
-structurally and financially. This step matters because linear models are very
-sensitive to extreme outliers — a handful of fake 1 USD transfers or impossible
-5,000 USD/sf lofts can dominate the fit, wreck cross-validation metrics, and
-drown out the more subtle spatial and neighborhood effects we actually care
-about.
+We also add basic physical filters: we require reasonable built form (livable area and lot area both over 500 sq ft, because “houses” with 120 sq ft recorded living area are usually data entry mistakes or partial condo interests). Then we require that all key numeric predictors exist and aren’t missing, and we round numeric values for cleaner interpretation. The result is `clean_data`: a modeling dataset that’s been denoised both structurally and financially. This step matters because linear models are very sensitive to extreme outliers — a handful of fake 1 USD transfers or impossible 5,000 USD/sf lofts can dominate the fit, wreck cross-validation metrics, and drown out the more subtle spatial and neighborhood effects we actually care about.
 
---------------------------------------------------------------------------------
+
+---
 
 ### Part 4: Modeling Building
+
 
 ```{r}
 
@@ -1837,83 +1679,85 @@ cv_m6 <- train(
 )
 
 # Compare
-data.frame(
-  Model = c("Structural", "Spatial", "Fixed Effects", "Small Neighborhoods + Mkt Value", "Simpler + Mkt Value", "Simpler Only"),
-  Rsquared = c(cv_m1$results$Rsquared, cv_m2$results$Rsquared, cv_m3$results$Rsquared, 
-               cv_m4$results$Rsquared, cv_m5$results$Rsquared, cv_m6$results$Rsquared),
-  RMSE = c(cv_m1$results$RMSE, cv_m2$results$RMSE, cv_m3$results$RMSE, 
-           cv_m4$results$RMSE, cv_m5$results$RMSE, cv_m6$results$RMSE),
-  MAE = c(cv_m1$results$MAE, cv_m2$results$MAE, cv_m3$results$MAE, 
-          cv_m4$results$MAE, cv_m5$results$MAE, cv_m6$results$MAE)
-)
+model_compare <- data.frame(
+  Model = c(
+    "Structural",
+    "Spatial",
+    "Fixed Effects",
+    "Small Neighborhoods + Mkt Value",
+    "Simpler + Mkt Value",
+    "Simpler Only"
+  ),
+  Rsquared = c(
+    cv_m1$results$Rsquared,
+    cv_m2$results$Rsquared,
+    cv_m3$results$Rsquared,
+    cv_m4$results$Rsquared,
+    cv_m5$results$Rsquared,
+    cv_m6$results$Rsquared
+  ),
+  RMSE = c(
+    cv_m1$results$RMSE,
+    cv_m2$results$RMSE,
+    cv_m3$results$RMSE,
+    cv_m4$results$RMSE,
+    cv_m5$results$RMSE,
+    cv_m6$results$RMSE
+  ),
+  MAE = c(
+    cv_m1$results$MAE,
+    cv_m2$results$MAE,
+    cv_m3$results$MAE,
+    cv_m4$results$MAE,
+    cv_m5$results$MAE,
+    cv_m6$results$MAE
+  )
+) |>
+  mutate(
+    R2 = round(Rsquared, 3),
+    RMSE = round(RMSE, 0),
+    MAE = round(MAE, 0)
+  ) |>
+  select(
+    Model,
+    `R² (CV)` = R2,
+    `RMSE (CV)` = RMSE,
+    `MAE (CV)` = MAE
+  )
+
+model_compare |>
+  kable(
+    caption = "10-fold CV performance across model specifications",
+    align = c("l", "c", "c", "c"),
+    format = "html"
+  ) |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    font_size = 13
+  ) |>
+  row_spec(1, bold = TRUE) |>
+  column_spec(1, width = "8cm") |>
+  add_header_above(
+    c(" " = 1, "Out-of-Sample Fit Metrics" = 3)
+  )
 
 ```
 
-**Discussion:** We trained a sequence of models using 10-fold cross-validation
-to see how different groups of predictors affect out-of-sample accuracy. The
-first model (“Structural”) uses only property-level physical characteristics:
-bedrooms, bathrooms, finished basement indicators, interior/exterior condition,
-living area, and building age. This baseline already explains about 67% of the
-variation in sale price (CV R² ≈ 0.67), but it’s still pretty rough: the average
-out-of-sample error is large, with an RMSE of about \$136K and an average
-absolute error (MAE) of about 90K USD. In plain English, even if you know what
-the house is and what shape it’s in, you’re still often off by six figures.
-That’s a sign that location — broadly defined — is doing a lot of work in
-Philadelphia’s housing market.
+**Discussion:**
+We trained a sequence of models using 10-fold cross-validation to see how different groups of predictors affect out-of-sample accuracy. The first model (“Structural”) uses only property-level physical characteristics: bedrooms, bathrooms, finished basement indicators, interior/exterior condition, living area, and building age. This baseline already explains about 67% of the variation in sale price (CV R² ≈ 0.67), but it’s still pretty rough: the average out-of-sample error is large, with an RMSE of about $136K and an average absolute error (MAE) of about 90K USD. In plain English, even if you know what the house is and what shape it’s in, you’re still often off by six figures. That’s a sign that location — broadly defined — is doing a lot of work in Philadelphia’s housing market.
 
-When we layer in block-scale spatial features and neighborhood socioeconomic
-context (“Spatial”), accuracy improves a lot. The R² jumps from \~0.67 to
-\~0.79, and RMSE drops from \~136K to \~108K. This version adds things like
-violent incidents within two blocks, distance to parks and schools, local retail
-access, and census tract indicators such as income, rent, vacancy, and
-demographics. That improvement tells us two things: (1) buyers absolutely price
-the surrounding environment — safety, access, social context — not just the
-building; and (2) those effects are strong enough to generalize out of sample.
-We’re not just overfitting noise; spatial context is genuinely predictive of
-what a house will sell for.
+When we layer in block-scale spatial features and neighborhood socioeconomic context (“Spatial”), accuracy improves a lot. The R² jumps from ~0.67 to ~0.79, and RMSE drops from ~136K to ~108K. This version adds things like violent incidents within two blocks, distance to parks and schools, local retail access, and census tract indicators such as income, rent, vacancy, and demographics. That improvement tells us two things: (1) buyers absolutely price the surrounding environment — safety, access, social context — not just the building; and (2) those effects are strong enough to generalize out of sample. We’re not just overfitting noise; spatial context is genuinely predictive of what a house will sell for.
 
-But “Spatial” is still treating the city as one big market. The third model
-(“Fixed Effects”) adds neighborhood fixed effects — basically, a separate
-intercept for each neighborhood — which soaks up persistent price differences
-between places like Fishtown, Point Breeze, Chestnut Hill, etc. That pushes R²
-to \~0.85 and drops RMSE to about 93K. This is a big deal. It means two homes
-with the same size, same condition, and same local crime exposure will still
-trade at systematically different price levels depending on which named
-neighborhood they’re in. In other words: neighborhood identity itself, not just
-measured amenities, is priced.
+But “Spatial” is still treating the city as one big market. The third model (“Fixed Effects”) adds neighborhood fixed effects — basically, a separate intercept for each neighborhood — which soaks up persistent price differences between places like Fishtown, Point Breeze, Chestnut Hill, etc. That pushes R² to ~0.85 and drops RMSE to about 93K. This is a big deal. It means two homes with the same size, same condition, and same local crime exposure will still trade at systematically different price levels depending on which named neighborhood they’re in. In other words: neighborhood identity itself, not just measured amenities, is priced.
 
-From there, we refine how we treat neighborhood. The fourth model (“Small
-Neighborhoods + Mkt Value”) does two important things: (1) it collapses very
-small neighborhoods (with \<10 observed sales) into a pooled
-“Small_Neighborhoods” bin so that those areas don’t produce unstable fixed
-effects, and (2) it adds the city’s assessed market value (mkt_value) as a
-predictor. This changes everything. Performance jumps massively: R² rises to
-\~0.92 and RMSE falls to about 65K, cutting typical error almost in half
-compared to the baseline structural model. MAE also drops to about 42K. This
-model is both high-performing and still interpretable: it blends physical house
-attributes, micro-spatial exposure (crime, distance to parks, etc.),
-socioeconomic context, and a stabilized neighborhood effect, plus an
-institutional pricing signal (assessed market value). That combination is our
-best-performing “full” model.
+From there, we refine how we treat neighborhood. The fourth model (“Small Neighborhoods + Mkt Value”) does two important things: (1) it collapses very small neighborhoods (with <10 observed sales) into a pooled “Small_Neighborhoods” bin so that those areas don’t produce unstable fixed effects, and (2) it adds the city’s assessed market value (mkt_value) as a predictor. This changes everything. Performance jumps massively: R² rises to ~0.92 and RMSE falls to about 65K, cutting typical error almost in half compared to the baseline structural model. MAE also drops to about 42K. This model is both high-performing and still interpretable: it blends physical house attributes, micro-spatial exposure (crime, distance to parks, etc.), socioeconomic context, and a stabilized neighborhood effect, plus an institutional pricing signal (assessed market value). That combination is our best-performing “full” model.
 
-Then we test whether we can simplify without losing accuracy. The fifth model
-(“Simpler + Mkt Value”) strips out some of the weaker spatial/ACS controls but
-keeps assessed value and the smoothed neighborhood factor. Its performance is
-basically identical to the full version: R² ≈ 0.925, RMSE ≈ 65K, MAE ≈ 42K. That
-tells us there’s some redundancy — once you include assessed market value and a
-good neighborhood structure, you don’t necessarily need every single contextual
-variable to hit high predictive accuracy.
+Then we test whether we can simplify without losing accuracy. The fifth model (“Simpler + Mkt Value”) strips out some of the weaker spatial/ACS controls but keeps assessed value and the smoothed neighborhood factor. Its performance is basically identical to the full version: R² ≈ 0.925, RMSE ≈ 65K, MAE ≈ 42K. That tells us there’s some redundancy — once you include assessed market value and a good neighborhood structure, you don’t necessarily need every single contextual variable to hit high predictive accuracy.
 
-Finally, we try “Simpler Only,” which keeps neighborhood effects but drops
-assessed value. Performance falls back: R² slips to \~0.84 and RMSE rises to
-\~95K, more like the plain fixed-effects model. That last comparison is super
-informative: it shows that the assessed market value term is doing a ton of
-predictive work. It acts like a summary statistic for block-level desirability,
-renovation quality, curb appeal, and whatever else the city’s assessment office
-is “seeing.” In practice, the best cross-validated model is the version that
-includes (i) structural features of the home, (ii) a stabilized neighborhood
-factor, and (iii) assessed market value. That model is accurate, relatively
-compact, and realistic to deploy for valuation or forecasting.
+Finally, we try “Simpler Only,” which keeps neighborhood effects but drops assessed value. Performance falls back: R² slips to ~0.84 and RMSE rises to ~95K, more like the plain fixed-effects model. That last comparison is super informative: it shows that the assessed market value term is doing a ton of predictive work. It acts like a summary statistic for block-level desirability, renovation quality, curb appeal, and whatever else the city’s assessment office is “seeing.” In practice, the best cross-validated model is the version that includes (i) structural features of the home, (ii) a stabilized neighborhood factor, and (iii) assessed market value. That model is accurate, relatively compact, and realistic to deploy for valuation or forecasting.
+
+
 
 ```{r}
 fe_m4 <- feols(
@@ -1929,9 +1773,9 @@ fe_m4 <- feols(
 # Pretty table (no neighborhood FE dummies will show)
 
 modelsummary(
-  list("Final Model (FE absorbed)" = fe_m4),
+  list("Fourth Model (FE absorbed + MKT Value)" = fe_m4),
   gof_omit  = 'IC|Adj|Log|F',
-  statistic = "({std.error})",     # <-- this is the important change
+  statistic = "({std.error})",     
   estimate  = "{estimate}{stars}",
   stars     = c('*'=.1,'**'=.05,'***'=.01),
   output    = "markdown"
@@ -1943,87 +1787,19 @@ lm_model4 <- cv_m4$finalModel
 
 **Coefficient Interpretation:**
 
-This model is estimated with neighborhood fixed effects (via neigh_cv), which
-means we’re not comparing a 1M USD rowhome in Center City to a 90K USD shell in
-Kensington. We’re comparing houses within the same local market bucket. So every
-coefficient should be read as: “holding the neighborhood constant, and holding
-everything else constant, how does this feature change sale price?” That matters
-because Philadelphia has a lot of lower- and middle-income housing stock with
-smaller square footage, aging structures, and incremental rehab. In that
-environment, buyers trade off things like layout, livable condition, block
-safety, and perceived stability more than just raw square footage. The fixed
-effects soak up the broad neighborhood premium/discount (schools, reputation,
-amenities, hype), so what’s left is what explains why two houses on similar turf
-sell for different prices.
+This model is estimated with neighborhood fixed effects (via neigh_cv), which means we’re not comparing a 1M USD rowhome in Center City to a 90K USD shell in Kensington. We’re comparing houses within the same local market bucket. So every coefficient should be read as: “holding the neighborhood constant, and holding everything else constant, how does this feature change sale price?” That matters because Philadelphia has a lot of lower- and middle-income housing stock with smaller square footage, aging structures, and incremental rehab. In that environment, buyers trade off things like layout, livable condition, block safety, and perceived stability more than just raw square footage. The fixed effects soak up the broad neighborhood premium/discount (schools, reputation, amenities, hype), so what’s left is what explains why two houses on similar turf sell for different prices.
 
-On the physical side of the house, three patterns dominate. First, interior and
-exterior condition are extremely valuable. Compared to houses in visibly poor
-shape, houses in better interior condition sell for about 60K–90K USD more, and
-houses in worse exterior condition lose about 50K–80K USD in value, even after
-controlling for size, beds, and baths. That tells you what really clears in
-Philly’s for-sale market: buyers are paying for “move-in ready and looks solid
-from the street,” not just square footage. Bathrooms also carry a strong premium
-— roughly 13K USD per additional bath — which fits a story about livability and
-privacy.
+On the physical side of the house, three patterns dominate. First, interior and exterior condition are extremely valuable. Compared to houses in visibly poor shape, houses in better interior condition sell for about 60K–90K USD more, and houses in worse exterior condition lose about 50K–80K USD in value, even after controlling for size, beds, and baths. That tells you what really clears in Philly’s for-sale market: buyers are paying for “move-in ready and looks solid from the street,” not just square footage. 
 
-Bedrooms are trickier. Once you control for total living area, an extra bedroom
-actually correlates with slightly lower sale price. The way to read that is not
-“buyers hate bedrooms,” but “for two houses of the same size, the one chopped
-into more/smaller bedrooms can actually feel tighter and cheaper.” In
-Philadelphia’s rowhome housing stock — especially entry-level rehab product —
-that’s common: developers carve an extra bedroom into the same envelope, but
-buyers still value openness. Living area itself is priced at about 37 USD per
-additional square foot, which is a clean, intuitive slope: more usable space is
-still worth more money, but not all square footage is created equal if the
-layout feels cramped.
+Bathrooms also carry a strong premium — roughly 13K USD per additional bath — which fits a story about livability and privacy. Bedrooms are trickier. Once you control for total living area, an extra bedroom actually correlates with slightly lower sale price. The way to read that is not “buyers hate bedrooms,” but “for two houses of the same size, the one chopped into more/smaller bedrooms can actually feel tighter and cheaper.” In Philadelphia’s rowhome housing stock — especially entry-level rehab product — that’s common: developers carve an extra bedroom into the same envelope, but buyers still value openness. Living area itself is priced at about 37 USD per additional square foot, which is a clean, intuitive slope: more usable space is still worth more money, but not all square footage is created equal if the layout feels cramped.
 
-We also see localized social and environmental factors priced in, even within
-the same neighborhood. More violent incidents within roughly two blocks (about
-600 feet) are associated with lower sale prices, on the order of tens of USD per
-additional incident. That might sound small per incident, but block-to-block
-differences add up, and the key point is this survives neighborhood fixed
-effects. In other words, even inside a neighborhood that’s broadly considered
-“high crime,” buyers still distinguish between a quieter block and a hotter
-corner. Meanwhile, access-style amenities like distance to parks, distance to
-schools, and nearby food retailers don’t come through as statistically
-meaningful once you control for neighborhood. That suggests those amenities are
-already baked into which neighborhood you’re in; they’re not the reason one
-house sells higher than the nearly identical house down the street. Said
-differently: once you’re in that neighborhood market, hyperlocal safety matters
-more than marginal proximity to a park.
+We also see localized social and environmental factors priced in, even within the same neighborhood. More violent incidents within roughly two blocks (about 600 feet) are associated with lower sale prices, on the order of tens of USD per additional incident. That might sound small per incident, but block-to-block differences add up, and the key point is this survives neighborhood fixed effects. In other words, even inside a neighborhood that’s broadly considered “high crime,” buyers still distinguish between a quieter block and a hotter corner. Meanwhile, access-style amenities like distance to parks, distance to schools, and nearby food retailers don’t come through as statistically meaningful once you control for neighborhood. That suggests those amenities are already baked into which neighborhood you’re in; they’re not the reason one house sells higher than the nearly identical house down the street. Said differently: once you’re in that neighborhood market, hyperlocal safety matters more than marginal proximity to a park.
 
-Finally, the model captures social context at the tract level — income, race,
-age structure — and those patterns are uncomfortable but real. Houses in tracts
-with higher median household income tend to sell for more, even within the same
-neighborhood bucket, which says that micro-areas of relative affluence inside a
-neighborhood command a premium. The share of Black residents in the tract is
-associated with lower sale prices, holding physical quality, crime, and
-everything else constant. That is not a story about “house quality”; that’s a
-story about how the market (buyers, lenders, appraisers) continues to discount
-majority-Black areas. This is consistent with persistent racialized valuation in
-U.S. housing markets. We also see a positive association with the share of
-seniors (65+): blocks with more older residents tend to have slightly higher
-sale prices, which likely proxies for stability — long-term owner occupancy,
-less churn, and “quiet” blocks. These demographic effects are all still
-happening inside neighborhoods, which means buyers are sensitive to the social
-micro-geography of a block or tract, not just its ZIP code.
+Finally, the model captures social context at the tract level — income, race, age structure — and those patterns are uncomfortable but real. Houses in tracts with higher median household income tend to sell for more, even within the same neighborhood bucket, which says that micro-areas of relative affluence inside a neighborhood command a premium. The share of Black residents in the tract is associated with lower sale prices, holding physical quality, crime, and everything else constant. That is not a story about “house quality”; that’s a story about how the market (buyers, lenders, appraisers) continues to discount majority-Black areas. This is consistent with persistent racialized valuation in U.S. housing markets. We also see a positive association with the share of seniors (65+): blocks with more older residents tend to have slightly higher sale prices, which likely proxies for stability — long-term owner occupancy, less churn, and “quiet” blocks. These demographic effects are all still happening inside neighborhoods, which means buyers are sensitive to the social micro-geography of a block or tract, not just its ZIP code.
 
-One last anchor in the model is assessed market value. The city’s assessed value
-is extremely predictive of the actual sale price, at about 0.85 USD on the
-dollar. That does two things. First, it soaks up a lot of residual variation in
-quality — finishes, block vibe, unseen mechanical upgrades — that isn’t fully
-captured by our other variables. Second, it explains why the model fit is so
-strong (R² ≈ 0.93 overall, \~0.82 within neighborhoods): once you hold
-neighborhood fixed effects and you include what the city thinks the house is
-worth, you’ve basically captured both the structural story and the local market
-story. So the way to interpret this model is: inside a given Philadelphia
-neighborhood market, buyers pay a lot for finish and condition, they reward
-livable layouts and bathrooms, they discount safety risk on your immediate
-block, and they still respond to coded neighborhood status signals — income,
-racial composition, and perceived block stability — even after we’ve neutralized
-broad “which neighborhood are you in?” differences.
+One last anchor in the model is assessed market value. The city’s assessed value is extremely predictive of the actual sale price, at about 0.85 USD on the dollar. That does two things. First, it soaks up a lot of residual variation in quality — finishes, block vibe, unseen mechanical upgrades — that isn’t fully captured by our other variables. Second, it explains why the model fit is so strong (R² ≈ 0.93 overall, ~0.82 within neighborhoods): once you hold neighborhood fixed effects and you include what the city thinks the house is worth, you’ve basically captured both the structural story and the local market story. So the way to interpret this model is: inside a given Philadelphia neighborhood market, buyers pay a lot for finish and condition, they reward livable layouts and bathrooms, they discount safety risk on your immediate block, and they still respond to coded neighborhood status signals — income, racial composition, and perceived block stability — even after we’ve neutralized broad “which neighborhood are you in?” differences.
 
---------------------------------------------------------------------------------
+---
 
 ### Part 5: Model Diagnostics
 
@@ -2123,75 +1899,32 @@ because they have large livable areas and are located in premium neighborhoods
 such as Rittenhouse, Old City, and Chestnut Hill. It is still important to note
 that these outliers are influential and can potentially skew coefficients.
 
---------------------------------------------------------------------------------
+---
 
 ### Part 6: Conclusions & Recommendations
 
 **What is your final model's accuracy?**
 
-We tested four models and watched how prediction quality improved as we layered
-in more information.
+We tested four models and watched how prediction quality improved as we layered in more information.
 
--   Structural only (beds, baths, square footage, age, condition): RMSE ≈
-    136,000 USD.
--   
-    -   Spatial context (parks, schools, food access, neighborhood socioeconomic
-        stats, crime): RMSE ≈ 108,000 USD.
--   
-    -   Neighborhood fixed effects (absorbing neighborhood differences
-        directly): RMSE ≈ 93,000 USD.
--   
-    -   Collapsing small neighborhoods + adding assessed market value: RMSE ≈
-        65,000 USD.
+  - Structural only (beds, baths, square footage, age, condition): RMSE ≈ 136,000 USD.
+  - + Spatial context (parks, schools, food access, neighborhood socioeconomic stats, crime): RMSE ≈ 108,000 USD.
+  - + Neighborhood fixed effects (absorbing neighborhood differences directly): RMSE ≈ 93,000 USD.
+  - + Collapsing small neighborhoods + adding assessed market value: RMSE ≈ 65,000 USD.
 
-So the final model — the “Small Neighborhoods + Mkt Value” spec — cuts average
-error almost in half compared to the basic structural model (136K → 65K USD).
-That’s a huge jump. This tells us two things. First, house-level physical traits
-are not enough to explain price in Philly. Second, you get massive gains in
-accuracy from (a) knowing where in the city the house is, down to the
-neighborhood and even the block, and (b) using the city’s own market assessment
-as a kind of summary of unobserved quality. The final model is accurate enough
-to be useful for price benchmarking and valuation discussions, not just academic
-pattern-finding.
+So the final model — the “Small Neighborhoods + Mkt Value” spec — cuts average error almost in half compared to the basic structural model (136K → 65K USD). That’s a huge jump. This tells us two things. First, house-level physical traits are not enough to explain price in Philly. Second, you get massive gains in accuracy from (a) knowing where in the city the house is, down to the neighborhood and even the block, and (b) using the city’s own market assessment as a kind of summary of unobserved quality. The final model is accurate enough to be useful for price benchmarking and valuation discussions, not just academic pattern-finding.
 
-Also look at R²: it climbs from about 0.67 in the structural model to \~0.92 in
-the final model. That means we’re capturing \~92% of the variation in sale
-prices with publicly available data plus neighborhood controls.
+Also look at R²: it climbs from about 0.67 in the structural model to ~0.92 in the final model. That means we’re capturing ~92% of the variation in sale prices with publicly available data plus neighborhood controls.
 
 **Which features matter most for Philadelphia prices?**
 
--   Physical livability: Interior condition has a massive effect: “better
-    interior” categories add on the order of tens of thousands of USD relative
-    to poor interior condition. Exterior condition works the same direction but
-    in reverse: worse exterior knocks off large chunks of value (often 50K–80K
-    USD less). Bathrooms are also very valuable — adding one more bathroom is
-    associated with roughly +13K USD, holding other things constant. Living area
-    matters too: each additional square foot of livable space sells for \~37
-    USD.
+- Physical livability: Interior condition has a massive effect: “better interior” categories add on the order of tens of thousands of USD relative to poor interior condition. Exterior condition works the same direction but in reverse: worse exterior knocks off large chunks of value (often 50K–80K USD less). Bathrooms are also very valuable — adding one more bathroom is associated with roughly +13K USD, holding other things constant. Living area matters too: each additional square foot of livable space sells for ~37 USD.
 
--   Layout quality, not just bedroom count: More bedrooms is not automatically
-    “more expensive.” After controlling for total livable area, additional
-    bedrooms are actually associated with lower prices. The story there: if two
-    houses are the same size, the one chopped into more (smaller) bedrooms is
-    viewed as less desirable. Buyers want usable, open-feeling space, not just
-    “4BR” on paper. Basements in usable form, on the other hand, usually add
-    value, and in some categories that bump is \>10K USD.
+- Layout quality, not just bedroom count: More bedrooms is not automatically “more expensive.” After controlling for total livable area, additional bedrooms are actually associated with lower prices. The story there: if two houses are the same size, the one chopped into more (smaller) bedrooms is viewed as less desirable. Buyers want usable, open-feeling space, not just “4BR” on paper. Basements in usable form, on the other hand, usually add value, and in some categories that bump is >10K USD.
 
--   Immediate block conditions (social environment): Violent incidents within
-    roughly two blocks (≈600 ft) are priced in. Every additional violent
-    incident nearby lowers the sale price. That’s not just “bad neighborhood vs
-    good neighborhood,” because we absorb neighborhood fixed effects — this is
-    within-neighborhood, block-level safety perception. So buyers are
-    discounting homes on hotter corners, even if they’re still in an otherwise
-    desirable area.
+- Immediate block conditions (social environment): Violent incidents within roughly two blocks (≈600 ft) are priced in. Every additional violent incident nearby lowers the sale price. That’s not just “bad neighborhood vs good neighborhood,” because we absorb neighborhood fixed effects — this is within-neighborhood, block-level safety perception. So buyers are discounting homes on hotter corners, even if they’re still in an otherwise desirable area.
 
--   Neighborhood market position / wealth signals: Median household income in
-    the tract is positively associated with higher sale prices, and assessed
-    market value from the city is extremely predictive (roughly 0.85 USD of sale
-    price per 1 USD of assessed value). That basically means: if the assessor
-    thinks you’re a high-value property, the market mostly agrees. A decent
-    chunk of “finish quality,” “renovation level,” and “this is a block that’s
-    turning” is being captured through that single variable.
+- Neighborhood market position / wealth signals: Median household income in the tract is positively associated with higher sale prices, and assessed market value from the city is extremely predictive (roughly 0.85 USD of sale price per 1 USD of assessed value). That basically means: if the assessor thinks you’re a high-value property, the market mostly agrees. A decent chunk of “finish quality,” “renovation level,” and “this is a block that’s turning” is being captured through that single variable.
 
 **Which neighborhoods are hardest to predict?**
 
@@ -2374,68 +2107,24 @@ resid_maps_all <-
 print(resid_maps_all)
 ```
 
+
 **Equity concerns?**
 
-Yes, and they show up in the coefficients. Even after controlling for interior
-quality, exterior condition, square footage, bathroom count, crime on the block,
-and neighborhood fixed effects, properties in areas with a higher share of Black
-residents tend to sell for less. That is not a physical-quality story — we
-already held physical quality constant. It’s also not just “this is a cheaper
-neighborhood,” because neighborhood fixed effects are in there. It’s evidence of
-structural discounting: the same basic housing form is being valued lower in
-Blacker areas.
+Yes, and they show up in the coefficients. Even after controlling for interior quality, exterior condition, square footage, bathroom count, crime on the block, and neighborhood fixed effects, properties in areas with a higher share of Black residents tend to sell for less. That is not a physical-quality story — we already held physical quality constant. It’s also not just “this is a cheaper neighborhood,” because neighborhood fixed effects are in there. It’s evidence of structural discounting: the same basic housing form is being valued lower in Blacker areas.
 
-We also see that tracts with higher median household income sell for more, and
-tracts with more older residents (65+) sell for more. You can read that as the
-market attaching a price premium to “social stability” or “aging, long-tenure
-homeowners with resources,” and a penalty to neighborhoods racialized as
-lower-value. That has obvious fair housing implications. If you used a model
-like this to “objectively” value collateral for lending or tax assessment
-without adjustments, you’d be baking those disparities directly into policy. In
-other words, the market is not just pricing bricks and bathrooms; it’s pricing
-neighborhood identity — including race and class — and we can see it in the
-data.
+We also see that tracts with higher median household income sell for more, and tracts with more older residents (65+) sell for more. You can read that as the market attaching a price premium to “social stability” or “aging, long-tenure homeowners with resources,” and a penalty to neighborhoods racialized as lower-value. That has obvious fair housing implications. If you used a model like this to “objectively” value collateral for lending or tax assessment without adjustments, you’d be baking those disparities directly into policy. In other words, the market is not just pricing bricks and bathrooms; it’s pricing neighborhood identity — including race and class — and we can see it in the data.
 
 **Limitations?**
 
--   We model sale price, not willingness to pay in general. Off-market
-    transfers, distressed sales, family transfers, or cash flips at weird prices
-    all exist and can leak into the data. We tried to filter out some
-    non-arm’s-length / broken records using safeguards like
-    price-per-square-foot ranges and value_multiple cutoffs, but it’s not
-    perfect.
+- We model sale price, not willingness to pay in general. Off-market transfers, distressed sales, family transfers, or cash flips at weird prices all exist and can leak into the data. We tried to filter out some non-arm’s-length / broken records using safeguards like price-per-square-foot ranges and value_multiple cutoffs, but it’s not perfect.
 
--   We don’t observe interiors the way an appraiser or buyer does. “Interior
-    condition” is categorical and crude. It does a lot of work in the model, but
-    it’s still way less detailed than listing photos, finishes, HVAC age, roof
-    age, etc. So some of what shows up in the assessed market value term is just
-    “good renovation quality we didn’t explicitly encode.”
+- We don’t observe interiors the way an appraiser or buyer does. “Interior condition” is categorical and crude. It does a lot of work in the model, but it’s still way less detailed than listing photos, finishes, HVAC age, roof age, etc. So some of what shows up in the assessed market value term is just “good renovation quality we didn’t explicitly encode.”
 
--   Timing and direction of causality. Crime is measured during 2023–2024, and
-    we’re relating that to sales in roughly that same window. Buyers react to
-    reputation and perceived safety, not just the literal last 12 months of
-    incidents. So the coefficient on violent_2blocks is “areas that are known to
-    be hotter tend to sell for less,” not “if one assault happens on your block
-    today, you instantly lose X USD tomorrow.”
+- Timing and direction of causality. Crime is measured during 2023–2024, and we’re relating that to sales in roughly that same window. Buyers react to reputation and perceived safety, not just the literal last 12 months of incidents. So the coefficient on violent_2blocks is “areas that are known to be hotter tend to sell for less,” not “if one assault happens on your block today, you instantly lose X USD tomorrow.”
 
--   Demographic variables are structurally loaded. The fact that pct_black is
-    negatively associated with price is not a statement about intrinsic property
-    value. It’s capturing systemic bias — lending, appraisal, speculative
-    expectations — and we’re treating that as a “feature.” That’s useful for
-    prediction, but dangerous for policy if used naively. You would not want to
-    bake that into automated valuation tools without guardrails, because it
-    would literally encode discrimination.
+- Demographic variables are structurally loaded. The fact that pct_black is negatively associated with price is not a statement about intrinsic property value. It’s capturing systemic bias — lending, appraisal, speculative expectations — and we’re treating that as a “feature.” That’s useful for prediction, but dangerous for policy if used naively. You would not want to bake that into automated valuation tools without guardrails, because it would literally encode discrimination.
 
--   Fixed effects hide macro gap but don’t solve it. Neighborhood fixed effects
-    let us ask “why does this house sell for more than that house within the
-    same neighborhood?” That’s exactly what we want for local pricing. But fixed
-    effects also absorb neighborhood-level disparities themselves. That means
-    we’re not modeling why one neighborhood as a whole appraises lower than
-    another neighborhood, which is also an equity question — we’re holding that
-    gap constant.
+- Fixed effects hide macro gap but don’t solve it. Neighborhood fixed effects let us ask “why does this house sell for more than that house within the same neighborhood?” That’s exactly what we want for local pricing. But fixed effects also absorb neighborhood-level disparities themselves. That means we’re not modeling why one neighborhood as a whole appraises lower than another neighborhood, which is also an equity question — we’re holding that gap constant.
 
-**Declaration** ChatGPT was used to amend language errors and allow for more
-seamless sentence structure/syntax. It was also used to aid in certain
-repetitive coding tasks. All of which were double checked for accuracy and at
-times redone by another team member to ensure ownership of both content and
-code.
+**Declaration**
+ChatGPT was used to amend language errors and allow for more seamless sentence structure/syntax. It was also used to aid in certain repetitive coding tasks. All of which were double checked for accuracy and at times redone by another team member to ensure ownership of both content and code.
