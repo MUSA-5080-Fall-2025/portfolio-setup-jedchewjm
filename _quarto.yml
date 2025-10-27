@@ -19,6 +19,13 @@ website:
         - href: weekly-notes/week-06-notes.qmd
         - href: weekly-notes/week-07-notes.qmd
           
+      - text: Midterm
+        menu: 
+          - href: midterm/appendix/Midterm_2025.qmd
+            text: "Report - Single-Family Home Price Prediction in Philadelphia"
+          - href: midterm/slides/Midterm_slides_v3.qmd
+            text: "Slides - Improving Property Tax Assessments in Philadelphia"  
+      
       - text: Labs
         menu:
         - href: labs/lab_0/scripts/lab0_template.qmd
@@ -31,7 +38,6 @@ website:
         - href: side-hustles/demographic_change.qmd
         - href: side-hustles/vacancy_land_use.qmd
         
-
 format:
   html:
     theme: cosmo
