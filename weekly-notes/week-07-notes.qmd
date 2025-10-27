@@ -10,13 +10,9 @@ date: "2025-10-20"
 **Building the model:**
 
 1.  Visualize relationships
-
 2.  Engineer features
-
-3.  Fit the model
-
+3.  Fir the model
 4.  Evaluate performance (RMSE, R²)
-
 5.  Check assumptions
 
 **Spatial Diagnostics**
@@ -45,18 +41,24 @@ date: "2025-10-20"
 
 -   **-1** = Perfect negative correlation (dispersion)
 
+------------------------------------------------------------------------
+
+**Defining Neighbors:**
+
+![](images/clipboard-88185342.png){width="987"}
+
 **Sample Example:**
 
 ![](images/clipboard-2995180422.png){width="451"}
 
-Step 1: Calculate Deviations from Mean
+**Step 1: Calculate Deviations from Mean**
 
-![](images/clipboard-2249328638.png)
+![](images/clipboard-2249328638.png){width="471"}
 
 **Positive deviation** = we over-predicted (actual \> predicted)\
 **Negative deviation** = we under-predicted (actual \< predicted)
 
-Step 2: Multiply Neighbor Pair Deviations
+**Step 2: Multiply Neighbor Pair Deviations**
 
 ![](images/clipboard-645011366.png)
 
@@ -65,6 +67,44 @@ Step 2: Multiply Neighbor Pair Deviations
 -   Products near zero → **Low Moran’s I** (random)
 
 -   Negative products → **Negative Moran’s I** (rare with errors)
+
+**Step 3: Possible Solutions**
+
+If Moran’s I shows clustered errors:
+
+✅ **Add more spatial features** (different buffers, more amenities)\
+✅ **Try neighborhood fixed effects**\
+✅ **Use spatial cross-validation**
+
+------------------------------------------------------------------------
+
+**Issues with Spatial Lag for Prediction:**
+
+1.  **Simultaneity Problem (circular logic)**
+
+-   My price affects neighbors → neighbors affect me
+
+-   OLS estimates are biased and inconsistent
+
+2.  **Prediction Paradox (poor generalizability)**
+
+-   Need neighbors’ prices to predict my price
+
+-   But for new developments or future periods, those prices don’t exist yet
+
+3.  **Data Leakage in CV**
+
+-   Spatial Lag "leaks" information from test set
+
+-   Artificially good performance that won't hold
+
+![](images/clipboard-4100208631.png){width="251"}
+
+**Key Idea: Match method to purpose:** 
+
+-   **inference** → spatial lag/error models; **prediction** → spatial features
+
+-   **our predicton approach:** Instead of modeling dependence in Y (prices), model proximity in X (predictors)
 
 ## Coding Techniques
 
@@ -98,10 +138,12 @@ moran_test$statistic         # Moran's I value
 
 ## Questions & Challenges
 
--   
+-   The intuition behind Moran's I is "*When I’m above/below average, are my neighbors also above/below average?"* I'm curious if incorporating models such as kNN can help to meaningfully reduce spatial lag?
 
 ## Connections to Policy
 
--   
+-   Research methods should follow policy intents and purposes. When looking at market forecasting or policy predictions, the predictive spatial features described above are more useful than spatial econometrics models
 
 ## Reflection
+
+-   I had never heard of Spatial Lag, Spatial Autocorrelation, or Moran's I before this class as I have not taken spatial statistics, so this was a very useful crash course!

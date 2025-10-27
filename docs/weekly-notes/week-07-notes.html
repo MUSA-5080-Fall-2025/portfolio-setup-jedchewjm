@@ -167,6 +167,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
   </li>
   <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-midterm" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Midterm</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-midterm">    
+        <li>
+    <a class="dropdown-item" href="../midterm/appendix/Midterm_2025.html">
+ <span class="dropdown-text">Report - Single-Family Home Price Prediction in Philadelphia</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../midterm/slides/Midterm_slides_v3.html">
+ <span class="dropdown-text">Slides - Improving Property Tax Assessments in Philadelphia</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Labs</span>
     </a>
@@ -265,11 +280,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="regression-workflow">Regression Workflow</h3>
 <p><strong>Building the model:</strong></p>
 <ol type="1">
-<li><p>Visualize relationships</p></li>
-<li><p>Engineer features</p></li>
-<li><p>Fit the model</p></li>
-<li><p>Evaluate performance (RMSE, R²)</p></li>
-<li><p>Check assumptions</p></li>
+<li>Visualize relationships</li>
+<li>Engineer features</li>
+<li>Fir the model</li>
+<li>Evaluate performance (RMSE, R²)</li>
+<li>Check assumptions</li>
 </ol>
 <p><strong>Spatial Diagnostics</strong></p>
 <ol start="6" type="1">
@@ -291,18 +306,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p><strong>0</strong> = Random spatial pattern</p></li>
 <li><p><strong>-1</strong> = Perfect negative correlation (dispersion)</p></li>
 </ul>
+<hr>
+<p><strong>Defining Neighbors:</strong></p>
+<p><img src="images/clipboard-88185342.png" class="img-fluid" width="987"></p>
 <p><strong>Sample Example:</strong></p>
 <p><img src="images/clipboard-2995180422.png" class="img-fluid" width="451"></p>
-<p>Step 1: Calculate Deviations from Mean</p>
-<p><img src="images/clipboard-2249328638.png" class="img-fluid"></p>
+<p><strong>Step 1: Calculate Deviations from Mean</strong></p>
+<p><img src="images/clipboard-2249328638.png" class="img-fluid" width="471"></p>
 <p><strong>Positive deviation</strong>&nbsp;= we over-predicted (actual &gt; predicted)<br>
 <strong>Negative deviation</strong>&nbsp;= we under-predicted (actual &lt; predicted)</p>
-<p>Step 2: Multiply Neighbor Pair Deviations</p>
+<p><strong>Step 2: Multiply Neighbor Pair Deviations</strong></p>
 <p><img src="images/clipboard-645011366.png" class="img-fluid"></p>
 <ul>
 <li><p>Lots of positive products → <strong>High Moran’s I</strong> (clustering)</p></li>
 <li><p>Products near zero → <strong>Low Moran’s I</strong> (random)</p></li>
 <li><p>Negative products → <strong>Negative Moran’s I</strong> (rare with errors)</p></li>
+</ul>
+<p><strong>Step 3: Possible Solutions</strong></p>
+<p>If Moran’s I shows clustered errors:</p>
+<p>✅&nbsp;<strong>Add more spatial features</strong>&nbsp;(different buffers, more amenities)<br>
+✅&nbsp;<strong>Try neighborhood fixed effects</strong><br>
+✅&nbsp;<strong>Use spatial cross-validation</strong></p>
+<hr>
+<p><strong>Issues with Spatial Lag for Prediction:</strong></p>
+<ol type="1">
+<li><strong>Simultaneity Problem (circular logic)</strong></li>
+</ol>
+<ul>
+<li><p>My price affects neighbors → neighbors affect me</p></li>
+<li><p>OLS estimates are biased and inconsistent</p></li>
+</ul>
+<ol start="2" type="1">
+<li><strong>Prediction Paradox (poor generalizability)</strong></li>
+</ol>
+<ul>
+<li><p>Need neighbors’ prices to predict my price</p></li>
+<li><p>But for new developments or future periods, those prices don’t exist yet</p></li>
+</ul>
+<ol start="3" type="1">
+<li><strong>Data Leakage in CV</strong></li>
+</ol>
+<ul>
+<li><p>Spatial Lag “leaks” information from test set</p></li>
+<li><p>Artificially good performance that won’t hold</p></li>
+</ul>
+<p><img src="images/clipboard-4100208631.png" class="img-fluid" width="251"></p>
+<p><strong>Key Idea: Match method to purpose:</strong>&nbsp;</p>
+<ul>
+<li><p><strong>inference</strong>&nbsp;→ spatial lag/error models;&nbsp;<strong>prediction</strong>&nbsp;→ spatial features</p></li>
+<li><p><strong>our predicton approach:</strong> Instead of modeling dependence in Y (prices), model proximity in X (predictors)</p></li>
 </ul>
 </section>
 </section>
@@ -346,17 +398,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="questions-challenges" class="level2">
 <h2 class="anchored" data-anchor-id="questions-challenges">Questions &amp; Challenges</h2>
 <ul>
-<li></li>
+<li>The intuition behind Moran’s I is “<em>When I’m above/below average, are my neighbors also above/below average?“</em> I’m curious if incorporating models such as kNN can help to meaningfully reduce spatial lag?</li>
 </ul>
 </section>
 <section id="connections-to-policy" class="level2">
 <h2 class="anchored" data-anchor-id="connections-to-policy">Connections to Policy</h2>
 <ul>
-<li></li>
+<li>Research methods should follow policy intents and purposes. When looking at market forecasting or policy predictions, the predictive spatial features described above are more useful than spatial econometrics models</li>
 </ul>
 </section>
 <section id="reflection" class="level2">
 <h2 class="anchored" data-anchor-id="reflection">Reflection</h2>
+<ul>
+<li>I had never heard of Spatial Lag, Spatial Autocorrelation, or Moran’s I before this class as I have not taken spatial statistics, so this was a very useful crash course!</li>
+</ul>
 
 
 </section>
