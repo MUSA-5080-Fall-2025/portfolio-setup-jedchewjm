@@ -1,5 +1,5 @@
 ---
-title: "Vacancy and Land Use - Sharswood"
+title: "Vacancy, Land Use, and Businesses - Sharswood"
 subtitle: "URBS 4000: Urban Studies Thesis"
 author: "Jed Chew"
 date: today
@@ -59,8 +59,10 @@ library(janitor)
 library(sf)
 library(tigris)
 library(scales)
+library(ggnewscale)
 library(patchwork)
 library(RColorBrewer)
+library(viridisLite)
 library(units)
 library(knitr)
 library(caret)
@@ -96,24 +98,11 @@ acs_vars_2022 <- load_variables(2022, "acs5", cache = TRUE)
 ```
 
 ```{r, results = 'hide'}
-# Helper Variables for Summing Population Values for Children aged 5-19
-child_pop = c("B01001_004", "B01001_005", "B01001_006", "B01001_007", 
-                "B01001_028", "B01001_029", "B01001_030", "B01001_031")
-
-
-# Helper Variable for Summing Population Values for Elderly Population
-elderly_pop = c("B01001_020", "B01001_021", "B01001_022", "B01001_023", 
-                "B01001_024", "B01001_025", 
-                "B01001_044", "B01001_045", "B01001_046", 
-                "B01001_047", "B01001_048", "B01001_049")
-
 # Get tract-level demographic data from 2022 ACS 5-Yr Estimates for Philadelphia
 phl_tract_2022_data <- get_acs(
   geography = "tract",
   variables = c(
     total_pop = "B01003_001",
-    child_pop = child_pop,
-    elderly_pop = elderly_pop,
     median_income = "B19013_001",
     poverty = "B17001_001",
     White     = "B03002_003",
@@ -141,19 +130,7 @@ phl_tract_2022_clean <- phl_tract_2022_data |>
   )
 
 phl_tract_2022_summary <- phl_tract_2022_clean |>
-  mutate(
-    elderly_popE = rowSums(across(matches("^elderly_pop\\d+E$")), na.rm = TRUE),
-    # for MOE, ACS guidance is to combine by quadrature
-    elderly_popM = sqrt(rowSums(across(matches("^elderly_pop\\d+M$"))^2, na.rm = 
-                                  TRUE)),
-    pct_elderly = round((elderly_popE / total_popE) *100, 2),
-    child_popE = rowSums(across(matches("^child_pop\\d+E$")), na.rm = TRUE),
-    child_popM = sqrt(rowSums(across(matches("^child_pop\\d+M$"))^2, na.rm = 
-                                  TRUE)),
-    pct_child = round((child_popE/total_popE) * 100, 2),
-  ) |>
-  select(GEOID, tract_name, county_name, total_popE, median_incomeE, elderly_popE, 
-         elderly_popM, pct_elderly, child_popE, child_popM, pct_child)
+  select(GEOID, tract_name, county_name, total_popE, median_incomeE)
 ```
 
 --------------------------------------------------------------------------------
@@ -170,35 +147,52 @@ sharswood_2022_tract <- sharswood_2022_tract_sf |>
 sharswood_2022_tract
 ```
 
---------------------------------------------------------------------------------
-
-### Step 4: Plot Maps of Vacant Buildings, Land, and Points in Sharswood
-
 ```{r, results = 'hide'}
-sharswood_land_parcels <- st_read("data/sharswood_parcels.geojson")
-
-ggplot() +
-  geom_sf(data = sharswood_bg_sf, fill = "gray97", color = "gray50", linewidth = 0.3) +
-  geom_sf(data = sharswood_land_parcels, fill = NA, color = "gray50", linewidth = 0.6) +
-  labs(title = "Property Parcels in Sharswood") +
-  theme_void()
-```
-
-```{r, results = 'hide'}
+# Spatially Filter Vacancy Data for Sharswood
 vacant_bldgs <- st_read("data/Vacant_Indicators_Bldg.geojson")
 vacant_land <- st_read("data/Vacant_Indicators_Land.geojson")
 vacant_pts <- st_read("data/Vacant_Indicators_Points.geojson")
+sharswood_land_parcels <- st_read("data/sharswood_parcels.geojson")
 
 sharswood_zip <- 19121
 
 sharswood_vacant_bldgs <- vacant_bldgs |> 
   st_transform(st_crs(sharswood_bg_sf)) |> 
   filter(zipcode == sharswood_zip) |> 
+  mutate(bldg_desc = str_squish(bldg_desc)) |>
+  filter(
+    !is.na(bldg_desc), # filter out NAs
+    !str_detect(bldg_desc, regex("\\bschool\\b", ignore_case = TRUE)), # filter out Girard College
+    !str_detect(bldg_desc, regex("\\bland\\b", ignore_case = TRUE)) # filter out Land
+  ) |> 
+  mutate(
+    # Remove "MASONRY" and tidy up
+    bldg_desc_clean = str_squish(str_remove(bldg_desc, 
+                                            regex("MASONRY", ignore_case = TRUE))),
+    # Create broader categories
+    bldg_type = case_when(
+      str_detect(bldg_desc_clean, 
+                 regex("APT\\s*2-4", ignore_case = TRUE)) ~ "Apt 2-4 units",
+      str_detect(bldg_desc_clean, 
+                 regex("ROW\\s*\\d", ignore_case = TRUE)) ~ "Rowhouse",
+      str_detect(bldg_desc_clean, 
+                 regex("ROW\\s*CONV", ignore_case = TRUE)) ~ "Rowhouse Convert/Apt",
+      str_detect(bldg_desc_clean, 
+                 regex("SEMI", ignore_case = TRUE)) ~ "Semi-Detached",
+      str_detect(bldg_desc_clean, 
+                 regex("STORE", ignore_case = TRUE)) ~ "Store",
+      str_detect(bldg_desc_clean, 
+                 regex("STR/OFF\\+APTS", ignore_case = TRUE)) ~ "Store/Office + Apts",
+      str_detect(bldg_desc_clean, 
+                 regex("HSE\\s+WORSHIP", ignore_case = TRUE)) ~ "Hse of Worship",
+      TRUE ~ "Other")
+  ) |>
   st_filter(sharswood_bg_sf, .predicate = st_intersects)
 
 sharswood_vacant_land <- vacant_land |> 
   st_transform(st_crs(sharswood_bg_sf)) |> 
-  filter(ZIPCODE == sharswood_zip) |> 
+  filter(ZIPCODE == sharswood_zip,
+         BLDG_DESC == "VAC LAND RES < ACRE") |> 
   st_filter(sharswood_bg_sf, .predicate = st_intersects)
 
 sharswood_vacant_pts <- vacant_pts |> 
@@ -208,6 +202,118 @@ sharswood_vacant_pts <- vacant_pts |>
 ```
 
 ```{r}
+# Vacancy in Table Format
+sharswood_vacant_bldgs_df <- sharswood_vacant_bldgs |> 
+  st_drop_geometry() |> 
+  select(objectid, address, owner1, bldg_desc, bldg_type, zoningbasedistrict)
+sharswood_vacant_bldgs_df
+
+count(sharswood_vacant_bldgs_df, bldg_desc)
+count(sharswood_vacant_bldgs_df, bldg_type)
+count(sharswood_vacant_bldgs_df, owner1)
+
+sharswood_vacant_land_df <- sharswood_vacant_land |> 
+  st_drop_geometry() |> 
+  select(OBJECTID, ADDRESS, OWNER1, BLDG_DESC, ZONINGBASEDISTRICT)
+sharswood_vacant_land_df
+
+count(sharswood_vacant_land_df, OWNER1)
+
+sharswood_vacant_pts_df <- sharswood_vacant_pts |> 
+  st_drop_geometry() |> 
+  select(OBJECTID, ADDRESS, OWNER1, BLDG_DESC, ZONINGBASEDISTRICT)
+sharswood_vacant_pts_df
+```
+
+```{r}
+# Count Vacant Land by Owner
+sharswood_vacant_land_owner <- sharswood_vacant_land |> 
+  mutate(owner_std = str_to_title(str_squish(OWNER1))) |> 
+  add_count(owner_std, name = "owner_n")  |> 
+  mutate(
+    owner_grp = case_when(
+      is.na(owner_std) | owner_std == "" ~ "Unknown",
+      owner_n == 1                       ~ "Individual Owners",
+      TRUE                               ~ owner_std
+    )
+  ) |> 
+  select(-owner_n)
+
+sharswood_vacant_land_owner_df <- sharswood_vacant_land_owner |> 
+  st_drop_geometry() |> 
+  select(OBJECTID, ADDRESS, OWNER1, BLDG_DESC, owner_grp, ZONINGBASEDISTRICT)
+head(sharswood_vacant_land_owner_df)
+```
+
+--------------------------------------------------------------------------------
+
+### Step 4: Plot Maps of Vacant Buildings, Land, and Points in Sharswood
+
+```{r}
+# Build palettes that expand to any number of categories
+n_bldg <- dplyr::n_distinct(sharswood_vacant_bldgs$bldg_type)
+# Blue → teal → green
+bldg_cols <- colorRampPalette(
+  c("#084081", "#2b8cbe", "#4eb3d3", "#7bccc4", "#43a2ca", "#2ca25f", "#238b45", "#006d2c")
+)(n_bldg)
+
+n_land <- dplyr::n_distinct(sharswood_vacant_land$ZONINGBASEDISTRICT)
+land_cols <- colorRampPalette(brewer.pal(3, "Reds"))(n_land)
+
+ggplot() +
+  geom_sf(data = sharswood_land_parcels, fill = NA, color = "gray60", linewidth = 0.4) +
+  geom_sf(data = sharswood_vacant_bldgs, 
+          aes(fill = bldg_type), 
+          color = "grey10", linewidth = 0.08) +
+  scale_fill_manual(values = bldg_cols, name = "Vacant Buildings - Type") +
+  guides(fill = guide_legend(order = 1)) +
+  new_scale_fill() +
+  geom_sf(data = sharswood_vacant_land,
+          aes(fill = ZONINGBASEDISTRICT),
+          color = "grey30", linewidth = 0.2, alpha = 0.65) +
+  scale_fill_manual(values = land_cols, name = "Vacant Land - Zoning") +
+  guides(fill = guide_legend(order = 2)) +
+  labs(
+    title = "Vacant Land and Buildings in Sharswood",
+    caption = "Vacant Land updated 3/24/25; Vacant Buildings updated 7/7/25",
+  ) +
+  theme_void() +
+  theme(
+    legend.position = "right",
+    legend.title = element_text(size = 11, face = "bold"),
+    legend.text  = element_text(size = 9),
+    plot.title   = element_text(face = "bold"),
+    plot.caption = element_text(hjust = 0, size = 9, margin = margin(t = 6))
+  )
+```
+
+```{r}
+# Vacant Land by Ownership
+n_land_owner <- dplyr::n_distinct(sharswood_vacant_land_owner$owner_grp)
+land_owner_cols <- colorRampPalette(brewer.pal(8, "Set1"))(n_land_owner)
+
+ggplot() +
+  geom_sf(data = sharswood_land_parcels, fill = NA, color = "gray60", linewidth = 0.4) +
+  geom_sf(data = sharswood_vacant_land_owner,
+          aes(fill = owner_grp),
+          color = "grey30", linewidth = 0.2, alpha = 0.65) +
+  scale_fill_manual(values = land_owner_cols, name = "Vacant Land - Ownership") +
+  guides(fill = guide_legend(order = 2)) +
+  labs(
+    title = "Vacant Land in Sharswood by Ownership",
+    caption = "Vacant Land updated 3/24/25"
+  ) +
+  theme_void() +
+  theme(
+    legend.position = "right",
+    legend.title = element_text(size = 11, face = "bold"),
+    legend.text  = element_text(size = 9),
+    plot.title   = element_text(face = "bold"),
+    plot.caption = element_text(hjust = 0, size = 9, margin = margin(t = 6))
+  )
+```
+
+```{r, eval = FALSE}
 ggplot() +
   geom_sf(data = sharswood_land_parcels, fill = NA, color = "gray50", linewidth = 0.6) +
   geom_sf(data = sharswood_vacant_bldgs, aes(fill = bldg_desc)) +
@@ -215,9 +321,7 @@ ggplot() +
     title = "Vacant Buildings in Sharswood",
     subtitle = "Date Last Updated: July 7, 2025") +
   theme_void()
-```
 
-```{r}
 ggplot() +
   geom_sf(data = sharswood_land_parcels, fill = NA, color = "gray50", linewidth = 0.6) +
   geom_sf(data = sharswood_vacant_land, aes(fill = ZONINGBASEDISTRICT)) +
@@ -225,9 +329,7 @@ ggplot() +
     title = "Vacant Land in Sharswood",
     subtitle = "Date Last Updated: March 24, 2025") +
   theme_void()
-```
 
-```{r}
 ggplot() +
   geom_sf(data = sharswood_land_parcels, fill = NA, color = "gray50", linewidth = 0.6) +
   geom_sf(data = sharswood_vacant_pts, aes(color = VACANT_FLAG)) +
@@ -236,57 +338,3 @@ ggplot() +
     subtitle = "Date Last Updated: March 24, 2025") +
   theme_void()
 ```
-
---------------------------------------------------------------------------------
-
-## Part 2: Land-Use Data
-
---------------------------------------------------------------------------------
-
--   Data Source: <https://opendataphilly.org/datasets/land-use/>
-
--   Date Downloaded: Oct 20, 2025
-
--   Description: City of Philadelphia land use as ascribed to individual parcel
-    boundaries or units of land. Land use is the type of activity occurring on
-    the land such as residential, commercial or industrial. Each unit of land is
-    assigned one of nine major classifications of land use (2-digit code), and
-    where possible a more narrowly defined sub-classification (3-digit code).
-    The land use feature class has been field checked and corrected for the
-    following Planning Districts.
-
-```{r, eval = FALSE}
-# curr_land_use <- st_read("data/Land_Use.geojson")
-
-# sharswood_land_use <- curr_land_use |> 
-  # st_transform(st_crs(sharswood_bg_sf)) |> 
-  # st_filter(sharswood_bg_sf, .predicate = st_intersects)
-
-# land_use_2012_2018 <- st_Read("data/Land_Use_2012_2018.gejson")
-
-# sharswood_historical_land_use <- land_use_2012_2018 |> 
-  # st_transform(st_crs(sharswood_bg_sf)) |> 
-  # st_filter(sharswood_bg_sf, .predicate = st_intersects)
-```
-
-```{r, eval = FALSE}
-# need to use a filtered .geojson with file size < 100 MB
-sharswood_land_use <- st_read("data/sharswood_land_use.geojson") |>
-  st_transform(st_crs(sharswood_bg_sf))
-
-ggplot(sharswood_land_use) +
-  geom_sf() +
-  theme_void()
-```
-
---------------------------------------------------------------------------------
-
-## Part 3: Comprehensive Visualization and Analysis
-
---------------------------------------------------------------------------------
-
-### Step 1: Rename Columns for ACS Year
-
-### Step 2: Facet Maps by Period
-
-### Step 3: Change Maps

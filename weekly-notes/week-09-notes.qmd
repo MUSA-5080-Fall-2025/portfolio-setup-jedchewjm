@@ -1,0 +1,386 @@
+---
+title: "Week 9 Notes - Predictive Policing"
+date: "2025-11-03"
+---
+
+## Key Concepts Learned
+
+### Technical Questions
+
+-   How do we model crime counts?
+
+-   What spatial features predict crime?
+
+-   How do we validate predictions?
+
+-   Can we outperform baseline methods?
+
+![](images/clipboard-3233584324.png)
+
+### Critical Questions
+
+-   Whose data? Whose crimes?
+
+-   What if the data is “dirty”?
+
+-   Who benefits? Who is harmed?
+
+-   What feedback loops are created?
+
+-   Can technical solutions fix social problems?
+
+### Defining "Dirty Data"
+
+Richardson et al. 2019: “*Data derived from or influenced by corrupt, biased, and unlawful practices, including data that has been intentionally manipulated or ‘juked,’ as well as data that is distorted by individual and societal biases*.”
+
+1.  Fabricated/Manipulated Data
+2.  Systematically Biased Data
+3.  Missing/Incomplete Data
+4.  Proxy Problems
+
+### Confirmation Bias Feedback Loop:
+
+-   Algorithm learns: “Crime happens in neighborhood X”
+
+-   Police sent to neighborhood X
+
+-   More arrests in neighborhood X (regardless of actual crime)
+
+-   Algorithm “confirmed”: “We were right about neighborhood X!”
+
+-   Cycle intensifies
+
+### Modeling Workflow
+
+**01 \| Setup & Data Preparation**
+
+-   Load burglaries (point data)
+
+-   Load abandoned cars (311 calls)
+
+-   **Create fishnet** (500m × 500m grid)
+
+-   Aggregate burglaries to cells
+
+**02 \| Baseline Comparison**
+
+-   **Kernel Density Estimation (KDE)**
+
+-   Simple spatial smoothing
+
+-   What we need to beat!
+
+**03 \| Feature Engineering**
+
+**Using Abandoned Cars as “Disorder Indicator”:**
+
+-   **Count** in each cell
+
+-   **k-Nearest Neighbors** (mean distance to 3 nearest)
+
+-   **LISA** (Local Moran’s I - identify hot spots)
+
+-   **Distance to hot spots** (significant clusters)
+
+**04 \| Count Regression Models**
+
+-   Fit **Poisson regression**
+
+-   Test for **overdispersion**
+
+-   Fit **Negative Binomial** (if needed)
+
+-   Interpret coefficients
+
+**05 \| Spatial Cross-Validation**
+
+-   **Leave-One-Group-Out (LOGO)**
+
+-   Train on n-1 districts
+
+-   Test on held-out district
+
+-   Calculate MAE/RMSE
+
+**06 \| Model Comparison**
+
+-   Compare to KDE baseline
+
+-   Map predictions vs. actual
+
+-   Analyze errors spatially
+
+**Summary of Different Spatial Measures**
+
+-   Count → How much disorder is HERE?
+
+-   k-NN Distance → How CLOSE are we to disorder?
+
+-   Hot Spots (LISA) → Where does disorder CLUSTER?
+
+-   Distance to Hot Spots → How close to concentrated disorder?
+
+-   Each captures a different aspect of spatial proximity to our indicator variable
+
+**Common Approaches to Spatial Weights Matrix (W)**
+
+-   **Contiguity:** Share a border? (Queen vs. Rook)
+
+    -   Our fishnet grid uses Queen contiguity (most common for regular grids)
+
+-   **Distance:** Within threshold distance?
+
+-   **K-nearest neighbors:** Closest k locations
+
+**Four Types of Significant Clusters**
+
+![](images/clipboard-40446740.png)
+
+## Coding Techniques
+
+-   **Local Moran's I**
+
+```{r, eval = FALSE}
+library(spdep)
+
+# Step 1: Create spatial object
+fishnet_sp <- as_Spatial(fishnet)
+
+# Step 2: Define neighbors (Queen contiguity)
+neighbors <- poly2nb(fishnet_sp, queen = TRUE)
+
+# Step 3: Create spatial weights (row-standardized)
+weights <- nb2listw(neighbors, style = "W", zero.policy = TRUE)
+
+# Step 4: Calculate Local Moran's I
+local_moran <- localmoran(
+  fishnet$abandoned_cars,  # Variable of interest
+  weights,                  # Spatial weights
+  zero.policy = TRUE       # Handle cells with no neighbors
+)
+
+# Step 5: Extract components
+fishnet$local_I <- local_moran[, "Ii"]      # Local I statistic
+fishnet$p_value <- local_moran[, "Pr(z != E(Ii))"]  # P-value
+fishnet$z_score <- local_moran[, "Z.Ii"]    # Z-score
+```
+
+-   **Distance to Nearest Feature (kNN where k = 1)**
+
+    For each grid cell:
+
+    1.  Find location of all abandoned cars
+
+    2.  Calculate distance to each
+
+    3.  Keep minimum distance
+
+```{r, eval = FALSE}
+library(FNN)
+
+# Calculate distance to nearest abandoned car
+nn_dist <- get.knnx(
+  data = st_coordinates(abandoned_cars),      # "To" locations
+  query = st_coordinates(st_centroid(fishnet)), # "From" locations
+  k = 1                                          # Nearest 1
+)
+
+# Extract distances
+fishnet$abandoned_car_nn <- nn_dist$nn.dist[, 1]
+```
+
+-   **Distance to Hot Spot**
+
+    -   Step 1: Identify hotspots (Local Moran’s I High-High clusters)
+
+    -   Step 2: distance from each cell to nearest hotspot
+
+```{r, eval = FALSE}
+# Step 1: Identify hotspots (we did this earlier)
+hotspot_cells <- filter(fishnet, hotspot == 1)
+
+# Step 2: Calculate distances
+hotspot_dist <- get.knnx(
+  data = st_coordinates(st_centroid(hotspot_cells)),
+  query = st_coordinates(st_centroid(fishnet)),
+  k = 1
+)
+
+fishnet$hotspot_nn <- hotspot_dist$nn.dist[, 1]
+```
+
+-   **Visualizing Distance Features**
+
+```{r, eval = FALSE}
+# Create comparison maps
+p1 <- ggplot(fishnet) +
+  geom_sf(aes(fill = abandoned_car_nn), color = NA) +
+  scale_fill_viridis_c(name = "Distance (m)", option = "plasma") +
+  labs(title = "Distance to Nearest Abandoned Car") +
+  theme_void()
+
+p2 <- ggplot(fishnet) +
+  geom_sf(aes(fill = hotspot_nn), color = NA) +
+  scale_fill_viridis_c(name = "Distance (m)", option = "magma") +
+  labs(title = "Distance to Nearest Hotspot") +
+  theme_void()
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+-   **Creating a Fishnet Grid**
+
+```{r, eval = FALSE}
+library(sf)
+
+# Step 1: Define cell size (in map units - meters for our projection)
+cell_size <- 500  # 500m x 500m cells
+
+# Step 2: Create grid over study area
+fishnet <- st_make_grid(
+  chicago_boundary,
+  cellsize = cell_size,
+  square = TRUE,
+  what = "polygons"
+) %>%
+  st_sf() %>%
+  mutate(uniqueID = row_number())
+
+# Step 3: Clip to study area (remove cells outside boundary)
+fishnet <- fishnet[chicago_boundary, ]
+
+# Check results
+nrow(fishnet)  # Number of cells
+st_area(fishnet[1, ])  # Area of one cell (should be 250,000 m²)
+```
+
+-   **Aggregating Points to Grid**
+
+    -   Spatial join between crimes (points) and fishnet (polygons)
+
+    -   Count crimes per cell
+
+    -   Handle cells with zero crimes
+
+```{r, eval = FALSE}
+# Count burglaries per cell
+burglary_counts <- st_join(burglaries, fishnet) %>%
+  st_drop_geometry() %>%
+  group_by(uniqueID) %>%
+  summarize(countBurglaries = n())
+
+# Join back to fishnet
+fishnet <- fishnet %>%
+  left_join(burglary_counts, by = "uniqueID") %>%
+  mutate(countBurglaries = replace_na(countBurglaries, 0))
+
+# Summary
+summary(fishnet$countBurglaries)
+#   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#      0       0       1    2.3       3      47
+```
+
+**Leave-One-Group-Out (LOGO-CV) Implementation**
+
+```{r, eval = FALSE}
+# Get unique districts
+districts <- unique(fishnet$District)
+
+# Initialize results
+cv_results <- list()
+
+# Loop through districts
+for (dist in districts) {
+  train_data <- fishnet %>% filter(District != dist)  # Split data
+  test_data <- fishnet %>% filter(District == dist)
+  
+  # Fit model on training data
+  model_cv <- glm.nb(
+    countBurglaries ~ Abandoned_Cars + Abandoned_Cars.nn + abandoned.isSig.dist,
+    data = train_data
+  )
+  
+  # Predict on test data
+  test_data$prediction <- predict(model_cv, test_data, type = "response")
+  
+  # Store results
+  cv_results[[dist]] <- test_data
+}
+
+# Combine all predictions
+all_predictions <- bind_rows(cv_results)
+```
+
+**Common Error Metrics: MAE, RMSE, Bias**
+
+```{r, eval = FALSE}
+# Calculate metrics by district
+cv_metrics <- all_predictions %>%
+  group_by(District) %>%
+  summarize(
+    MAE = mean(abs(countBurglaries - prediction)),
+    RMSE = sqrt(mean((countBurglaries - prediction)^2)),
+    ME = mean(countBurglaries - prediction)
+  )
+```
+
+**Calculating Kernel Density Estimation (KDE)**
+
+```{r, eval = FALSE}
+library(spatstat)
+
+# Step 1: Convert to point pattern (ppp) object
+burglary_ppp <- as.ppp(
+  X = st_coordinates(burglaries),
+  W = as.owin(st_bbox(chicago_boundary))
+)
+
+# Step 2: Calculate KDE
+kde_surface <- density.ppp(
+  burglary_ppp,
+  sigma = 1000,  # Bandwidth in meters
+  edge = TRUE    # Edge correction
+)
+
+# Step 3: Extract values to fishnet cells
+fishnet$kde_risk <- raster::extract(
+  raster(kde_surface),
+  st_centroid(fishnet)
+)
+
+# Standardize to 0-1 scale for comparison
+fishnet$kde_risk <- (fishnet$kde_risk - min(fishnet$kde_risk, na.rm=T)) / 
+                     (max(fishnet$kde_risk, na.rm=T) - min(fishnet$kde_risk, na.rm=T))
+
+# Visualizing Model vs. KDE Performance
+# Bar chart comparing methods
+comparison_data <- bind_rows(
+  model_results %>% mutate(Method = "Negative Binomial Model"),
+  kde_results %>% mutate(Method = "Kernel Density")
+)
+
+ggplot(comparison_data, aes(x = risk_category, y = pct_of_total, fill = Method)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = c("#440154FF", "#FDE724FF")) +
+  labs(
+    title = "Percentage of 2018 Burglaries Captured",
+    subtitle = "Which method performs better in high-risk areas?",
+    x = "Risk Category",
+    y = "% of Total 2018 Burglaries"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+## Questions & Challenges
+
+-   
+
+## Connections to Policy
+
+-   
+
+## Reflection
+
+-   Further Reading: <https://www.wired.com/story/how-peter-thiels-secretive-data-company-pushed-into-policing/>
+-   <https://blog.palantir.com/about-palantir-ddddb78aec29>
