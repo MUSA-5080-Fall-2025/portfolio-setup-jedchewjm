@@ -1299,6 +1299,6 @@
     "href": "labs/lab_4/assignment4_template.html#key-findings-checklist",
     "title": "Assignment 4: Predictive Policing & Analysis",
     "section": "Key Findings Checklist",
-    "text": "Key Findings Checklist\nTechnical Performance:\n\nCross-validation MAE: 2.7\nModel vs. KDE: [Which performed better?]\nMost predictive variable: [Which had largest effect?]\n\nSpatial Patterns:\n\nBurglaries are [evenly distributed / clustered]\nHot spots are located in [describe]\nModel errors show [random / systematic] patterns\n\nModel Limitations:\n\nOverdispersion: [Yes/No]\nSpatial autocorrelation in residuals: [Test this!]\nCells with zero counts: [What % of data?]"
+    "text": "Key Findings Checklist\nTechnical Performance:\n\nCross-validation MAE: 2.68\nModel vs. KDE: KDE performed better as it produced a lower MAE and RMSE than the model based on abandoned and vacant buildings\nMost predictive variable: [Which had largest effect?]\n\nSpatial Patterns:\n\nBurglaries are clustered as clearly visualized in the Kernel Density Estimation Baseline\nHot spots are located in [describe]\nModel errors show [random / systematic] patterns\n\nModel Limitations:\n\nOverdispersion: Yes – the dispersion parameter of 3.35 exceeds the rule of thumb of 1.5. This suggests that overdispersion in the Poisson distribution model is present and one should considered using a Negative Binomial model instead\nSpatial autocorrelation in residuals: [Test this!]\nCells with zero counts: 781 out of 2458 had zero burglaries (31.8 %)"
   }
 ]

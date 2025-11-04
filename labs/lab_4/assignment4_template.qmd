@@ -33,11 +33,20 @@ By the end of this exercise, you will be able to:
 6.  Compare model predictions to a Kernel Density Estimation baseline
 7.  Evaluate model performance using appropriate metrics
 
+# Analysis Requirements
+
+**For each major section, you must explain in your own words:**
+
+-   **What** you are doing in that step
+-   **Why** this step is important for the analysis
+-   **What** you found or learned from the results
+
 # Setup
 
 ```{r setup}
 #| message: false
 #| warning: false
+#| results: 'hide'
 
 # Load required packages
 library(tidyverse)      # Data manipulation
@@ -52,6 +61,8 @@ library(patchwork)      # Plot composition (replaces grid/gridExtra)
 library(knitr)          # Tables
 library(kableExtra)     # Table formatting
 library(classInt)       # Classification intervals
+library(janitor)        # Clean Names
+
 library(here)
 
 # Spatstat split into sub-packages
@@ -154,7 +165,7 @@ p1 <- ggplot() +
     subtitle = paste0("Chicago 2017, n = ", nrow(burglaries))
   )
 
-# Density surface using modern syntax
+# Density surface
 p2 <- ggplot() + 
   geom_sf(data = chicagoBoundary, fill = "gray95", color = "gray60") +
   geom_density_2d_filled(
@@ -163,17 +174,13 @@ p2 <- ggplot() +
     alpha = 0.7,
     bins = 8
   ) +
-  scale_fill_viridis_d(
-    option = "plasma",
-    direction = -1,
-    guide = "none"  # Modern ggplot2 syntax (not guide = FALSE)
-  ) +
+  scale_fill_viridis_d(option = "plasma", direction = -1, guide = "none") +
   labs(
     title = "Density Surface",
     subtitle = "Kernel density estimation"
   )
 
-# Combine plots using patchwork (modern approach)
+# Combine plots using patchwork
 p1 + p2 + 
   plot_annotation(
     title = "Spatial Distribution of Burglaries in Chicago",
@@ -184,8 +191,9 @@ p1 + p2 +
 ::: callout-note
 ## Observed Patterns
 
--   Lorem Ipsum
--   Lorem Ipsum
+-   Burglary locations are widely dispersed throughout Chicago but cluster more densely in certain areas such as the West Side and South Side neighborhoods
+-   This pattern is more obvious in the KDE map which smooths point data to highlight hotspots of burglary activity
+-   Notable coldspots include the far Northside and the Downtown Core (i.e. the Loop CBD)
 :::
 
 # Part 2: Create Fishnet Grid
@@ -198,7 +206,7 @@ A **fishnet grid** converts irregular point data into a regular grid of cells wh
 # Create 500m x 500m grid
 fishnet <- st_make_grid(
   chicagoBoundary,
-  cellsize = 500,  # 500 meters per cell
+  cellsize = 500,  # 500m per cell
   square = TRUE
 ) %>%
   st_sf() %>%
@@ -214,7 +222,7 @@ cat("  - Cell size:", 500, "x", 500, "meters\n")
 cat("  - Cell area:", round(st_area(fishnet[1,])), "square meters\n")
 ```
 
-### 2.2 \| Aggregate \<Burglaries\> to Grid
+### 2.2 \| Aggregate Burglaries to Grid
 
 ```{r aggregate-burglaries}
 # Spatial join: which cell contains each burglary?
@@ -237,7 +245,7 @@ cat("\nCells with zero burglaries:",
     "(", round(100 * sum(fishnet$countBurglaries == 0) / nrow(fishnet), 1), "%)\n")
 ```
 
-### 2.3 \| Visualize Count Distribution
+### 2.3 \| Visualize Aggregated Count Distribution
 
 ```{r visualize-fishnet}
 #| fig-width: 8
@@ -262,7 +270,7 @@ ggplot() +
 
 # Part 3: Create a Kernel Density Estimate (KDE) Baseline
 
--   KDE represents our null hypothesis: burglaries happen where they happened before, with no other information
+-   KDE represents our *null hypothesis*: burglaries happen where they happened before, with no other information
 
 ```{r kde-baseline}
 #| message: false
@@ -280,7 +288,7 @@ kde_burglaries <- density.ppp(
   edge = TRUE    # Edge correction
 )
 
-# Convert to terra raster (modern approach, not raster::raster)
+# Convert to terra raster
 kde_raster <- rast(kde_burglaries)
 
 # Extract KDE values to fishnet cells
@@ -317,56 +325,131 @@ ggplot() +
 
 # Part 4: Create Spatial Predictor Variables
 
-Now we'll create features that might help predict burglaries. We'll use "broken windows theory" logic: signs of disorder predict crime.
+Now we'll create features that might help predict burglaries. We'll use "broken windows theory" logic: signs of disorder predict crime. In this report, I specifically focus on 311 calls to report vacant and abandoned buildings.
 
-### 4.1 \| Load 311 Abandoned Vehicle Calls
+### 4.1 \| Load 311 Vacant and Abandoned Buildings Reported
 
-```{r load-abandoned-cars}
+```{r load-vacant-abandoned-buildings, progress = FALSE}
+vacant_abandoned_bldg <- read_csv("data/vacant_abandoned_buildings.csv") |> 
+  filter(!is.na(LATITUDE), !is.na(LONGITUDE))
+```
+
+```{r clean-vacant-abandoned-buildings, message = FALSE}
+# clean and rename column names
+vacant_abandoned_bldg_2017 <- vacant_abandoned_bldg |>
+  janitor::clean_names() |> 
+  rename(
+    request_type           = service_request_type,
+    request_num            = service_request_number,
+    date_received          = date_service_request_was_received,
+    location_on_lot        = 
+      location_of_building_on_the_lot_if_garage_change_type_code_to_bgd,
+    dangerous_hazardous    = is_the_building_dangerous_or_hazardous,
+    open_or_boarded        = is_building_open_or_boarded,
+    entry_point            = if_the_building_is_open_where_is_the_entry_point,
+    vacant_or_occupied     = is_the_building_currently_vacant_or_occupied,
+    vacant_due_to_fire     = is_the_building_vacant_due_to_fire,
+    # note typo in original dataset - childen instead of children
+    ppl_using_prop         = any_people_using_property_homeless_childen_gangs,
+    addr_st_num            = address_street_number,
+    addr_st_direction      = address_street_direction,
+    addr_st_name           = address_street_name,
+    addr_st_suffix         = address_street_suffix,
+    zip                    = zip_code,
+    x                      = x_coordinate,
+    y                      = y_coordinate,
+    ward                   = ward,
+    police_dist            = police_district,
+    community_area         = community_area,
+    lat                    = latitude,
+    lon                    = longitude,
+    location               = location
+  ) |>
+   # filter vacant and abandoned buildings reported in 2017
+  mutate(
+    date_received = as.Date(date_received, format = "%m/%d/%Y"),
+    month = as.integer(format(date_received, "%m")),
+    day   = as.integer(format(date_received, "%d")),
+    year  = as.integer(format(date_received, "%Y"))
+  ) |>
+  filter(year == 2017)
+```
+
+```{r select-abandoned-buildings}
+# filter NA values and select relevant columns
+vacant_abandoned_bldg_2017 <- vacant_abandoned_bldg_2017 |> 
+  dplyr::mutate(
+    addr_full = str_squish( # combine address variables
+      paste(addr_st_num, addr_st_direction, addr_st_name, addr_st_suffix))
+  )
+
+keep_cols <- c(
+  "request_num","year","month", "open_or_boarded","vacant_or_occupied",
+  "vacant_due_to_fire","ppl_using_prop", "addr_full", "zip","x","y","ward",
+  "police_dist","community_area","lat","lon","location")
+
+vacant_abandoned_bldg_2017 <- vacant_abandoned_bldg_2017 |> 
+  dplyr::select(any_of(keep_cols)) |> 
+  dplyr::filter(!is.na(vacant_or_occupied))
+
+vacant_abandoned_bldg_2017
+```
+
+```{r set-crs-abandoned-buildings}
 #| message: false
 
-abandoned_cars <- read_csv("data/abandoned_cars_2017.csv")%>%
-  filter(!is.na(Latitude), !is.na(Longitude)) %>%
-  st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) %>%
-  st_transform('ESRI:102271')
+# Set CRS
+abandoned_bldg <- vacant_abandoned_bldg_2017 |> 
+  st_as_sf(coords = c("lon", "lat"), crs = 4326) |>  
+  st_transform('ESRI:102271') # Set CRS
 
-cat("✓ Loaded abandoned vehicle calls\n")
-cat("  - Number of calls:", nrow(abandoned_cars), "\n")
+cat("✓ Loaded vacant/abandoned building calls\n")
+cat("  - Number of calls:", nrow(vacant_abandoned_bldg_2017), "\n")
 ```
 
 ::: callout-note
-## Data Loading Note
+## Note of Caution
 
-The data was downloaded from Chicago's Open Data Portal. You can now request an api from the Chicago portal and tap into the data there.
+**Chicago Open Data Source:** <https://data.cityofchicago.org/Service-Requests/311-Service-Requests-Vacant-and-Abandoned-Building/7nii-7srd/data_preview>
 
 **Consider:** How might the 311 reporting system itself be biased? Who calls 311? What neighborhoods have better 311 awareness?
 :::
 
-### 4.2 \| Count of Abandoned Cars per Cell
+### 4.2 \| Count of Reported Vacant/Abandoned Buildings per Cell
 
-```{r count-abandoned-cars}
-# Aggregate abandoned car calls to fishnet
-abandoned_fishnet <- st_join(abandoned_cars, fishnet, join = st_within) %>%
+```{r}
+# Gut Check Visualization of Vacant/Abandoned Buildings
+ggplot() +
+  geom_sf(data = chicagoBoundary) +
+  geom_sf(data = abandoned_bldg, alpha = 0.5) +
+  theme_void()
+```
+
+```{r count-vacant_abandoned_bldg}
+# Aggregate abandoned building calls to fishnet
+abandoned_fishnet <- st_join(abandoned_bldg, fishnet, 
+                             join = st_within) %>%
   st_drop_geometry() %>%
   group_by(uniqueID) %>%
-  summarize(abandoned_cars = n())
+  summarize(abandoned_bldg = n())
 
 # Join to fishnet
 fishnet <- fishnet %>%
   left_join(abandoned_fishnet, by = "uniqueID") %>%
-  mutate(abandoned_cars = replace_na(abandoned_cars, 0))
+  mutate(abandoned_bldg = replace_na(abandoned_bldg, 0))
 
-cat("Abandoned car distribution:\n")
-summary(fishnet$abandoned_cars)
+cat("Vacant and Abandoned Building distribution:\n")
+summary(fishnet$abandoned_bldg)
 ```
 
-```{r visualize-abandoned-cars}
+```{r visualize-vacant_abandoned_bldg}
 #| fig-width: 10
 #| fig-height: 4
 
 p1 <- ggplot() +
-  geom_sf(data = fishnet, aes(fill = abandoned_cars), color = NA) +
+  geom_sf(data = fishnet, aes(fill = abandoned_bldg), color = NA) +
   scale_fill_viridis_c(name = "Count", option = "magma") +
-  labs(title = "Abandoned Vehicle 311 Calls") +
+  labs(title = "Vacant/Abandoned Building 311 Calls") +
   theme_crime()
 
 p2 <- ggplot() +
@@ -376,7 +459,8 @@ p2 <- ggplot() +
   theme_crime()
 
 p1 + p2 +
-  plot_annotation(title = "Are abandoned cars and burglaries correlated?")
+  plot_annotation(
+    title = "Are vacant/abandoned buildings and burglaries correlated?")
 ```
 
 ### 4.3 \| k-Nearest Neighbors (kNN) Features
@@ -385,13 +469,14 @@ Count in a cell is one measure. Distance to the nearest 3 abandoned cars capture
 
 ```{r nn-feature}
 #| message: false
+#| warning: false
 
 # Calculate mean distance to 3 nearest abandoned cars
 # (Do this OUTSIDE of mutate to avoid sf conflicts)
 
 # Get coordinates
 fishnet_coords <- st_coordinates(st_centroid(fishnet))
-abandoned_coords <- st_coordinates(abandoned_cars)
+abandoned_coords <- st_coordinates(abandoned_bldg)
 
 # Calculate k nearest neighbors and distances
 nn_result <- get.knnx(abandoned_coords, fishnet_coords, k = 3)
@@ -399,18 +484,21 @@ nn_result <- get.knnx(abandoned_coords, fishnet_coords, k = 3)
 # Add to fishnet
 fishnet <- fishnet %>%
   mutate(
-    abandoned_cars.nn = rowMeans(nn_result$nn.dist)
+    abandoned_bldg.nn = rowMeans(nn_result$nn.dist)
   )
 
 cat("✓ Calculated nearest neighbor distances\n")
-summary(fishnet$abandoned_cars.nn)
+summary(fishnet$abandoned_bldg.nn)
 ```
 
 ### 4.4 \| Local Moran's I; Identify Hotspots; Distance to Hot Spots
 
-Let's identify clusters of abandoned cars using Local Moran's I, then calculate distance to these hot spots.
+Let's identify clusters of abandoned buildings using Local Moran's I, then calculate distance to these hot spots.
 
 ```{r local-morans-abandoned}
+#| message: false
+#| warning: false
+
 # Function to calculate Local Moran's I
 calculate_local_morans <- function(data, variable, k = 5) {
   
@@ -442,8 +530,8 @@ calculate_local_morans <- function(data, variable, k = 5) {
     )
 }
 
-# Apply to abandoned cars
-fishnet <- calculate_local_morans(fishnet, "abandoned_cars", k = 5)
+# Apply to vacant and abandoned buildings
+fishnet <- calculate_local_morans(fishnet, "abandoned_bldg", k = 5)
 ```
 
 ```{r visualize-morans}
@@ -468,13 +556,15 @@ ggplot() +
     name = "Cluster Type"
   ) +
   labs(
-    title = "Local Moran's I: Abandoned Car Clusters",
+    title = "Local Moran's I: Vacant and Abandoned Building Clusters",
     subtitle = "High-High = Hot spots of disorder"
   ) +
   theme_crime()
 ```
 
 ```{r distance-to-hotspots}
+#| warning: false
+
 # Get centroids of "High-High" cells (hot spots)
 hotspots <- fishnet %>%
   filter(moran_class == "High-High") %>%
@@ -533,8 +623,8 @@ fishnet_model <- fishnet %>%
     uniqueID,
     District,
     countBurglaries,
-    abandoned_cars,
-    abandoned_cars.nn,
+    abandoned_bldg,
+    abandoned_bldg.nn,
     dist_to_hotspot
   ) %>%
   na.omit()  # Remove any remaining NAs
@@ -547,7 +637,7 @@ cat("  - Variables:", ncol(fishnet_model), "\n")
 ```{r fit-poisson}
 # Fit Poisson regression
 model_poisson <- glm(
-  countBurglaries ~ abandoned_cars + abandoned_cars.nn + 
+  countBurglaries ~ abandoned_bldg + abandoned_bldg.nn + 
     dist_to_hotspot,
   data = fishnet_model,
   family = "poisson"
@@ -583,7 +673,7 @@ If overdispersed, use **Negative Binomial regression** (more flexible).
 ```{r fit-negbin}
 # Fit Negative Binomial model
 model_nb <- glm.nb(
-  countBurglaries ~ abandoned_cars + abandoned_cars.nn + 
+  countBurglaries ~ abandoned_bldg + abandoned_bldg.nn + 
     dist_to_hotspot,
   data = fishnet_model
 )
@@ -599,7 +689,10 @@ cat("Negative Binomial AIC:", round(AIC(model_nb), 1), "\n")
 
 ### 6.4 \| Compare Model Fit (AIC)
 
--   To clarify what does AIC mean??
+-   AIC stands for **Akaike Information Criterion**, and it’s a common metric used to compare model fit for non-linear regression models (i.e. AIC is used instead of R-Squared)
+-   For our purposes, AIC serves as a quick confirmation that the negative binomial regression model has a better fit than the poisson regression model because of its lower AIC (7788.5 vs 9357.9)
+-   AIC is relative, and not absolute — it’s only meaningful when comparing multiple models fit to the same dataset
+-   AIC is defined as $$AIC=−2×log-likelihood+2k$$ where log-likelihood measures how well the model fits the data (higher is better), and k is the number of estimated parameters in the model (including the intercept)
 
 # Part 7: Spatial LOGO-CV (2017)
 
@@ -622,7 +715,7 @@ for (i in seq_along(districts)) {
   
   # Fit model on training data
   model_cv <- glm.nb(
-    countBurglaries ~ abandoned_cars + abandoned_cars.nn + 
+    countBurglaries ~ abandoned_bldg + abandoned_bldg.nn + 
       dist_to_hotspot,
     data = train_data
   )
@@ -677,7 +770,7 @@ cv_results %>%
 ```{r final-predictions}
 # Fit final model on all data
 final_model <- glm.nb(
-  countBurglaries ~ abandoned_cars + abandoned_cars.nn + 
+  countBurglaries ~ abandoned_bldg + abandoned_bldg.nn + 
     dist_to_hotspot,
   data = fishnet_model
 )
@@ -703,7 +796,7 @@ fishnet <- fishnet %>%
 #| fig-width: 12
 #| fig-height: 4
 
-# Create three maps
+# Create three maps for comparison of Models
 p1 <- ggplot() +
   geom_sf(data = fishnet, aes(fill = countBurglaries), color = NA) +
   scale_fill_viridis_c(name = "Count", option = "plasma", limits = c(0, 15)) +
@@ -788,7 +881,7 @@ p2 <- ggplot() +
 p1 + p2
 ```
 
-### 8.4 \| Assess Model Performance ACross Time
+### 8.4 \| Assess Model Performance Across Time
 
 # Part 9: Summary Statistics
 
@@ -817,17 +910,17 @@ model_summary %>%
 **Technical Performance:**
 
 -   Cross-validation MAE: `r round(mean(cv_results$mae), 2)`
--   Model vs. KDE: \[Which performed better?\]
+-   Model vs. KDE: KDE performed better as it produced a lower MAE and RMSE than the model based on abandoned and vacant buildings
 -   Most predictive variable: \[Which had largest effect?\]
 
 **Spatial Patterns:**
 
--   Burglaries are \[evenly distributed / clustered\]
+-   Burglaries are clustered as clearly visualized in the Kernel Density Estimation Baseline
 -   Hot spots are located in \[describe\]
 -   Model errors show \[random / systematic\] patterns
 
 **Model Limitations:**
 
--   Overdispersion: \[Yes/No\]
+-   Overdispersion: Yes – the dispersion parameter of 3.35 exceeds the rule of thumb of 1.5. This suggests that overdispersion in the Poisson distribution model is present and one should considered using a Negative Binomial model instead
 -   Spatial autocorrelation in residuals: \[Test this!\]
--   Cells with zero counts: \[What % of data?\]
+-   Cells with zero counts: 781 out of 2458 had zero burglaries (31.8 %)
