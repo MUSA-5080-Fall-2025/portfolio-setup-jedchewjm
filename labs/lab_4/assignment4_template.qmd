@@ -19,7 +19,7 @@ execute:
 
 ## About This Exercise
 
-In this exercise, you will build a spatial predictive model for burglaries using count regression and spatial features.
+In this lab, you will apply the spatial predictive modeling techniques demonstrated in the class exercise to a 311 service request type of your choice. You will build a complete spatial predictive model, document your process, and interpret your results.
 
 # Learning Objectives
 
@@ -29,7 +29,7 @@ By the end of this exercise, you will be able to:
 2.  Calculate spatial features including k-nearest neighbors and distance measures
 3.  Diagnose spatial autocorrelation using Local Moran's I
 4.  Fit and interpret Poisson and Negative Binomial regression for count data
-5.  Implement spatial cross-validation (Leave-One-Group-Out)
+5.  Implement spatial LOGO cross-validation
 6.  Compare model predictions to a Kernel Density Estimation baseline
 7.  Evaluate model performance using appropriate metrics
 
@@ -78,13 +78,24 @@ theme_crime <- function(base_size = 11) {
 # Set as default
 theme_set(theme_crime())
 
+# Set Working Directory
+setwd("C:/Users/chewj/Documents/MUSA/Github/portfolio-setup-jedchewjm/labs/lab_4")
+
 cat("✓ All packages loaded successfully!\n")
 cat("✓ Working directory:", getwd(), "\n")
 ```
 
-# Part 1: Load and Explore Data
+# Part 1: Analyze Chosen 311 Violation Type
 
-## Exercise 1.1: Load Chicago Spatial Data
+# Choose your 311 Violation Type
+
+-   Browse the available service request types (e.g., Graffiti Removal, Pothole Repair, Street Light Out, Sanitation Code Violations, etc.) and **choose one violation type** that interests you.
+
+-   Chicago 311 Service Requests dataset: [**https://data.cityofchicago.org/stories/s/311-Dataset-Changes-12-11-2018/d7nq-5g7t**](https://data.cityofchicago.org/stories/s/311-Dataset-Changes-12-11-2018/d7nq-5g7t)
+
+-   Use `ESRI:102271` (Illinois State Plane East, NAD83, US Feet) as CRS
+
+### 1.1 \| Load Chicago Spatial Data
 
 ```{r load-boundaries}
 #| message: false
@@ -111,23 +122,13 @@ cat("  - Police districts:", nrow(policeDistricts), "\n")
 cat("  - Police beats:", nrow(policeBeats), "\n")
 ```
 
-::: callout-note
-## Coordinate Reference System
-
-We're using `ESRI:102271` (Illinois State Plane East, NAD83, US Feet). This is appropriate for Chicago because:
-
--   It minimizes distortion in this region
--   Uses feet (common in US planning)
--   Allows accurate distance calculations
-:::
-
-## Exercise 1.2: Load Burglary Data
+### 1.2 \| Load Burglary Data
 
 ```{r load-burglaries}
 #| message: false
 
 # Load from provided data file (downloaded from Chicago open data portal)
-burglaries <- st_read(here("data", "burglaries.shp")) %>% 
+burglaries <- st_read("data/burglaries.shp") %>% 
   st_transform('ESRI:102271')
 
 # Check the data
@@ -138,28 +139,7 @@ cat("  - Date range:", min(burglaries$date, na.rm = TRUE), "to",
     max(burglaries$date, na.rm = TRUE), "\n")
 ```
 
-**Question 1.1:** How many burglaries are in the dataset? What time period does this cover? Why does the coordinate reference system matter for our spatial analysis?
-
-*Your answer here:*
-
-::: callout-warning
-## Critical Pause #1: Data Provenance
-
-Before proceeding, consider where this data came from:
-
-**Who recorded this data?** Chicago Police Department officers and detectives
-
-**What might be missing?**
-
--   Unreported burglaries (victims didn't call police)
--   Incidents police chose not to record
--   Downgraded offenses (burglary recorded as trespassing)
--   Spatial bias (more patrol = more recorded crime)
-
-**Think About** Was there a Department of Justice investigation of CPD during this period? What did they find about data practices?
-:::
-
-## Exercise 1.3: Visualize Point Data
+### 1.3 \| Visualize Point Data & Describe Patterns
 
 ```{r visualize-points}
 #| fig-width: 10
@@ -201,21 +181,18 @@ p1 + p2 +
   )
 ```
 
-**Question 1.2:** What spatial patterns do you observe? Are burglaries evenly distributed across Chicago? Where are the highest concentrations? What might explain these patterns?
+::: callout-note
+## Observed Patterns
 
-*Your answer here:*
+-   Lorem Ipsum
+-   Lorem Ipsum
+:::
 
 # Part 2: Create Fishnet Grid
 
-## Exercise 2.1: Understanding the Fishnet
+A **fishnet grid** converts irregular point data into a regular grid of cells where we can aggregate counts / calculate spatial features / apply regression models
 
-A **fishnet grid** converts irregular point data into a regular grid of cells where we can:
-
--   Aggregate counts
--   Calculate spatial features
--   Apply regression models
-
-Think of it as overlaying graph paper on a map.
+### 2.1 \| Create 500 m x 500 m Fishnet Grid
 
 ```{r create-fishnet}
 # Create 500m x 500m grid
@@ -237,11 +214,7 @@ cat("  - Cell size:", 500, "x", 500, "meters\n")
 cat("  - Cell area:", round(st_area(fishnet[1,])), "square meters\n")
 ```
 
-**Question 2.1:** Why do we use a regular grid instead of existing boundaries like neighborhoods or census tracts? What are the advantages and disadvantages of this approach?
-
-*Your answer here:*
-
-## Exercise 2.2: Aggregate Burglaries to Grid
+### 2.2 \| Aggregate \<Burglaries\> to Grid
 
 ```{r aggregate-burglaries}
 # Spatial join: which cell contains each burglary?
@@ -264,6 +237,8 @@ cat("\nCells with zero burglaries:",
     "(", round(100 * sum(fishnet$countBurglaries == 0) / nrow(fishnet), 1), "%)\n")
 ```
 
+### 2.3 \| Visualize Count Distribution
+
 ```{r visualize-fishnet}
 #| fig-width: 8
 #| fig-height: 6
@@ -285,15 +260,9 @@ ggplot() +
   theme_crime()
 ```
 
-**Question 2.2:** What is the distribution of burglary counts across cells? Why do so many cells have zero burglaries? Is this distribution suitable for count regression? (Hint: look up overdispersion)
+# Part 3: Create a Kernel Density Estimate (KDE) Baseline
 
-*Your answer here:*
-
-# Part 3: Create a Kernel Density Baseline
-
-Before building complex models, let's create a simple baseline using **Kernel Density Estimation (KDE)**.
-
-**The KDE baseline asks:** "What if crime just happens where it happened before?" (simple spatial smoothing, no predictors)
+-   KDE represents our null hypothesis: burglaries happen where they happened before, with no other information
 
 ```{r kde-baseline}
 #| message: false
@@ -346,30 +315,16 @@ ggplot() +
   theme_crime()
 ```
 
-**Question 3.1:** How does the KDE map compare to the count map? What does KDE capture well? What does it miss?
-
-*Your answer here:*
-
-::: callout-tip
-## Why Start with KDE?
-
-The KDE represents our **null hypothesis**: burglaries happen where they happened before, with no other information.
-
-**Your complex model must outperform this simple baseline to justify its complexity.**
-
-We'll compare back to this at the end!
-:::
-
 # Part 4: Create Spatial Predictor Variables
 
 Now we'll create features that might help predict burglaries. We'll use "broken windows theory" logic: signs of disorder predict crime.
 
-## Exercise 4.1: Load 311 Abandoned Vehicle Calls
+### 4.1 \| Load 311 Abandoned Vehicle Calls
 
 ```{r load-abandoned-cars}
 #| message: false
 
-abandoned_cars <- read_csv(here("data/abandoned_cars_2017.csv"))%>%
+abandoned_cars <- read_csv("data/abandoned_cars_2017.csv")%>%
   filter(!is.na(Latitude), !is.na(Longitude)) %>%
   st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) %>%
   st_transform('ESRI:102271')
@@ -386,7 +341,7 @@ The data was downloaded from Chicago's Open Data Portal. You can now request an 
 **Consider:** How might the 311 reporting system itself be biased? Who calls 311? What neighborhoods have better 311 awareness?
 :::
 
-## Exercise 4.2: Count of Abandoned Cars per Cell
+### 4.2 \| Count of Abandoned Cars per Cell
 
 ```{r count-abandoned-cars}
 # Aggregate abandoned car calls to fishnet
@@ -424,11 +379,7 @@ p1 + p2 +
   plot_annotation(title = "Are abandoned cars and burglaries correlated?")
 ```
 
-**Question 4.1:** Do you see a visual relationship between abandoned cars and burglaries? What does this suggest?
-
-*Your answer here:*
-
-## Exercise 4.3: Nearest Neighbor Features
+### 4.3 \| k-Nearest Neighbors (kNN) Features
 
 Count in a cell is one measure. Distance to the nearest 3 abandoned cars captures local context.
 
@@ -455,11 +406,7 @@ cat("✓ Calculated nearest neighbor distances\n")
 summary(fishnet$abandoned_cars.nn)
 ```
 
-**Question 4.2:** What does a low value of `abandoned_cars.nn` mean? A high value? Why might this be informative?
-
-*Your answer here:*
-
-## Exercise 4.4: Distance to Hot Spots
+### 4.4 \| Local Moran's I; Identify Hotspots; Distance to Hot Spots
 
 Let's identify clusters of abandoned cars using Local Moran's I, then calculate distance to these hot spots.
 
@@ -551,20 +498,6 @@ if (nrow(hotspots) > 0) {
 }
 ```
 
-**Question 4.3:** Why might distance to a cluster of abandoned cars be more informative than distance to a single abandoned car? What does Local Moran's I tell us?
-
-*Your answer here:*
-
-::: callout-note
-**Local Moran's I** identifies:
-
--   **High-High**: Hot spots (high values surrounded by high values)
--   **Low-Low**: Cold spots (low values surrounded by low values)
--   **High-Low / Low-High**: Spatial outliers
-
-This helps us understand spatial clustering patterns.
-:::
-
 ------------------------------------------------------------------------
 
 # Part 5: Join Police Districts for Cross-Validation
@@ -586,9 +519,9 @@ cat("  - Districts:", length(unique(fishnet$District)), "\n")
 cat("  - Cells:", nrow(fishnet), "\n")
 ```
 
-# Part 6: Model Fitting
+# Part 6: Count Regression Model Fitting
 
-## Exercise 6.1: Poisson Regression
+### 6.1 \| Poisson Regression
 
 Burglary counts are count data (0, 1, 2, 3...). We'll use **Poisson regression**.
 
@@ -624,11 +557,7 @@ model_poisson <- glm(
 summary(model_poisson)
 ```
 
-**Question 6.1:** Interpret the coefficients. Which variables are significant? What do the signs (positive/negative) tell you?
-
-*Your answer here:*
-
-## Exercise 6.2: Check for Overdispersion
+### 6.2 \| Check for Overdispersion
 
 Poisson regression assumes mean = variance. Real count data often violates this (overdispersion).
 
@@ -647,7 +576,7 @@ if (dispersion > 1.5) {
 }
 ```
 
-## Exercise 6.3: Negative Binomial Regression
+### 6.3 \| Negative Binomial Regression
 
 If overdispersed, use **Negative Binomial regression** (more flexible).
 
@@ -668,13 +597,11 @@ cat("Poisson AIC:", round(AIC(model_poisson), 1), "\n")
 cat("Negative Binomial AIC:", round(AIC(model_nb), 1), "\n")
 ```
 
-**Question 6.2:** Which model fits better (lower AIC)? What does this tell you about the data?
+### 6.4 \| Compare Model Fit (AIC)
 
-*Your answer here:*
+-   To clarify what does AIC mean??
 
-# Part 7: Spatial Cross-Validation
-
-Standard cross-validation randomly splits data. But with spatial data, this means training on cells right next to test cells (information leakage!).
+# Part 7: Spatial LOGO-CV (2017)
 
 **Leave-One-Group-Out (LOGO) Cross-Validation** trains on all districts except one, then tests on the held-out district.
 
@@ -743,21 +670,9 @@ cv_results %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 
-**Question 7.1:** Why is spatial CV more appropriate than random CV for this problem? Which districts were hardest to predict?
-
-*Your answer here:*
-
-::: callout-note
-## Connection to Week 5
-
-Remember learning about train/test splits and cross-validation? This is a spatial version of that concept!
-
-**Why it matters:** If we can only predict well in areas we've already heavily policed, what does that tell us about the model's utility?
-:::
-
 # Part 8: Model Predictions and Comparison
 
-## Exercise 8.1: Generate Final Predictions
+### 8.1 \| Generate Final Predictions
 
 ```{r final-predictions}
 # Fit final model on all data
@@ -782,7 +697,7 @@ fishnet <- fishnet %>%
   )
 ```
 
-## Exercise 8.2: Compare Model vs. KDE Baseline
+### 8.2 \| Compare Model vs. KDE Baseline
 
 ```{r compare-models}
 #| fig-width: 12
@@ -837,11 +752,7 @@ comparison %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 
-**Question 8.1:** Does the complex model outperform the simple KDE baseline? By how much? Is the added complexity worth it?
-
-*Your answer here:*
-
-## Exercise 9.3: Where Does the Model Work Well?
+### 8.3 \| Where Does the Model Work Well?
 
 ```{r prediction-errors}
 #| fig-width: 10
@@ -877,13 +788,11 @@ p2 <- ggplot() +
 p1 + p2
 ```
 
-**Question 9.2:** Where does the model make the biggest errors? Are there spatial patterns in the errors? What might this reveal?
+### 8.4 \| Assess Model Performance ACross Time
 
-*Your answer here:*
+# Part 9: Summary Statistics
 
-# Part 10: Summary Statistics and Tables
-
-## Exercise 10.1: Model Summary Table
+### 9.1 \| Model Summary Table
 
 ```{r model-summary-table}
 # Create nice summary table
@@ -903,9 +812,7 @@ model_summary %>%
   )
 ```
 
-## Exercise 10.2: Key Findings Summary
-
-Based on your analysis, complete this summary:
+## Key Findings Checklist
 
 **Technical Performance:**
 
@@ -924,20 +831,3 @@ Based on your analysis, complete this summary:
 -   Overdispersion: \[Yes/No\]
 -   Spatial autocorrelation in residuals: \[Test this!\]
 -   Cells with zero counts: \[What % of data?\]
-
-# Conclusion and Next Steps
-
-::: callout-important
-## What You've Accomplished
-
-You've successfully built a spatial predictive model for burglaries using:
-
-✓ Fishnet aggregation\
-✓ Spatial features (counts, distances, nearest neighbors)\
-✓ Spatial autocorrelation diagnostics (Local Moran's I)\
-✓ Count regression (Poisson and Negative Binomial)\
-✓ Spatial cross-validation (LOGO)\
-✓ Comparison to baseline (KDE)
-:::
-
-::::::::::

@@ -11,7 +11,7 @@ date: "2025-10-20"
 
 1.  Visualize relationships
 2.  Engineer features
-3.  Fir the model
+3.  Fit the model
 4.  Evaluate performance (RMSE, R²)
 5.  Check assumptions
 
@@ -24,9 +24,7 @@ date: "2025-10-20"
 **Spatial Autocorrelation in Errors (i.e. Clustered Errors)**
 
 -   spatial pattern visible (not random scatter)
-
 -   under/over-predict in areas
-
 -   model misses something about location
 
 **Moran's I measures Spatial Autocorrelation**
@@ -36,9 +34,7 @@ date: "2025-10-20"
 **Range:** -1 to +1
 
 -   **+1** = Perfect positive correlation (clustering)
-
 -   **0** = Random spatial pattern
-
 -   **-1** = Perfect negative correlation (dispersion)
 
 ------------------------------------------------------------------------
@@ -63,9 +59,7 @@ date: "2025-10-20"
 ![](images/clipboard-645011366.png)
 
 -   Lots of positive products → **High Moran’s I** (clustering)
-
 -   Products near zero → **Low Moran’s I** (random)
-
 -   Negative products → **Negative Moran’s I** (rare with errors)
 
 **Step 3: Possible Solutions**
@@ -83,19 +77,16 @@ If Moran’s I shows clustered errors:
 1.  **Simultaneity Problem (circular logic)**
 
 -   My price affects neighbors → neighbors affect me
-
 -   OLS estimates are biased and inconsistent
 
 2.  **Prediction Paradox (poor generalizability)**
 
 -   Need neighbors’ prices to predict my price
-
 -   But for new developments or future periods, those prices don’t exist yet
 
 3.  **Data Leakage in CV**
 
 -   Spatial Lag "leaks" information from test set
-
 -   Artificially good performance that won't hold
 
 ![](images/clipboard-4100208631.png){width="251"}
@@ -103,7 +94,6 @@ If Moran’s I shows clustered errors:
 **Key Idea: Match method to purpose:** 
 
 -   **inference** → spatial lag/error models; **prediction** → spatial features
-
 -   **our predicton approach:** Instead of modeling dependence in Y (prices), model proximity in X (predictors)
 
 ## Coding Techniques

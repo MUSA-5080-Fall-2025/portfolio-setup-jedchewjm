@@ -105,6 +105,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -164,6 +193,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../weekly-notes/week-07-notes.html">
  <span class="dropdown-text">Week 7 Notes - Model Diagnostics and Spatial Autocorrelation</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../weekly-notes/week-09-notes.html">
+ <span class="dropdown-text">Week 9 Notes - Predictive Policing</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -197,6 +230,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li>
     <a class="dropdown-item" href="../labs/lab_2/assignment2_template.html">
  <span class="dropdown-text">Assignment 2: Spatial Analysis and Visualization</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab_4/assignment4_template.html">
+ <span class="dropdown-text">Assignment 4: Predictive Policing &amp; Analysis</span></a>
   </li>  
     </ul>
   </li>
@@ -237,10 +274,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#key-concepts-learned" id="toc-key-concepts-learned" class="nav-link active" data-scroll-target="#key-concepts-learned">Key Concepts Learned</a>
   <ul class="collapse">
+  <li><a href="#predictive-policing-sales-pitch" id="toc-predictive-policing-sales-pitch" class="nav-link" data-scroll-target="#predictive-policing-sales-pitch">Predictive Policing Sales Pitch</a></li>
   <li><a href="#technical-questions" id="toc-technical-questions" class="nav-link" data-scroll-target="#technical-questions">Technical Questions</a></li>
   <li><a href="#critical-questions" id="toc-critical-questions" class="nav-link" data-scroll-target="#critical-questions">Critical Questions</a></li>
   <li><a href="#defining-dirty-data" id="toc-defining-dirty-data" class="nav-link" data-scroll-target="#defining-dirty-data">Defining “Dirty Data”</a></li>
   <li><a href="#confirmation-bias-feedback-loop" id="toc-confirmation-bias-feedback-loop" class="nav-link" data-scroll-target="#confirmation-bias-feedback-loop">Confirmation Bias Feedback Loop:</a></li>
+  <li><a href="#questions-to-ask-about-any-predictive-policing-system" id="toc-questions-to-ask-about-any-predictive-policing-system" class="nav-link" data-scroll-target="#questions-to-ask-about-any-predictive-policing-system">Questions to Ask about Any Predictive Policing System</a></li>
   <li><a href="#modeling-workflow" id="toc-modeling-workflow" class="nav-link" data-scroll-target="#modeling-workflow">Modeling Workflow</a></li>
   </ul></li>
   <li><a href="#coding-techniques" id="toc-coding-techniques" class="nav-link" data-scroll-target="#coding-techniques">Coding Techniques</a></li>
@@ -280,115 +319,206 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="key-concepts-learned" class="level2">
 <h2 class="anchored" data-anchor-id="key-concepts-learned">Key Concepts Learned</h2>
+<section id="predictive-policing-sales-pitch" class="level3">
+<h3 class="anchored" data-anchor-id="predictive-policing-sales-pitch">Predictive Policing Sales Pitch</h3>
+<ul>
+<li><strong>Efficiency:</strong> “Deploy limited resources where they’re needed most”</li>
+<li><strong>Objectivity:</strong> “Remove human bias from decision-making”</li>
+<li><strong>Proactivity:</strong> “Prevent crime before it happens”</li>
+<li><strong>Data-driven:</strong> “Let the data tell us where crime will occur”</li>
+</ul>
+<p><img src="images/clipboard-3233584324.png" class="img-fluid" width="792"></p>
+</section>
 <section id="technical-questions" class="level3">
 <h3 class="anchored" data-anchor-id="technical-questions">Technical Questions</h3>
 <ul>
-<li><p>How do we model crime counts?</p></li>
-<li><p>What spatial features predict crime?</p></li>
-<li><p>How do we validate predictions?</p></li>
-<li><p>Can we outperform baseline methods?</p></li>
+<li>How do we model crime counts?</li>
+<li>What spatial features predict crime?</li>
+<li>How do we validate predictions?</li>
+<li>Can we outperform baseline methods?</li>
 </ul>
-<p><img src="images/clipboard-3233584324.png" class="img-fluid"></p>
 </section>
 <section id="critical-questions" class="level3">
 <h3 class="anchored" data-anchor-id="critical-questions">Critical Questions</h3>
 <ul>
-<li><p>Whose data? Whose crimes?</p></li>
-<li><p>What if the data is “dirty”?</p></li>
-<li><p>Who benefits? Who is harmed?</p></li>
-<li><p>What feedback loops are created?</p></li>
-<li><p>Can technical solutions fix social problems?</p></li>
+<li>Whose data? Whose crimes?</li>
+<li>What if the data is “dirty”? – can we separate “good” from “bad” data?</li>
+<li>Who benefits? Who is harmed?</li>
+<li>What feedback loops are created? – do past patterns predict future crime, or do they just predict policing?</li>
+<li>Can technical solutions fix social problems?</li>
 </ul>
 </section>
 <section id="defining-dirty-data" class="level3">
 <h3 class="anchored" data-anchor-id="defining-dirty-data">Defining “Dirty Data”</h3>
+<blockquote class="blockquote">
 <p>Richardson et al.&nbsp;2019: “<em>Data derived from or influenced by corrupt, biased, and unlawful practices, including data that has been intentionally manipulated or ‘juked,’ as well as data that is distorted by individual and societal biases</em>.”</p>
+</blockquote>
 <ol type="1">
-<li>Fabricated/Manipulated Data</li>
-<li>Systematically Biased Data</li>
-<li>Missing/Incomplete Data</li>
-<li>Proxy Problems</li>
+<li>Fabricated/Manipulated Data – false arrests / downgraded crime classifications</li>
+<li>Systematically Biased Data – over-policing of certain communities / under-policing of white-collar crime</li>
+<li>Missing/Incomplete Data – ignored complaints / incomplete reports</li>
+<li>Proxy Problems – arrests ≠ crimes committed; calls for service ≠ actual need</li>
 </ol>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>The Impossibility of <em>Neutral</em> Crime Data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><strong>Socially constructed</strong> - Societies define what counts as “crime”</li>
+<li><strong>Selectively enforced</strong> - More resources to some neighborhoods</li>
+<li><strong>Organizationally filtered</strong> - Police priorities, department culture</li>
+<li><strong>Politically shaped</strong> - “Tough on crime” eras, moral panics</li>
+<li><strong>Technically mediated</strong> - 911 systems, CAD software, databases</li>
+</ol>
+</div>
+</div>
 </section>
 <section id="confirmation-bias-feedback-loop" class="level3">
 <h3 class="anchored" data-anchor-id="confirmation-bias-feedback-loop">Confirmation Bias Feedback Loop:</h3>
 <ul>
-<li><p>Algorithm learns: “Crime happens in neighborhood X”</p></li>
-<li><p>Police sent to neighborhood X</p></li>
-<li><p>More arrests in neighborhood X (regardless of actual crime)</p></li>
-<li><p>Algorithm “confirmed”: “We were right about neighborhood X!”</p></li>
-<li><p>Cycle intensifies</p></li>
+<li>Algorithm learns: “Crime happens in neighborhood X”</li>
+<li>Police sent to neighborhood X</li>
+<li>More arrests in neighborhood X (regardless of actual crime)</li>
+<li>Algorithm “confirmed”: “We were right about neighborhood X!”</li>
 </ul>
+</section>
+<section id="questions-to-ask-about-any-predictive-policing-system" class="level3">
+<h3 class="anchored" data-anchor-id="questions-to-ask-about-any-predictive-policing-system">Questions to Ask about Any Predictive Policing System</h3>
+<p><strong>01 | Data Provenance</strong></p>
+<ul>
+<li>What time period does training data cover? What evidence exists that data is accurate?</li>
+</ul>
+<p><strong>02 | Variable Selection</strong></p>
+<ul>
+<li>What specific variables are used? How might each variable embed bias?</li>
+<li>What’s excluded and why? Who made these choices?</li>
+</ul>
+<p><strong>03 | Validation</strong></p>
+<ul>
+<li>How is accuracy measured? What counts as “success”?</li>
+<li>Are error rates reported by neighborhood?</li>
+<li>Who experiences false positives vs.&nbsp;false negatives?</li>
+</ul>
+<p><strong>04 | Deployment</strong></p>
+<ul>
+<li>How do predictions translate to action? What discretion do officers have?</li>
+</ul>
+<p><strong>05 | Transparency &amp; Accountability</strong></p>
+<ul>
+<li>Is the methodology public?</li>
+<li>Is there a process to challenge predictions? Who monitors for disparate impact?</li>
+</ul>
+<p><strong>06 | Alternatives</strong></p>
+<ul>
+<li>What non-punitive interventions were considered? Could these address root causes instead?</li>
+</ul>
+<hr>
 </section>
 <section id="modeling-workflow" class="level3">
 <h3 class="anchored" data-anchor-id="modeling-workflow">Modeling Workflow</h3>
 <p><strong>01 | Setup &amp; Data Preparation</strong></p>
 <ul>
-<li><p>Load burglaries (point data)</p></li>
-<li><p>Load abandoned cars (311 calls)</p></li>
-<li><p><strong>Create fishnet</strong> (500m × 500m grid)</p></li>
-<li><p>Aggregate burglaries to cells</p></li>
+<li>Load burglaries (point data)</li>
+<li>Load abandoned cars (311 calls)</li>
+<li><strong>Create fishnet</strong> <strong>grid</strong> (500m × 500m grid)</li>
+<li>Aggregate burglaries to cells</li>
 </ul>
 <p><strong>02 | Baseline Comparison</strong></p>
 <ul>
-<li><p><strong>Kernel Density Estimation (KDE)</strong></p></li>
-<li><p>Simple spatial smoothing</p></li>
-<li><p>What we need to beat!</p></li>
+<li><strong>Kernel Density Estimation (KDE)</strong></li>
+<li>Simple spatial smoothing</li>
 </ul>
 <p><strong>03 | Feature Engineering</strong></p>
 <p><strong>Using Abandoned Cars as “Disorder Indicator”:</strong></p>
 <ul>
-<li><p><strong>Count</strong> in each cell</p></li>
-<li><p><strong>k-Nearest Neighbors</strong> (mean distance to 3 nearest)</p></li>
-<li><p><strong>LISA</strong> (Local Moran’s I - identify hot spots)</p></li>
-<li><p><strong>Distance to hot spots</strong> (significant clusters)</p></li>
+<li><strong>Count</strong> in each cell</li>
+<li><strong>k-Nearest Neighbors</strong> (mean distance to 3 nearest)</li>
+<li><strong>LISA</strong> (Local Moran’s I - identify hot spots)</li>
+<li><strong>Distance to hot spots</strong> (significant clusters)</li>
 </ul>
 <p><strong>04 | Count Regression Models</strong></p>
 <ul>
-<li><p>Fit <strong>Poisson regression</strong></p></li>
-<li><p>Test for <strong>overdispersion</strong></p></li>
-<li><p>Fit <strong>Negative Binomial</strong> (if needed)</p></li>
-<li><p>Interpret coefficients</p></li>
+<li>Fit <strong>Poisson regression</strong> – test for <em>overdispersion</em></li>
+<li>Fit <strong>Negative Binomial</strong> (if overdispersed)</li>
+<li>Interpret coefficients</li>
 </ul>
 <p><strong>05 | Spatial Cross-Validation</strong></p>
 <ul>
-<li><p><strong>Leave-One-Group-Out (LOGO)</strong></p></li>
-<li><p>Train on n-1 districts</p></li>
-<li><p>Test on held-out district</p></li>
-<li><p>Calculate MAE/RMSE</p></li>
+<li><strong>Leave-One-Group-Out (LOGO)</strong></li>
+<li>Train on <span class="math inline">\(n-1\)</span> districts</li>
+<li>Test on held-out district</li>
+<li>Calculate MAE/RMSE</li>
 </ul>
 <p><strong>06 | Model Comparison</strong></p>
 <ul>
-<li><p>Compare to KDE baseline</p></li>
-<li><p>Map predictions vs.&nbsp;actual</p></li>
-<li><p>Analyze errors spatially</p></li>
+<li>Compare to KDE baseline / test both on hold-out data</li>
+<li>Map predictions vs.&nbsp;actual</li>
+<li>Analyze errors spatially</li>
 </ul>
 <p><strong>Summary of Different Spatial Measures</strong></p>
 <ul>
-<li><p>Count → How much disorder is HERE?</p></li>
-<li><p>k-NN Distance → How CLOSE are we to disorder?</p></li>
-<li><p>Hot Spots (LISA) → Where does disorder CLUSTER?</p></li>
-<li><p>Distance to Hot Spots → How close to concentrated disorder?</p></li>
-<li><p>Each captures a different aspect of spatial proximity to our indicator variable</p></li>
+<li>Count → How much disorder is HERE?</li>
+<li>k-NN Distance → How CLOSE are we to disorder?</li>
+<li>Hot Spots (LISA) → Where does disorder CLUSTER?</li>
+<li>Distance to Hot Spots → How close to concentrated disorder?</li>
+<li>Each captures a different aspect of spatial proximity to our indicator variable</li>
 </ul>
-<p><strong>Common Approaches to Spatial Weights Matrix (W)</strong></p>
+<p><strong>Common Approaches to Spatial Weights Matrix (W) – Defining Neighbors</strong></p>
 <ul>
-<li><p><strong>Contiguity:</strong> Share a border? (Queen vs.&nbsp;Rook)</p>
+<li><strong>Contiguity:</strong> Share a border? (Queen vs.&nbsp;Rook)
 <ul>
 <li>Our fishnet grid uses Queen contiguity&nbsp;(most common for regular grids)</li>
+<li>Row Standardization – Corner Cell with 4 neighbors: each gets weight 0.25 vs Standard Cell with 8 neighbors: each gets weight 0.125</li>
 </ul></li>
-<li><p><strong>Distance:</strong> Within threshold distance?</p></li>
-<li><p><strong>K-nearest neighbors:</strong> Closest k locations</p></li>
+<li><strong>Distance:</strong> Within threshold distance?</li>
+<li><strong>K-nearest neighbors:</strong> Closest k locations</li>
 </ul>
-<p><strong>Four Types of Significant Clusters</strong></p>
+<p><strong>Statistical Significance Testing for Moran’s I – Permutation Test</strong></p>
+<p>Intuition: only report clusters that are unlikely to occur by chance</p>
+<ol type="1">
+<li>Calculate observed <span class="math inline">\(I_i\)</span> for location <span class="math inline">\(i\)</span></li>
+<li>Randomly shuffle values across locations (999 times)</li>
+<li>Recalculate <span class="math inline">\(I_i\)</span> for each permutation</li>
+<li>Compare observed vs.&nbsp;distribution of permuted values</li>
+<li>If observed is extreme → statistically significant (p &lt; 0.05)</li>
+</ol>
+<p><strong>[Four Types of Significant Clusters]</strong></p>
 <p><img src="images/clipboard-40446740.png" class="img-fluid"></p>
 </section>
 </section>
 <section id="coding-techniques" class="level2">
 <h2 class="anchored" data-anchor-id="coding-techniques">Coding Techniques</h2>
 <ul>
-<li><strong>Local Moran’s I</strong></li>
+<li><strong>Local Moran’s I – maps showing <em>where</em> patterns/clusters exist</strong>
+<ul>
+<li><p>numerator: how different is location <span class="math inline">\(i\)</span> from mean</p></li>
+<li><p>denominator: variance of all locations</p></li>
+<li><p>weight: how different are neighbors from mean</p></li>
+</ul></li>
 </ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-1896389022.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="299"></p>
+</figure>
+</div>
+<ul>
+<li><strong>The Moran Scatterplot</strong>
+<ul>
+<li><p>x-axis: standardized value at location <span class="math inline">\(i\)</span></p></li>
+<li><p>y-axis: spatial lag (weighted average of neighbors)</p></li>
+</ul></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-2471633912.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="251"></p>
+</figure>
+</div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -417,6 +547,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 <ul>
+<li><strong>Identify &amp; Map Hotspots</strong></li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardize the variable for quadrant classification</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>fishnet<span class="sc">$</span>standardized_value <span class="ot">&lt;-</span> <span class="fu">scale</span>(fishnet<span class="sc">$</span>abandoned_cars)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate spatial lag (weighted mean of neighbors)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>fishnet<span class="sc">$</span>spatial_lag <span class="ot">&lt;-</span> <span class="fu">lag.listw</span>(weights, fishnet<span class="sc">$</span>abandoned_cars)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>fishnet<span class="sc">$</span>standardized_lag <span class="ot">&lt;-</span> <span class="fu">scale</span>(fishnet<span class="sc">$</span>spatial_lag)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify High-High clusters</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>fishnet<span class="sc">$</span>hotspot <span class="ot">&lt;-</span> <span class="dv">0</span>  <span class="co"># Default: not a hotspot</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Criteria: </span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Value above mean (standardized &gt; 0)</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Neighbors above mean (spatial lag &gt; 0)</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Statistically significant (p &lt; 0.05)</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>fishnet<span class="sc">$</span>hotspot[</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  fishnet<span class="sc">$</span>standardized_value <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> </span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  fishnet<span class="sc">$</span>standardized_lag <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> </span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  fishnet<span class="sc">$</span>p_value <span class="sc">&lt;</span> <span class="fl">0.05</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Count hotspots</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(fishnet<span class="sc">$</span>hotspot)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<ul>
 <li><p><strong>Distance to Nearest Feature (kNN where k = 1)</strong></p>
 <p>For each grid cell:</p>
 <ol type="1">
@@ -428,17 +589,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FNN)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate distance to nearest abandoned car</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>nn_dist <span class="ot">&lt;-</span> <span class="fu">get.knnx</span>(</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">st_coordinates</span>(abandoned_cars),      <span class="co"># "To" locations</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">st_coordinates</span>(<span class="fu">st_centroid</span>(fishnet)), <span class="co"># "From" locations</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">1</span>                                          <span class="co"># Nearest 1</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract distances</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>fishnet<span class="sc">$</span>abandoned_car_nn <span class="ot">&lt;-</span> nn_dist<span class="sc">$</span>nn.dist[, <span class="dv">1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FNN)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate distance to nearest abandoned car</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>nn_dist <span class="ot">&lt;-</span> <span class="fu">get.knnx</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">st_coordinates</span>(abandoned_cars),      <span class="co"># "To" locations</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">st_coordinates</span>(<span class="fu">st_centroid</span>(fishnet)), <span class="co"># "From" locations</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">1</span>                                          <span class="co"># Nearest 1</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract distances</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>fishnet<span class="sc">$</span>abandoned_car_nn <span class="ot">&lt;-</span> nn_dist<span class="sc">$</span>nn.dist[, <span class="dv">1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <ul>
@@ -451,17 +612,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Identify hotspots (we did this earlier)</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>hotspot_cells <span class="ot">&lt;-</span> <span class="fu">filter</span>(fishnet, hotspot <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Calculate distances</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>hotspot_dist <span class="ot">&lt;-</span> <span class="fu">get.knnx</span>(</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">st_coordinates</span>(<span class="fu">st_centroid</span>(hotspot_cells)),</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">st_coordinates</span>(<span class="fu">st_centroid</span>(fishnet)),</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">1</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>fishnet<span class="sc">$</span>hotspot_nn <span class="ot">&lt;-</span> hotspot_dist<span class="sc">$</span>nn.dist[, <span class="dv">1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Identify hotspots (we did this earlier)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>hotspot_cells <span class="ot">&lt;-</span> <span class="fu">filter</span>(fishnet, hotspot <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Calculate distances</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>hotspot_dist <span class="ot">&lt;-</span> <span class="fu">get.knnx</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">st_coordinates</span>(<span class="fu">st_centroid</span>(hotspot_cells)),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">st_coordinates</span>(<span class="fu">st_centroid</span>(fishnet)),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">1</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Look for concentric patterns around features/hotspots</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>fishnet<span class="sc">$</span>hotspot_nn <span class="ot">&lt;-</span> hotspot_dist<span class="sc">$</span>nn.dist[, <span class="dv">1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <ul>
@@ -470,53 +632,205 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create comparison maps</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(fishnet) <span class="sc">+</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> abandoned_car_nn), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Distance (m)"</span>, <span class="at">option =</span> <span class="st">"plasma"</span>) <span class="sc">+</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distance to Nearest Abandoned Car"</span>) <span class="sc">+</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(fishnet) <span class="sc">+</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> hotspot_nn), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Distance (m)"</span>, <span class="at">option =</span> <span class="st">"magma"</span>) <span class="sc">+</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distance to Nearest Hotspot"</span>) <span class="sc">+</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(p1, p2, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create comparison maps</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(fishnet) <span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> abandoned_car_nn), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Distance (m)"</span>, <span class="at">option =</span> <span class="st">"plasma"</span>) <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distance to Nearest Abandoned Car"</span>) <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(fishnet) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> hotspot_nn), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Distance (m)"</span>, <span class="at">option =</span> <span class="st">"magma"</span>) <span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distance to Nearest Hotspot"</span>) <span class="sc">+</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(p1, p2, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
+<hr>
+<ul>
+<li><strong>Poisson Regression</strong>
+<ul>
+<li><u>Problem with OLS for Counts:</u> can predict negative values; assumes constant variance; assumes continuous outcome; assumes normal errors</li>
+<li><u>Distribution of Crime Counts:</u> right-skewed; many zeros (most cells have no burglaries); discrete (only integer values)</li>
+<li><u>Handling Zeros in Count Data:</u> poisson and standard negative binomial typically handles zeros naturally</li>
+</ul></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-2250388741.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="373"></p>
+</figure>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit Poisson model</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>model_poisson <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  countBurglaries <span class="sc">~</span> Abandoned_Cars <span class="sc">+</span> Abandoned_Cars.nn <span class="sc">+</span> abandoned.isSig.dist,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> fishnet,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">poisson</span>(<span class="at">link =</span> <span class="st">"log"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># View results</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_poisson)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Exponentiate coefficients for interpretation</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(model_poisson))</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Example output:</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#                        exp(coef)</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># (Intercept)            0.234</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Abandoned_Cars         1.151</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Abandoned_Cars.nn      0.998</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># abandoned.isSig.dist   0.999</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Interpretation:</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co"># - Each additional abandoned car → 15.1% increase in expected burglaries</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># - Each meter from nearest abandoned car → 0.2% decrease in expected burglaries</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<ul>
+<li><strong>Poisson: Check for Overdispersion</strong>
+<ul>
+<li>Poisson assumption: Variance = Mean</li>
+<li>Reality with crime data: Variance &gt;&gt; Mean</li>
+</ul></li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#  Calculate dispersion parameter</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dispersion <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">residuals</span>(model_pois, <span class="at">type =</span> <span class="st">"pearson"</span>)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>               model_pois<span class="sc">$</span>df.residual</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Dispersion parameter:"</span>, <span class="fu">round</span>(dispersion, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Rule of thumb:</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># &lt; 1.5: Poisson OK</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.5 - 3: Mild overdispersion, NegBin recommended (negative binomial)</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># &gt; 3: Serious overdispersion, NegBin essential</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<ul>
+<li><strong>Negative Binomial Regression</strong>
+<ul>
+<li>relaxes the variance = mean assumption</li>
+</ul></li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit Negative Binomial model</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>model_nb <span class="ot">&lt;-</span> <span class="fu">glm.nb</span>(</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  countBurglaries <span class="sc">~</span> Abandoned_Cars <span class="sc">+</span> Abandoned_Cars.nn <span class="sc">+</span> abandoned.isSig.dist,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> fishnet</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># View results</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_nb)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare to Poisson</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(model_pois)  <span class="co"># e.g., 8234.5</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(model_nb)    <span class="co"># e.g., 6721.3</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Lower AIC = better fit</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># If NegBin AIC much lower → use NegBin</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract dispersion parameter (theta)</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>model_nb<span class="sc">$</span>theta  <span class="co"># e.g., 2.47</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Interpretation: Significant overdispersion confirmed</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<ul>
+<li><strong>Comparing Poisson vs Negative Binomial</strong></li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 25%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Aspect</th>
+<th style="text-align: left;">Poisson</th>
+<th style="text-align: left;">Negative Binomial</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><em>Variance assumption</em></td>
+<td style="text-align: left;">Var = Mean</td>
+<td style="text-align: left;">Var = μ + αμ²</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><em>Overdispersion</em></td>
+<td style="text-align: left;">Cannot handle</td>
+<td style="text-align: left;">Accommodates</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><em>Standard errors</em></td>
+<td style="text-align: left;">Underestimated if overdispersed</td>
+<td style="text-align: left;">Correctly estimated</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><em>When to use</em></td>
+<td style="text-align: left;">Count data, no overdispersion</td>
+<td style="text-align: left;">Count data with overdispersion</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><em>Crime data</em></td>
+<td style="text-align: left;">Rarely appropriate</td>
+<td style="text-align: left;">Usually better</td>
+</tr>
+</tbody>
+</table>
 <ul>
 <li><strong>Creating a Fishnet Grid</strong></li>
 </ul>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Define cell size (in map units - meters for our projection)</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>cell_size <span class="ot">&lt;-</span> <span class="dv">500</span>  <span class="co"># 500m x 500m cells</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Create grid over study area</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>fishnet <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  chicago_boundary,</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">cellsize =</span> cell_size,</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">square =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">what =</span> <span class="st">"polygons"</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">uniqueID =</span> <span class="fu">row_number</span>())</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Clip to study area (remove cells outside boundary)</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>fishnet <span class="ot">&lt;-</span> fishnet[chicago_boundary, ]</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Check results</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(fishnet)  <span class="co"># Number of cells</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="fu">st_area</span>(fishnet[<span class="dv">1</span>, ])  <span class="co"># Area of one cell (should be 250,000 m²)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Define cell size (in map units - meters for our projection)</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>cell_size <span class="ot">&lt;-</span> <span class="dv">500</span>  <span class="co"># 500m x 500m cells</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Create grid over study area</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>fishnet <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  chicago_boundary,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">cellsize =</span> cell_size,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">square =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">what =</span> <span class="st">"polygons"</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">uniqueID =</span> <span class="fu">row_number</span>())</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Clip to study area (remove cells outside boundary)</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>fishnet <span class="ot">&lt;-</span> fishnet[chicago_boundary, ]</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Check results</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(fishnet)  <span class="co"># Number of cells</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="fu">st_area</span>(fishnet[<span class="dv">1</span>, ])  <span class="co"># Area of one cell (should be 250,000 m²)</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot Fishnet Pattern</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(fishnet, <span class="fu">aes</span>(<span class="at">x =</span> countBurglaries)) <span class="sc">+</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>, <span class="at">fill =</span> <span class="st">"#440154FF"</span>, <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Burglary Counts"</span>,</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Most cells have 0-2 burglaries, few have many"</span>,</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Burglaries per Cell"</span>,</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Cells"</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <ul>
-<li><p><strong>Aggregating Points to Grid</strong></p>
+<li><strong>Aggregating Points to Grid</strong>
 <ul>
 <li><p>Spatial join between crimes (points) and fishnet (polygons)</p></li>
 <li><p>Count crimes per cell</p></li>
@@ -526,130 +840,197 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count burglaries per cell</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>burglary_counts <span class="ot">&lt;-</span> <span class="fu">st_join</span>(burglaries, fishnet) <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(uniqueID) <span class="sc">%&gt;%</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">countBurglaries =</span> <span class="fu">n</span>())</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Join back to fishnet</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>fishnet <span class="ot">&lt;-</span> fishnet <span class="sc">%&gt;%</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(burglary_counts, <span class="at">by =</span> <span class="st">"uniqueID"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">countBurglaries =</span> <span class="fu">replace_na</span>(countBurglaries, <span class="dv">0</span>))</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fishnet<span class="sc">$</span>countBurglaries)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#      0       0       1    2.3       3      47</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count burglaries per cell</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>burglary_counts <span class="ot">&lt;-</span> <span class="fu">st_join</span>(burglaries, fishnet) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(uniqueID) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">countBurglaries =</span> <span class="fu">n</span>())</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Join back to fishnet</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>fishnet <span class="ot">&lt;-</span> fishnet <span class="sc">%&gt;%</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(burglary_counts, <span class="at">by =</span> <span class="st">"uniqueID"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">countBurglaries =</span> <span class="fu">replace_na</span>(countBurglaries, <span class="dv">0</span>))</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fishnet<span class="sc">$</span>countBurglaries)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#      0       0       1    2.3       3      47</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p><strong>Leave-One-Group-Out (LOGO-CV) Implementation</strong></p>
+<ul>
+<li><strong>Leave-One-Group-Out (LOGO-CV) Implementation</strong>
+<ul>
+<li><p><u>Problem with standard k-fold CV</u>: spatial leakage – model learns from neighbors of test set → overly optimistic performance estimates</p></li>
+<li><p><u>LOGO-CV:</u> hold out entire spatial groups instead of individual cells</p></li>
+</ul></li>
+</ul>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get unique districts</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>districts <span class="ot">&lt;-</span> <span class="fu">unique</span>(fishnet<span class="sc">$</span>District)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize results</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>cv_results <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through districts</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (dist <span class="cf">in</span> districts) {</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  train_data <span class="ot">&lt;-</span> fishnet <span class="sc">%&gt;%</span> <span class="fu">filter</span>(District <span class="sc">!=</span> dist)  <span class="co"># Split data</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  test_data <span class="ot">&lt;-</span> fishnet <span class="sc">%&gt;%</span> <span class="fu">filter</span>(District <span class="sc">==</span> dist)</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fit model on training data</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  model_cv <span class="ot">&lt;-</span> <span class="fu">glm.nb</span>(</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    countBurglaries <span class="sc">~</span> Abandoned_Cars <span class="sc">+</span> Abandoned_Cars.nn <span class="sc">+</span> abandoned.isSig.dist,</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train_data</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Predict on test data</span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  test_data<span class="sc">$</span>prediction <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_cv, test_data, <span class="at">type =</span> <span class="st">"response"</span>)</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Store results</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  cv_results[[dist]] <span class="ot">&lt;-</span> test_data</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine all predictions</span></span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>all_predictions <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(cv_results)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get unique districts</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>districts <span class="ot">&lt;-</span> <span class="fu">unique</span>(fishnet<span class="sc">$</span>District)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize results</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>cv_results <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through districts</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (dist <span class="cf">in</span> districts) {</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  train_data <span class="ot">&lt;-</span> fishnet <span class="sc">%&gt;%</span> <span class="fu">filter</span>(District <span class="sc">!=</span> dist)  <span class="co"># Split data</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  test_data <span class="ot">&lt;-</span> fishnet <span class="sc">%&gt;%</span> <span class="fu">filter</span>(District <span class="sc">==</span> dist)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fit model on training data</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  model_cv <span class="ot">&lt;-</span> <span class="fu">glm.nb</span>(</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    countBurglaries <span class="sc">~</span> Abandoned_Cars <span class="sc">+</span> Abandoned_Cars.nn <span class="sc">+</span> abandoned.isSig.dist,</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train_data</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Predict on test data</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  test_data<span class="sc">$</span>prediction <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_cv, test_data, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Store results</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>  cv_results[[dist]] <span class="ot">&lt;-</span> test_data</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine all predictions</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>all_predictions <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(cv_results)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p><strong>Common Error Metrics: MAE, RMSE, Bias</strong></p>
+<ul>
+<li><strong>Common Error Metrics: MAE, RMSE, Mean Error (Bias)</strong></li>
+</ul>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate metrics by district</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>cv_metrics <span class="ot">&lt;-</span> all_predictions <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(District) <span class="sc">%&gt;%</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">MAE =</span> <span class="fu">mean</span>(<span class="fu">abs</span>(countBurglaries <span class="sc">-</span> prediction)),</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">RMSE =</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((countBurglaries <span class="sc">-</span> prediction)<span class="sc">^</span><span class="dv">2</span>)),</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">ME =</span> <span class="fu">mean</span>(countBurglaries <span class="sc">-</span> prediction)</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate metrics by district</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>cv_metrics <span class="ot">&lt;-</span> all_predictions <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(District) <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">MAE =</span> <span class="fu">mean</span>(<span class="fu">abs</span>(countBurglaries <span class="sc">-</span> prediction)),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">RMSE =</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((countBurglaries <span class="sc">-</span> prediction)<span class="sc">^</span><span class="dv">2</span>)), </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">ME =</span> <span class="fu">mean</span>(countBurglaries <span class="sc">-</span> prediction) <span class="co"># negative ME means under-predict</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Map prediction errors</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>all_predictions <span class="ot">&lt;-</span> all_predictions <span class="sc">%&gt;%</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">error =</span> countBurglaries <span class="sc">-</span> prediction,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">abs_error =</span> <span class="fu">abs</span>(error),</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">pct_error =</span> (prediction <span class="sc">-</span> countBurglaries) <span class="sc">/</span> (countBurglaries <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(all_predictions) <span class="sc">+</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> error), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">low =</span> <span class="st">"blue"</span>, <span class="at">mid =</span> <span class="st">"white"</span>, <span class="at">high =</span> <span class="st">"red"</span>,</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">midpoint =</span> <span class="dv">0</span>,</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">"Error"</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Prediction Errors"</span>,</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Red = Over-prediction, Blue = Under-prediction"</span>) <span class="sc">+</span></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p><strong>Calculating Kernel Density Estimation (KDE)</strong></p>
+<hr>
+<ul>
+<li><strong>Calculating Kernel Density Estimation (KDE) as Baseline</strong></li>
+</ul>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spatstat)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Convert to point pattern (ppp) object</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>burglary_ppp <span class="ot">&lt;-</span> <span class="fu">as.ppp</span>(</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">X =</span> <span class="fu">st_coordinates</span>(burglaries),</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">W =</span> <span class="fu">as.owin</span>(<span class="fu">st_bbox</span>(chicago_boundary))</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Calculate KDE</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>kde_surface <span class="ot">&lt;-</span> <span class="fu">density.ppp</span>(</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  burglary_ppp,</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">sigma =</span> <span class="dv">1000</span>,  <span class="co"># Bandwidth in meters</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">edge =</span> <span class="cn">TRUE</span>    <span class="co"># Edge correction</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Extract values to fishnet cells</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>fishnet<span class="sc">$</span>kde_risk <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">extract</span>(</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raster</span>(kde_surface),</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_centroid</span>(fishnet)</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardize to 0-1 scale for comparison</span></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>fishnet<span class="sc">$</span>kde_risk <span class="ot">&lt;-</span> (fishnet<span class="sc">$</span>kde_risk <span class="sc">-</span> <span class="fu">min</span>(fishnet<span class="sc">$</span>kde_risk, <span class="at">na.rm=</span>T)) <span class="sc">/</span> </span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>                     (<span class="fu">max</span>(fishnet<span class="sc">$</span>kde_risk, <span class="at">na.rm=</span>T) <span class="sc">-</span> <span class="fu">min</span>(fishnet<span class="sc">$</span>kde_risk, <span class="at">na.rm=</span>T))</span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizing Model vs. KDE Performance</span></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Bar chart comparing methods</span></span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>comparison_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  model_results <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Method =</span> <span class="st">"Negative Binomial Model"</span>),</span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  kde_results <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Method =</span> <span class="st">"Kernel Density"</span>)</span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(comparison_data, <span class="fu">aes</span>(<span class="at">x =</span> risk_category, <span class="at">y =</span> pct_of_total, <span class="at">fill =</span> Method)) <span class="sc">+</span></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#440154FF"</span>, <span class="st">"#FDE724FF"</span>)) <span class="sc">+</span></span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Percentage of 2018 Burglaries Captured"</span>,</span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Which method performs better in high-risk areas?"</span>,</span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Risk Category"</span>,</span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"% of Total 2018 Burglaries"</span></span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spatstat)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Convert to point pattern (ppp) object</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>burglary_ppp <span class="ot">&lt;-</span> <span class="fu">as.ppp</span>(</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">X =</span> <span class="fu">st_coordinates</span>(burglaries),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">W =</span> <span class="fu">as.owin</span>(<span class="fu">st_bbox</span>(chicago_boundary))</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Calculate KDE</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>kde_surface <span class="ot">&lt;-</span> <span class="fu">density.ppp</span>(</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  burglary_ppp,</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">sigma =</span> <span class="dv">1000</span>,  <span class="co"># Bandwidth in meters (standard in literature)</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">edge =</span> <span class="cn">TRUE</span>    <span class="co"># Edge correction</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Extract values to fishnet cells</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>fishnet<span class="sc">$</span>kde_risk <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">extract</span>(</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">raster</span>(kde_surface),</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_centroid</span>(fishnet)</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardize to 0-1 scale for comparison</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>fishnet<span class="sc">$</span>kde_risk <span class="ot">&lt;-</span> (fishnet<span class="sc">$</span>kde_risk <span class="sc">-</span> <span class="fu">min</span>(fishnet<span class="sc">$</span>kde_risk, <span class="at">na.rm=</span>T)) <span class="sc">/</span> </span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>                     (<span class="fu">max</span>(fishnet<span class="sc">$</span>kde_risk, <span class="at">na.rm=</span>T) <span class="sc">-</span> <span class="fu">min</span>(fishnet<span class="sc">$</span>kde_risk, <span class="at">na.rm=</span>T))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
+<ul>
+<li><strong>Creating Risk Categories</strong></li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create quintiles (5 equal groups)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>fishnet<span class="sc">$</span>model_risk_category <span class="ot">&lt;-</span> <span class="fu">cut</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  fishnet<span class="sc">$</span>prediction,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">breaks =</span> <span class="fu">quantile</span>(fishnet<span class="sc">$</span>prediction, <span class="at">probs =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.2</span>)),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"1st (Lowest)"</span>, <span class="st">"2nd"</span>, <span class="st">"3rd"</span>, <span class="st">"4th"</span>, <span class="st">"5th (Highest)"</span>),</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">include.lowest =</span> <span class="cn">TRUE</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>fishnet<span class="sc">$</span>kde_risk_category <span class="ot">&lt;-</span> <span class="fu">cut</span>(</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  fishnet<span class="sc">$</span>kde_risk,</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">breaks =</span> <span class="fu">quantile</span>(fishnet<span class="sc">$</span>kde_risk, <span class="at">probs =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.2</span>)),</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"1st (Lowest)"</span>, <span class="st">"2nd"</span>, <span class="st">"3rd"</span>, <span class="st">"4th"</span>, <span class="st">"5th (Highest)"</span>),</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">include.lowest =</span> <span class="cn">TRUE</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<ul>
+<li><strong>Visualizing Model vs KDE Performance</strong></li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bar chart comparing methods</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>comparison_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  model_results <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Method =</span> <span class="st">"Negative Binomial Model"</span>),</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  kde_results <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Method =</span> <span class="st">"Kernel Density"</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(comparison_data, <span class="fu">aes</span>(<span class="at">x =</span> risk_category, <span class="at">y =</span> pct_of_total, <span class="at">fill =</span> Method)) <span class="sc">+</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#440154FF"</span>, <span class="st">"#FDE724FF"</span>)) <span class="sc">+</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Percentage of 2018 Burglaries Captured"</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Which method performs better in high-risk areas?"</span>,</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Risk Category"</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"% of Total 2018 Burglaries"</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<ul>
+<li><strong>Procedure for Testing on Hold-Out Data (i.e.&nbsp;data the model has never seen)</strong>
+<ul>
+<li><p>Train model on 2017 data</p></li>
+<li><p>Create risk predictions for all cells</p></li>
+<li><p>Load 2018 burglaries (new data)</p></li>
+<li><p>Count how many 2018 burglaries fall in each risk category</p></li>
+<li><p>Compare model vs.&nbsp;KDE</p></li>
+</ul></li>
+</ul>
 </section>
 <section id="questions-challenges" class="level2">
 <h2 class="anchored" data-anchor-id="questions-challenges">Questions &amp; Challenges</h2>
 <ul>
-<li></li>
+<li>There’s a lot to digest today – I will need to review this material slowly and apply the underlying intuitions to the lab assignment</li>
 </ul>
 </section>
 <section id="connections-to-policy" class="level2">
 <h2 class="anchored" data-anchor-id="connections-to-policy">Connections to Policy</h2>
-<ul>
-<li></li>
-</ul>
+<p><img src="images/clipboard-480259933.png" class="img-fluid" width="476"></p>
 </section>
 <section id="reflection" class="level2">
 <h2 class="anchored" data-anchor-id="reflection">Reflection</h2>

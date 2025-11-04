@@ -164,6 +164,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../weekly-notes/week-07-notes.html">
  <span class="dropdown-text">Week 7 Notes - Model Diagnostics and Spatial Autocorrelation</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../weekly-notes/week-09-notes.html">
+ <span class="dropdown-text">Week 9 Notes - Predictive Policing</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -198,6 +202,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../labs/lab_2/assignment2_template.html">
  <span class="dropdown-text">Assignment 2: Spatial Analysis and Visualization</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab_4/assignment4_template.html">
+ <span class="dropdown-text">Assignment 4: Predictive Policing &amp; Analysis</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -215,7 +223,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="../side-hustles/vacancy_land_use.html">
- <span class="dropdown-text">Vacancy and Land Use - Sharswood</span></a>
+ <span class="dropdown-text">Vacancy, Land Use, and Businesses - Sharswood</span></a>
   </li>  
     </ul>
   </li>
@@ -282,7 +290,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="1">
 <li>Visualize relationships</li>
 <li>Engineer features</li>
-<li>Fir the model</li>
+<li>Fit the model</li>
 <li>Evaluate performance (RMSE, R²)</li>
 <li>Check assumptions</li>
 </ol>
@@ -294,17 +302,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <p><strong>Spatial Autocorrelation in Errors (i.e.&nbsp;Clustered Errors)</strong></p>
 <ul>
-<li><p>spatial pattern visible (not random scatter)</p></li>
-<li><p>under/over-predict in areas</p></li>
-<li><p>model misses something about location</p></li>
+<li>spatial pattern visible (not random scatter)</li>
+<li>under/over-predict in areas</li>
+<li>model misses something about location</li>
 </ul>
 <p><strong>Moran’s I measures Spatial Autocorrelation</strong></p>
 <p><em>Intuition: When I’m above/below average, are my neighbors also above/below average?</em></p>
 <p><strong>Range:</strong> -1 to +1</p>
 <ul>
-<li><p><strong>+1</strong> = Perfect positive correlation (clustering)</p></li>
-<li><p><strong>0</strong> = Random spatial pattern</p></li>
-<li><p><strong>-1</strong> = Perfect negative correlation (dispersion)</p></li>
+<li><strong>+1</strong> = Perfect positive correlation (clustering)</li>
+<li><strong>0</strong> = Random spatial pattern</li>
+<li><strong>-1</strong> = Perfect negative correlation (dispersion)</li>
 </ul>
 <hr>
 <p><strong>Defining Neighbors:</strong></p>
@@ -318,9 +326,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Step 2: Multiply Neighbor Pair Deviations</strong></p>
 <p><img src="images/clipboard-645011366.png" class="img-fluid"></p>
 <ul>
-<li><p>Lots of positive products → <strong>High Moran’s I</strong> (clustering)</p></li>
-<li><p>Products near zero → <strong>Low Moran’s I</strong> (random)</p></li>
-<li><p>Negative products → <strong>Negative Moran’s I</strong> (rare with errors)</p></li>
+<li>Lots of positive products → <strong>High Moran’s I</strong> (clustering)</li>
+<li>Products near zero → <strong>Low Moran’s I</strong> (random)</li>
+<li>Negative products → <strong>Negative Moran’s I</strong> (rare with errors)</li>
 </ul>
 <p><strong>Step 3: Possible Solutions</strong></p>
 <p>If Moran’s I shows clustered errors:</p>
@@ -333,28 +341,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Simultaneity Problem (circular logic)</strong></li>
 </ol>
 <ul>
-<li><p>My price affects neighbors → neighbors affect me</p></li>
-<li><p>OLS estimates are biased and inconsistent</p></li>
+<li>My price affects neighbors → neighbors affect me</li>
+<li>OLS estimates are biased and inconsistent</li>
 </ul>
 <ol start="2" type="1">
 <li><strong>Prediction Paradox (poor generalizability)</strong></li>
 </ol>
 <ul>
-<li><p>Need neighbors’ prices to predict my price</p></li>
-<li><p>But for new developments or future periods, those prices don’t exist yet</p></li>
+<li>Need neighbors’ prices to predict my price</li>
+<li>But for new developments or future periods, those prices don’t exist yet</li>
 </ul>
 <ol start="3" type="1">
 <li><strong>Data Leakage in CV</strong></li>
 </ol>
 <ul>
-<li><p>Spatial Lag “leaks” information from test set</p></li>
-<li><p>Artificially good performance that won’t hold</p></li>
+<li>Spatial Lag “leaks” information from test set</li>
+<li>Artificially good performance that won’t hold</li>
 </ul>
 <p><img src="images/clipboard-4100208631.png" class="img-fluid" width="251"></p>
 <p><strong>Key Idea: Match method to purpose:</strong>&nbsp;</p>
 <ul>
-<li><p><strong>inference</strong>&nbsp;→ spatial lag/error models;&nbsp;<strong>prediction</strong>&nbsp;→ spatial features</p></li>
-<li><p><strong>our predicton approach:</strong> Instead of modeling dependence in Y (prices), model proximity in X (predictors)</p></li>
+<li><strong>inference</strong>&nbsp;→ spatial lag/error models;&nbsp;<strong>prediction</strong>&nbsp;→ spatial features</li>
+<li><strong>our predicton approach:</strong> Instead of modeling dependence in Y (prices), model proximity in X (predictors)</li>
 </ul>
 </section>
 </section>

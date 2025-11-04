@@ -162,7 +162,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="../weekly-notes/week-07-notes.html">
- <span class="dropdown-text">Week 6 Notes - Spatial ML and Advanced Regression</span></a>
+ <span class="dropdown-text">Week 7 Notes - Model Diagnostics and Spatial Autocorrelation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../weekly-notes/week-09-notes.html">
+ <span class="dropdown-text">Week 9 Notes - Predictive Policing</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-midterm" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Midterm</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-midterm">    
+        <li>
+    <a class="dropdown-item" href="../midterm/appendix/Midterm_2025.html">
+ <span class="dropdown-text">Report - Single-Family Home Price Prediction in Philadelphia</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../midterm/slides/Midterm_slides_v3.html">
+ <span class="dropdown-text">Slides - Improving Property Tax Assessments in Philadelphia</span></a>
   </li>  
     </ul>
   </li>
@@ -183,13 +202,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../labs/lab_2/assignment2_template.html">
  <span class="dropdown-text">Assignment 2: Spatial Analysis and Visualization</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab_4/assignment4_template.html">
+ <span class="dropdown-text">Assignment 4: Predictive Policing &amp; Analysis</span></a>
+  </li>  
     </ul>
   </li>
-  <li class="nav-item">
-    <span class="nav-link">
-<span class="menu-text">Side Hustles</span>
-    </span>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-side-hustles" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Side Hustles</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-side-hustles">    
+        <li>
+    <a class="dropdown-item" href="../side-hustles/dataaxle.html">
+ <span class="dropdown-text">Data Axle - Businesses in Sharswood</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../side-hustles/demographic_change.html">
+ <span class="dropdown-text">Demographic Changes at Census Tract Level - Sharswood</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../side-hustles/vacancy_land_use.html">
+ <span class="dropdown-text">Vacancy, Land Use, and Businesses - Sharswood</span></a>
+  </li>  
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -247,28 +284,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><strong>Spatial Data Fundamentals</strong>
 <ul>
-<li><p>Vector data model and sf objects</p></li>
-<li><p>ESRI Shapefile format: <code>.shp</code> (geometry – lat/long); <code>.dbf</code> (attribute); <code>.sbx</code> (binary spatial index file)</p></li>
+<li>Vector data model and sf objects</li>
+<li>ESRI Shapefile format: <code>.shp</code> (geometry – lat/long); <code>.dbf</code> (attribute); <code>.sbx</code> (binary spatial index file)</li>
 </ul></li>
 <li><strong>Spatial Operations</strong>
 <ul>
-<li><p>Spatial subsetting and filtering</p></li>
-<li><p>Spatial joins and relationships</p></li>
-<li><p>Measuring distances and areas</p></li>
+<li>Spatial subsetting and filtering</li>
+<li>Spatial joins and relationships</li>
+<li>Measuring distances and areas</li>
 </ul></li>
 <li><strong>Geometry Operations</strong>
 <ul>
-<li><p>Buffers, intersections, and unions</p></li>
-<li><p>Spatial aggregation</p></li>
+<li>Buffers, intersections, and unions</li>
+<li>Spatial aggregation</li>
 </ul></li>
 <li><strong>Coordinate Reference Systems (CRS)</strong>
 <ul>
-<li><p>Understanding projections &amp; transforming between CRS</p></li>
-<li><p><strong>Geographic Coordinate Systems (GCS)</strong> utilize lat/long coordinates with angular units in decimal degrees</p>
+<li>Understanding projections &amp; transforming between CRS</li>
+<li><strong>Geographic Coordinate Systems (GCS)</strong> utilize lat/long coordinates with angular units in decimal degrees
 <ul>
 <li><em>WGS84 (EPSG:4326):</em>GPS standard, global coverage, good for web mapping, data sharing</li>
 </ul></li>
-<li><p><strong>Project Coordinate Systems (PCS)</strong> utilize X/Y coordinates on a flat plane with units in metres/feet</p>
+<li><strong>Projected Coordinate Systems (PCS)</strong> utilize X/Y coordinates on a flat plane with units in metres/feet
 <ul>
 <li><p><em>Web Mercator (EPSG:3857):</em> Web mapping standard, heavily distorts areas near poles</p></li>
 <li><p><em>State Plane / UTM zones:</em> local accuracy, different zones for different regions, optimized for specific geographic areas</p></li>
@@ -281,10 +318,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Read Spatial Data:</strong> <code>st_read</code></p>
 <p><strong>Spatial Subsetting: extract features based on spatial relationships</strong></p>
 <ul>
-<li><p>Which counties border Allegheny?&nbsp;→&nbsp;<code>st_touches</code> looks for neighbors</p></li>
-<li><p>Which tracts are IN Allegheny?&nbsp;→&nbsp;<code>st_within</code></p></li>
-<li><p>Which tracts overlap a metro area? → <code>st_intersects</code> includes the reference feature itself</p></li>
-<li><p>If no&nbsp;<code>.predicate</code>&nbsp;specified, uses&nbsp;<code>st_intersects</code></p></li>
+<li>Which counties border Allegheny?&nbsp;→&nbsp;<code>st_touches</code> looks for neighbors</li>
+<li>Which tracts are IN Allegheny?&nbsp;→&nbsp;<code>st_within</code></li>
+<li>Which tracts overlap a metro area? → <code>st_intersects</code> includes the reference feature itself</li>
+<li>If no&nbsp;<code>.predicate</code>&nbsp;specified, uses&nbsp;<code>st_intersects</code></li>
 </ul>
 <p><img src="images/clipboard-3051935903.png" class="img-fluid"></p>
 <div class="cell">
@@ -301,8 +338,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><strong>Checking and Setting CRS</strong></p>
 <ul>
-<li><p>To simply check current CRS <code>st_crs(pa_counties)</code></p></li>
-<li><p>To set CRS (ONLY if missing) <code>pa_counties &lt;- st_set_crs(pa_counties, 4326)</code></p></li>
+<li>To simply check current CRS <code>st_crs(pa_counties)</code></li>
+<li>To set CRS (ONLY if missing) <code>pa_counties &lt;- st_set_crs(pa_counties, 4326)</code></li>
 </ul>
 <div class="cell">
 <details class="code-fold">
@@ -337,8 +374,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><strong>Area Calculations</strong></p>
 <ul>
-<li><p>The dot (.) is a placeholder that represents the data being passed through the pipe</p></li>
-<li><p>In the code example below, the dot (.) refers to <code>pa_counties</code></p></li>
+<li>The dot (.) is a placeholder that represents the data being passed through the pipe</li>
+<li>In the code example below, the dot (.) refers to <code>pa_counties</code></li>
 </ul>
 <div class="cell">
 <details class="code-fold">
@@ -405,15 +442,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="connections-to-policy" class="level2">
 <h2 class="anchored" data-anchor-id="connections-to-policy">Connections to Policy</h2>
 <ul>
-<li><p><strong>Spatial Policy Analysis Workflow</strong></p>
+<li><strong>Spatial Policy Analysis Workflow</strong>
 <ul>
-<li><strong>Load data</strong> → Get spatial boundaries and attribute data</li>
-<li><strong>Check projections</strong> → Transform to appropriate CRS</li>
-<li><strong>Join datasets</strong> → Combine spatial and non-spatial data</li>
-<li><strong>Spatial operations</strong> → Buffers, intersections, distance calculations</li>
-<li><strong>Aggregation</strong> → Summarize across spatial units</li>
-<li><strong>Visualization</strong> → Maps and charts</li>
-<li><strong>Interpretation</strong> → Policy recommendations</li>
+<li><p><strong>Load data</strong> → Get spatial boundaries and attribute data</p></li>
+<li><p><strong>Check projections</strong> → Transform to appropriate CRS</p></li>
+<li><p><strong>Join datasets</strong> → Combine spatial and non-spatial data</p></li>
+<li><p><strong>Spatial operations</strong> → Buffers, intersections, distance calculations</p></li>
+<li><p><strong>Aggregation</strong> → Summarize across spatial units</p></li>
+<li><p><strong>Visualization</strong> → Maps and charts</p></li>
+<li><p><strong>Interpretation</strong> → Policy recommendations</p></li>
 </ul></li>
 </ul>
 </section>

@@ -7,27 +7,19 @@ date: "2025-09-29"
 
 -   **Spatial Data Fundamentals**
     -   Vector data model and sf objects
-
     -   ESRI Shapefile format: `.shp` (geometry – lat/long); `.dbf` (attribute); `.sbx` (binary spatial index file)
 -   **Spatial Operations**
     -   Spatial subsetting and filtering
-
     -   Spatial joins and relationships
-
     -   Measuring distances and areas
 -   **Geometry Operations**
     -   Buffers, intersections, and unions
-
     -   Spatial aggregation
 -   **Coordinate Reference Systems (CRS)**
     -   Understanding projections & transforming between CRS
-
     -   **Geographic Coordinate Systems (GCS)** utilize lat/long coordinates with angular units in decimal degrees
-
         -   *WGS84 (EPSG:4326):*GPS standard, global coverage, good for web mapping, data sharing
-
-    -   **Project Coordinate Systems (PCS)** utilize X/Y coordinates on a flat plane with units in metres/feet
-
+    -   **Projected Coordinate Systems (PCS)** utilize X/Y coordinates on a flat plane with units in metres/feet
         -   *Web Mercator (EPSG:3857):* Web mapping standard, heavily distorts areas near poles
 
         -   *State Plane / UTM zones:* local accuracy, different zones for different regions, optimized for specific geographic areas
@@ -39,11 +31,8 @@ date: "2025-09-29"
 **Spatial Subsetting: extract features based on spatial relationships**
 
 -   Which counties border Allegheny? → `st_touches` looks for neighbors
-
 -   Which tracts are IN Allegheny? → `st_within`
-
 -   Which tracts overlap a metro area? → `st_intersects` includes the reference feature itself
-
 -   If no `.predicate` specified, uses `st_intersects`
 
 ![](images/clipboard-3051935903.png)
@@ -61,7 +50,6 @@ st_within()
 **Checking and Setting CRS**
 
 -   To simply check current CRS `st_crs(pa_counties)`
-
 -   To set CRS (ONLY if missing) `pa_counties <- st_set_crs(pa_counties, 4326)`
 
 ```{r crs, eval = FALSE}
@@ -94,7 +82,6 @@ tracts_with_counties <- census_tracts %>%
 **Area Calculations**
 
 -   The dot (.) is a placeholder that represents the data being passed through the pipe
-
 -   In the code example below, the dot (.) refers to `pa_counties`
 
 ```{r areas, eval = FALSE}
@@ -155,13 +142,18 @@ print(access_summary)
 ## Connections to Policy
 
 -   **Spatial Policy Analysis Workflow**
-
     -   **Load data** → Get spatial boundaries and attribute data
+
     -   **Check projections** → Transform to appropriate CRS
+
     -   **Join datasets** → Combine spatial and non-spatial data
+
     -   **Spatial operations** → Buffers, intersections, distance calculations
+
     -   **Aggregation** → Summarize across spatial units
+
     -   **Visualization** → Maps and charts
+
     -   **Interpretation** → Policy recommendations
 
 ## Reflection

@@ -105,35 +105,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -191,7 +162,26 @@ window.Quarto = {
   </li>  
         <li>
     <a class="dropdown-item" href="../weekly-notes/week-07-notes.html">
- <span class="dropdown-text">Week 7 Notes - Spatial ML and Spatial Autocorrelation</span></a>
+ <span class="dropdown-text">Week 7 Notes - Model Diagnostics and Spatial Autocorrelation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../weekly-notes/week-09-notes.html">
+ <span class="dropdown-text">Week 9 Notes - Predictive Policing</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-midterm" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Midterm</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-midterm">    
+        <li>
+    <a class="dropdown-item" href="../midterm/appendix/Midterm_2025.html">
+ <span class="dropdown-text">Report - Single-Family Home Price Prediction in Philadelphia</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../midterm/slides/Midterm_slides_v3.html">
+ <span class="dropdown-text">Slides - Improving Property Tax Assessments in Philadelphia</span></a>
   </li>  
     </ul>
   </li>
@@ -212,13 +202,31 @@ window.Quarto = {
     <a class="dropdown-item" href="../labs/lab_2/assignment2_template.html">
  <span class="dropdown-text">Assignment 2: Spatial Analysis and Visualization</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab_4/assignment4_template.html">
+ <span class="dropdown-text">Assignment 4: Predictive Policing &amp; Analysis</span></a>
+  </li>  
     </ul>
   </li>
-  <li class="nav-item">
-    <span class="nav-link">
-<span class="menu-text">Side Hustles</span>
-    </span>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-side-hustles" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Side Hustles</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-side-hustles">    
+        <li>
+    <a class="dropdown-item" href="../side-hustles/dataaxle.html">
+ <span class="dropdown-text">Data Axle - Businesses in Sharswood</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../side-hustles/demographic_change.html">
+ <span class="dropdown-text">Demographic Changes at Census Tract Level - Sharswood</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../side-hustles/vacancy_land_use.html">
+ <span class="dropdown-text">Vacancy, Land Use, and Businesses - Sharswood</span></a>
+  </li>  
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -239,7 +247,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#statistical-significance" id="toc-statistical-significance" class="nav-link" data-scroll-target="#statistical-significance"><strong>Statistical Significance</strong></a></li>
   <li><a href="#model-evaluation" id="toc-model-evaluation" class="nav-link" data-scroll-target="#model-evaluation">Model Evaluation</a></li>
-  <li><a href="#checking-assumptions-plots-reveal-what-r2-hides" id="toc-checking-assumptions-plots-reveal-what-r2-hides" class="nav-link" data-scroll-target="#checking-assumptions-plots-reveal-what-r2-hides">Checking Assumptions: Plots reveal what <span class="math display">\[R^2\]</span> hides</a></li>
+  <li><a href="#checking-assumptions-plots-reveal-what-r2-hides" id="toc-checking-assumptions-plots-reveal-what-r2-hides" class="nav-link" data-scroll-target="#checking-assumptions-plots-reveal-what-r2-hides">Checking Assumptions: Plots reveal what R^2 hides</a></li>
   <li><a href="#improving-the-model" id="toc-improving-the-model" class="nav-link" data-scroll-target="#improving-the-model">Improving the Model</a></li>
   </ul></li>
   <li><a href="#coding-techniques" id="toc-coding-techniques" class="nav-link" data-scroll-target="#coding-techniques">Coding Techniques</a></li>
@@ -306,29 +314,29 @@ window.Quarto = {
 </ul>
 </section>
 <section id="checking-assumptions-plots-reveal-what-r2-hides" class="level3">
-<h3 class="anchored" data-anchor-id="checking-assumptions-plots-reveal-what-r2-hides">Checking Assumptions: Plots reveal what <span class="math display">\[R^2\]</span> hides</h3>
+<h3 class="anchored" data-anchor-id="checking-assumptions-plots-reveal-what-r2-hides">Checking Assumptions: Plots reveal what R^2 hides</h3>
 <ul>
-<li><p><strong>Assumption 1: Linear Relationship</strong></p>
+<li><strong>Assumption 1: Linear Relationship</strong>
 <ul>
-<li><p>Check with Residual Plot</p></li>
-<li><p>Residuals = observed − fitted. They’re your best proxy for the error term. Good models leave residuals that look like random noise.</p></li>
+<li>Check with Residual Plot</li>
+<li>Residuals = observed − fitted. They’re your best proxy for the error term. Good models leave residuals that look like random noise.</li>
 </ul></li>
-<li><p><strong>Assumption 2: Constant Variance</strong></p>
+<li><strong>Assumption 2: Constant Variance</strong>
 <ul>
-<li><p>Check heteroscedasticity (i.e.&nbsp;variance changes across X</p></li>
-<li><p>Impact: standard errors are wrong -&gt; p values are misleading</p></li>
+<li>Check heteroscedasticity (i.e.&nbsp;variance changes across X</li>
+<li>Impact: standard errors are wrong -&gt; p values are misleading</li>
 </ul></li>
-<li><p><strong>Assumption 3: Normality of Residuals</strong></p>
+<li><strong>Assumption 3: Normality of Residuals</strong>
 <ul>
-<li><p>Check with Q-Q Plot (quantile-quantile plot) of residuals</p></li>
-<li><p>Important for confidence &amp; prediction intervals</p></li>
-<li><p>Needed for valid hypothesis tests (t-test and F-test)</p></li>
+<li>Check with Q-Q Plot (quantile-quantile plot) of residuals</li>
+<li>Important for confidence &amp; prediction intervals</li>
+<li>Needed for valid hypothesis tests (t-test and F-test)</li>
 </ul></li>
-<li><p><strong>Assumption 4: No Multicollinearity</strong></p>
+<li><strong>Assumption 4: No Multicollinearity</strong>
 <ul>
 <li>Coefficients become unstable and hard to interpret</li>
 </ul></li>
-<li><p><strong>Assumption 5: No Influential Outliers</strong></p>
+<li><strong>Assumption 5: No Influential Outliers</strong>
 <ul>
 <li><p>Influential Outliers: those with high leverage and large residuals</p></li>
 <li><p>Visual Diagnostic using Cook’s Distance (<em>Cook’s D</em>)</p></li>
@@ -338,9 +346,9 @@ window.Quarto = {
 <section id="improving-the-model" class="level3">
 <h3 class="anchored" data-anchor-id="improving-the-model">Improving the Model</h3>
 <ul>
-<li><p>Adding more predictors</p></li>
-<li><p>Log Transformations</p></li>
-<li><p>Categorical Variables</p></li>
+<li>Adding more predictors</li>
+<li>Log Transformations</li>
+<li>Categorical Variables</li>
 </ul>
 </section>
 </section>

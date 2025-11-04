@@ -1,0 +1,1694 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
+\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
+\definecolor{quarto-callout-color}{HTML}{909090}
+\definecolor{quarto-callout-note-color}{HTML}{0758E5}
+\definecolor{quarto-callout-important-color}{HTML}{CC1914}
+\definecolor{quarto-callout-warning-color}{HTML}{EB9113}
+\definecolor{quarto-callout-tip-color}{HTML}{00A047}
+\definecolor{quarto-callout-caution-color}{HTML}{FC5300}
+\definecolor{quarto-callout-color-frame}{HTML}{acacac}
+\definecolor{quarto-callout-note-color-frame}{HTML}{4582ec}
+\definecolor{quarto-callout-important-color-frame}{HTML}{d9534f}
+\definecolor{quarto-callout-warning-color-frame}{HTML}{f0ad4e}
+\definecolor{quarto-callout-tip-color-frame}{HTML}{02b875}
+\definecolor{quarto-callout-caution-color-frame}{HTML}{fd7e14}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Assignment 4: Predictive Policing \& Analysis},
+  pdfauthor={Jed Chew},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Assignment 4: Predictive Policing \& Analysis}
+\author{Jed Chew}
+\date{2025-11-10}
+\begin{document}
+\maketitle
+
+\renewcommand*\contentsname{Table of contents}
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+
+\subsection{About This Exercise}\label{about-this-exercise}
+
+In this lab, you will apply the spatial predictive modeling techniques
+demonstrated in the class exercise to a 311 service request type of your
+choice. You will build a complete spatial predictive model, document
+your process, and interpret your results.
+
+\section{Learning Objectives}\label{learning-objectives}
+
+By the end of this exercise, you will be able to:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Create a fishnet grid for aggregating point-level crime data
+\item
+  Calculate spatial features including k-nearest neighbors and distance
+  measures
+\item
+  Diagnose spatial autocorrelation using Local Moran's I
+\item
+  Fit and interpret Poisson and Negative Binomial regression for count
+  data
+\item
+  Implement spatial cross-validation (Leave-One-Group-Out)
+\item
+  Compare model predictions to a Kernel Density Estimation baseline
+\item
+  Evaluate model performance using appropriate metrics
+\end{enumerate}
+
+\section{Setup}\label{setup}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load required packages}
+\FunctionTok{library}\NormalTok{(tidyverse)      }\CommentTok{\# Data manipulation}
+\FunctionTok{library}\NormalTok{(sf)             }\CommentTok{\# Spatial operations}
+\FunctionTok{library}\NormalTok{(here)           }\CommentTok{\# Relative file paths}
+\FunctionTok{library}\NormalTok{(viridis)        }\CommentTok{\# Color scales}
+\FunctionTok{library}\NormalTok{(terra)          }\CommentTok{\# Raster operations (replaces \textquotesingle{}raster\textquotesingle{})}
+\FunctionTok{library}\NormalTok{(spdep)          }\CommentTok{\# Spatial dependence}
+\FunctionTok{library}\NormalTok{(FNN)            }\CommentTok{\# Fast nearest neighbors}
+\FunctionTok{library}\NormalTok{(MASS)           }\CommentTok{\# Negative binomial regression}
+\FunctionTok{library}\NormalTok{(patchwork)      }\CommentTok{\# Plot composition (replaces grid/gridExtra)}
+\FunctionTok{library}\NormalTok{(knitr)          }\CommentTok{\# Tables}
+\FunctionTok{library}\NormalTok{(kableExtra)     }\CommentTok{\# Table formatting}
+\FunctionTok{library}\NormalTok{(classInt)       }\CommentTok{\# Classification intervals}
+\FunctionTok{library}\NormalTok{(here)}
+
+\CommentTok{\# Spatstat split into sub{-}packages}
+\FunctionTok{library}\NormalTok{(spatstat.geom)    }\CommentTok{\# Spatial geometries}
+\FunctionTok{library}\NormalTok{(spatstat.explore) }\CommentTok{\# Spatial exploration/KDE}
+
+\CommentTok{\# Set options}
+\FunctionTok{options}\NormalTok{(}\AttributeTok{scipen =} \DecValTok{999}\NormalTok{)  }\CommentTok{\# No scientific notation}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{5080}\NormalTok{)         }\CommentTok{\# Reproducibility}
+
+\CommentTok{\# Create consistent theme for visualizations}
+\NormalTok{theme\_crime }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{11}\NormalTok{) \{}
+  \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =}\NormalTok{ base\_size) }\SpecialCharTok{+}
+    \FunctionTok{theme}\NormalTok{(}
+      \AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{face =} \StringTok{"bold"}\NormalTok{, }\AttributeTok{size =}\NormalTok{ base\_size }\SpecialCharTok{+} \DecValTok{1}\NormalTok{),}
+      \AttributeTok{plot.subtitle =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{color =} \StringTok{"gray30"}\NormalTok{, }\AttributeTok{size =}\NormalTok{ base\_size }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{),}
+      \AttributeTok{legend.position =} \StringTok{"right"}\NormalTok{,}
+      \AttributeTok{panel.grid.minor =} \FunctionTok{element\_blank}\NormalTok{(),}
+      \AttributeTok{axis.text =} \FunctionTok{element\_blank}\NormalTok{(),}
+      \AttributeTok{axis.title =} \FunctionTok{element\_blank}\NormalTok{()}
+\NormalTok{    )}
+\NormalTok{\}}
+
+\CommentTok{\# Set as default}
+\FunctionTok{theme\_set}\NormalTok{(}\FunctionTok{theme\_crime}\NormalTok{())}
+
+\CommentTok{\# Set Working Directory}
+\FunctionTok{setwd}\NormalTok{(}\StringTok{"C:/Users/chewj/Documents/MUSA/Github/portfolio{-}setup{-}jedchewjm/labs/lab\_4"}\NormalTok{)}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"✓ All packages loaded successfully!}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+✓ All packages loaded successfully!
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"✓ Working directory:"}\NormalTok{, }\FunctionTok{getwd}\NormalTok{(), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+✓ Working directory: C:/Users/chewj/Documents/MUSA/Github/portfolio-setup-jedchewjm/labs/lab_4 
+\end{verbatim}
+
+\section{Part 1: Analyze Chosen 311 Violation
+Type}\label{part-1-analyze-chosen-311-violation-type}
+
+\section{Choose your 311 Violation
+Type}\label{choose-your-311-violation-type}
+
+\begin{itemize}
+\item
+  Browse the available service request types (e.g., Graffiti Removal,
+  Pothole Repair, Street Light Out, Sanitation Code Violations, etc.)
+  and \textbf{choose one violation type} that interests you.
+\item
+  Chicago 311 Service Requests dataset:
+  \href{https://data.cityofchicago.org/stories/s/311-Dataset-Changes-12-11-2018/d7nq-5g7t}{\textbf{https://data.cityofchicago.org/stories/s/311-Dataset-Changes-12-11-2018/d7nq-5g7t}}
+\item
+  Use \texttt{ESRI:102271} (Illinois State Plane East, NAD83, US Feet)
+  as CRS
+\end{itemize}
+
+\subsubsection{1.1 \textbar{} Load Chicago Spatial
+Data}\label{load-chicago-spatial-data}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load police districts (used for spatial cross{-}validation)}
+\NormalTok{policeDistricts }\OtherTok{\textless{}{-}} 
+  \FunctionTok{st\_read}\NormalTok{(}\StringTok{"https://data.cityofchicago.org/api/geospatial/24zt{-}jpfn?method=export\&format=GeoJSON"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{st\_transform}\NormalTok{(}\StringTok{\textquotesingle{}ESRI:102271\textquotesingle{}}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\AttributeTok{District =}\NormalTok{ dist\_num)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Reading layer `OGRGeoJSON' from data source 
+  `https://data.cityofchicago.org/api/geospatial/24zt-jpfn?method=export&format=GeoJSON' 
+  using driver `GeoJSON'
+Simple feature collection with 25 features and 2 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -87.94011 ymin: 41.64455 xmax: -87.52414 ymax: 42.02303
+Geodetic CRS:  WGS 84
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load police beats (smaller administrative units)}
+\NormalTok{policeBeats }\OtherTok{\textless{}{-}} 
+  \FunctionTok{st\_read}\NormalTok{(}\StringTok{"https://data.cityofchicago.org/api/geospatial/n9it{-}hstw?method=export\&format=GeoJSON"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{st\_transform}\NormalTok{(}\StringTok{\textquotesingle{}ESRI:102271\textquotesingle{}}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\AttributeTok{Beat =}\NormalTok{ beat\_num)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Reading layer `OGRGeoJSON' from data source 
+  `https://data.cityofchicago.org/api/geospatial/n9it-hstw?method=export&format=GeoJSON' 
+  using driver `GeoJSON'
+Simple feature collection with 277 features and 4 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -87.94011 ymin: 41.64455 xmax: -87.52414 ymax: 42.02303
+Geodetic CRS:  WGS 84
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load Chicago boundary}
+\NormalTok{chicagoBoundary }\OtherTok{\textless{}{-}} 
+  \FunctionTok{st\_read}\NormalTok{(}\StringTok{"https://raw.githubusercontent.com/urbanSpatial/Public{-}Policy{-}Analytics{-}Landing/master/DATA/Chapter5/chicagoBoundary.geojson"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{st\_transform}\NormalTok{(}\StringTok{\textquotesingle{}ESRI:102271\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Reading layer `chicagoBoundary' from data source 
+  `https://raw.githubusercontent.com/urbanSpatial/Public-Policy-Analytics-Landing/master/DATA/Chapter5/chicagoBoundary.geojson' 
+  using driver `GeoJSON'
+Simple feature collection with 1 feature and 1 field
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: -87.8367 ymin: 41.64454 xmax: -87.52414 ymax: 42.02304
+Geodetic CRS:  WGS 84
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"✓ Loaded spatial boundaries}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+✓ Loaded spatial boundaries
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"  {-} Police districts:"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(policeDistricts), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  - Police districts: 25 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"  {-} Police beats:"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(policeBeats), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  - Police beats: 277 
+\end{verbatim}
+
+\subsubsection{1.2 \textbar{} Load Burglary
+Data}\label{load-burglary-data}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load from provided data file (downloaded from Chicago open data portal)}
+\NormalTok{burglaries }\OtherTok{\textless{}{-}} \FunctionTok{st\_read}\NormalTok{(}\StringTok{"data/burglaries.shp"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{st\_transform}\NormalTok{(}\StringTok{\textquotesingle{}ESRI:102271\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Reading layer `burglaries' from data source 
+  `C:\Users\chewj\Documents\MUSA\Github\portfolio-setup-jedchewjm\labs\lab_4\data\burglaries.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 7482 features and 22 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 340492 ymin: 552959.6 xmax: 367153.5 ymax: 594815.1
+Projected CRS: NAD83(HARN) / Illinois East
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Check the data}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{✓ Loaded burglary data}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+✓ Loaded burglary data
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"  {-} Number of burglaries:"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(burglaries), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  - Number of burglaries: 7482 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"  {-} CRS:"}\NormalTok{, }\FunctionTok{st\_crs}\NormalTok{(burglaries)}\SpecialCharTok{$}\NormalTok{input, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  - CRS: ESRI:102271 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"  {-} Date range:"}\NormalTok{, }\FunctionTok{min}\NormalTok{(burglaries}\SpecialCharTok{$}\NormalTok{date, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\StringTok{"to"}\NormalTok{, }
+    \FunctionTok{max}\NormalTok{(burglaries}\SpecialCharTok{$}\NormalTok{date, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  - Date range: Inf to -Inf 
+\end{verbatim}
+
+\subsubsection{1.3 \textbar{} Visualize Point Data \& Describe
+Patterns}\label{visualize-point-data-describe-patterns}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Simple point map}
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ chicagoBoundary, }\AttributeTok{fill =} \StringTok{"gray95"}\NormalTok{, }\AttributeTok{color =} \StringTok{"gray60"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ burglaries, }\AttributeTok{color =} \StringTok{"\#d62828"}\NormalTok{, }\AttributeTok{size =} \FloatTok{0.1}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Burglary Locations"}\NormalTok{,}
+    \AttributeTok{subtitle =} \FunctionTok{paste0}\NormalTok{(}\StringTok{"Chicago 2017, n = "}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(burglaries))}
+\NormalTok{  )}
+
+\CommentTok{\# Density surface using modern syntax}
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ chicagoBoundary, }\AttributeTok{fill =} \StringTok{"gray95"}\NormalTok{, }\AttributeTok{color =} \StringTok{"gray60"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_density\_2d\_filled}\NormalTok{(}
+    \AttributeTok{data =} \FunctionTok{data.frame}\NormalTok{(}\FunctionTok{st\_coordinates}\NormalTok{(burglaries)),}
+    \FunctionTok{aes}\NormalTok{(X, Y),}
+    \AttributeTok{alpha =} \FloatTok{0.7}\NormalTok{,}
+    \AttributeTok{bins =} \DecValTok{8}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_viridis\_d}\NormalTok{(}
+    \AttributeTok{option =} \StringTok{"plasma"}\NormalTok{,}
+    \AttributeTok{direction =} \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{,}
+    \AttributeTok{guide =} \StringTok{"none"}  \CommentTok{\# Modern ggplot2 syntax (not guide = FALSE)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Density Surface"}\NormalTok{,}
+    \AttributeTok{subtitle =} \StringTok{"Kernel density estimation"}
+\NormalTok{  )}
+
+\CommentTok{\# Combine plots using patchwork (modern approach)}
+\NormalTok{p1 }\SpecialCharTok{+}\NormalTok{ p2 }\SpecialCharTok{+} 
+  \FunctionTok{plot\_annotation}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Spatial Distribution of Burglaries in Chicago"}\NormalTok{,}
+    \AttributeTok{tag\_levels =} \StringTok{\textquotesingle{}A\textquotesingle{}}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{assignment4_template_files/figure-pdf/visualize-points-1.pdf}}
+
+\begin{tcolorbox}[enhanced jigsaw, colback=white, toprule=.15mm, rightrule=.15mm, bottomrule=.15mm, left=2mm, opacitybacktitle=0.6, coltitle=black, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, opacityback=0, bottomtitle=1mm, toptitle=1mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Observed Patterns}, arc=.35mm, leftrule=.75mm, breakable, colframe=quarto-callout-note-color-frame]
+
+\begin{itemize}
+\tightlist
+\item
+  Lorem Ipsum
+\item
+  Lorem Ipsum
+\end{itemize}
+
+\end{tcolorbox}
+
+\section{Part 2: Create Fishnet Grid}\label{part-2-create-fishnet-grid}
+
+A \textbf{fishnet grid} converts irregular point data into a regular
+grid of cells where we can aggregate counts / calculate spatial features
+/ apply regression models
+
+\subsubsection{2.1 \textbar{} Create 500 m x 500 m Fishnet
+Grid}\label{create-500-m-x-500-m-fishnet-grid}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create 500m x 500m grid}
+\NormalTok{fishnet }\OtherTok{\textless{}{-}} \FunctionTok{st\_make\_grid}\NormalTok{(}
+\NormalTok{  chicagoBoundary,}
+  \AttributeTok{cellsize =} \DecValTok{500}\NormalTok{,  }\CommentTok{\# 500 meters per cell}
+  \AttributeTok{square =} \ConstantTok{TRUE}
+\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{st\_sf}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{uniqueID =} \FunctionTok{row\_number}\NormalTok{())}
+
+\CommentTok{\# Keep only cells that intersect Chicago}
+\NormalTok{fishnet }\OtherTok{\textless{}{-}}\NormalTok{ fishnet[chicagoBoundary, ]}
+
+\CommentTok{\# View basic info}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"✓ Created fishnet grid}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+✓ Created fishnet grid
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"  {-} Number of cells:"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(fishnet), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  - Number of cells: 2458 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"  {-} Cell size:"}\NormalTok{, }\DecValTok{500}\NormalTok{, }\StringTok{"x"}\NormalTok{, }\DecValTok{500}\NormalTok{, }\StringTok{"meters}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  - Cell size: 500 x 500 meters
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"  {-} Cell area:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(}\FunctionTok{st\_area}\NormalTok{(fishnet[}\DecValTok{1}\NormalTok{,])), }\StringTok{"square meters}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  - Cell area: 250000 square meters
+\end{verbatim}
+
+\subsubsection{2.2 \textbar{} Aggregate
+\textless Burglaries\textgreater{} to
+Grid}\label{aggregate-burglaries-to-grid}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Spatial join: which cell contains each burglary?}
+\NormalTok{burglaries\_fishnet }\OtherTok{\textless{}{-}} \FunctionTok{st\_join}\NormalTok{(burglaries, fishnet, }\AttributeTok{join =}\NormalTok{ st\_within) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{st\_drop\_geometry}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(uniqueID) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{countBurglaries =} \FunctionTok{n}\NormalTok{())}
+
+\CommentTok{\# Join back to fishnet (cells with 0 burglaries will be NA)}
+\NormalTok{fishnet }\OtherTok{\textless{}{-}}\NormalTok{ fishnet }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(burglaries\_fishnet, }\AttributeTok{by =} \StringTok{"uniqueID"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{countBurglaries =} \FunctionTok{replace\_na}\NormalTok{(countBurglaries, }\DecValTok{0}\NormalTok{))}
+
+\CommentTok{\# Summary statistics}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{Burglary count distribution:}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Burglary count distribution:
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(fishnet}\SpecialCharTok{$}\NormalTok{countBurglaries)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  0.000   0.000   2.000   3.042   5.000  40.000 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{Cells with zero burglaries:"}\NormalTok{, }
+    \FunctionTok{sum}\NormalTok{(fishnet}\SpecialCharTok{$}\NormalTok{countBurglaries }\SpecialCharTok{==} \DecValTok{0}\NormalTok{), }
+    \StringTok{"/"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(fishnet),}
+    \StringTok{"("}\NormalTok{, }\FunctionTok{round}\NormalTok{(}\DecValTok{100} \SpecialCharTok{*} \FunctionTok{sum}\NormalTok{(fishnet}\SpecialCharTok{$}\NormalTok{countBurglaries }\SpecialCharTok{==} \DecValTok{0}\NormalTok{) }\SpecialCharTok{/} \FunctionTok{nrow}\NormalTok{(fishnet), }\DecValTok{1}\NormalTok{), }\StringTok{"\%)}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Cells with zero burglaries: 781 / 2458 ( 31.8 %)
+\end{verbatim}
+
+\subsubsection{2.3 \textbar{} Visualize Count
+Distribution}\label{visualize-count-distribution}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Visualize aggregated counts}
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fishnet, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ countBurglaries), }\AttributeTok{color =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ chicagoBoundary, }\AttributeTok{fill =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{color =} \StringTok{"white"}\NormalTok{, }\AttributeTok{linewidth =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_viridis\_c}\NormalTok{(}
+    \AttributeTok{name =} \StringTok{"Burglaries"}\NormalTok{,}
+    \AttributeTok{option =} \StringTok{"plasma"}\NormalTok{,}
+    \AttributeTok{trans =} \StringTok{"sqrt"}\NormalTok{,  }\CommentTok{\# Square root for better visualization of skewed data}
+    \AttributeTok{breaks =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{20}\NormalTok{, }\DecValTok{40}\NormalTok{)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Burglary Counts by Grid Cell"}\NormalTok{,}
+    \AttributeTok{subtitle =} \StringTok{"500m x 500m cells, Chicago 2017"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_crime}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{assignment4_template_files/figure-pdf/visualize-fishnet-1.pdf}}
+
+\section{Part 3: Create a Kernel Density Estimate (KDE)
+Baseline}\label{part-3-create-a-kernel-density-estimate-kde-baseline}
+
+\begin{itemize}
+\tightlist
+\item
+  KDE represents our null hypothesis: burglaries happen where they
+  happened before, with no other information
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Convert burglaries to ppp (point pattern) format for spatstat}
+\NormalTok{burglaries\_ppp }\OtherTok{\textless{}{-}} \FunctionTok{as.ppp}\NormalTok{(}
+  \FunctionTok{st\_coordinates}\NormalTok{(burglaries),}
+  \AttributeTok{W =} \FunctionTok{as.owin}\NormalTok{(}\FunctionTok{st\_bbox}\NormalTok{(chicagoBoundary))}
+\NormalTok{)}
+
+\CommentTok{\# Calculate KDE with 1km bandwidth}
+\NormalTok{kde\_burglaries }\OtherTok{\textless{}{-}} \FunctionTok{density.ppp}\NormalTok{(}
+\NormalTok{  burglaries\_ppp,}
+  \AttributeTok{sigma =} \DecValTok{1000}\NormalTok{,  }\CommentTok{\# 1km bandwidth}
+  \AttributeTok{edge =} \ConstantTok{TRUE}    \CommentTok{\# Edge correction}
+\NormalTok{)}
+
+\CommentTok{\# Convert to terra raster (modern approach, not raster::raster)}
+\NormalTok{kde\_raster }\OtherTok{\textless{}{-}} \FunctionTok{rast}\NormalTok{(kde\_burglaries)}
+
+\CommentTok{\# Extract KDE values to fishnet cells}
+\NormalTok{fishnet }\OtherTok{\textless{}{-}}\NormalTok{ fishnet }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{kde\_value =}\NormalTok{ terra}\SpecialCharTok{::}\FunctionTok{extract}\NormalTok{(}
+\NormalTok{      kde\_raster,}
+      \FunctionTok{vect}\NormalTok{(fishnet),}
+      \AttributeTok{fun =}\NormalTok{ mean,}
+      \AttributeTok{na.rm =} \ConstantTok{TRUE}
+\NormalTok{    )[, }\DecValTok{2}\NormalTok{]  }\CommentTok{\# Extract just the values column}
+\NormalTok{  )}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"✓ Calculated KDE baseline}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+✓ Calculated KDE baseline
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fishnet, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ kde\_value), }\AttributeTok{color =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ chicagoBoundary, }\AttributeTok{fill =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{color =} \StringTok{"white"}\NormalTok{, }\AttributeTok{linewidth =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_viridis\_c}\NormalTok{(}
+    \AttributeTok{name =} \StringTok{"KDE Value"}\NormalTok{,}
+    \AttributeTok{option =} \StringTok{"plasma"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Kernel Density Estimation Baseline"}\NormalTok{,}
+    \AttributeTok{subtitle =} \StringTok{"Simple spatial smoothing of burglary locations"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_crime}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{assignment4_template_files/figure-pdf/visualize-kde-1.pdf}}
+
+\section{Part 4: Create Spatial Predictor
+Variables}\label{part-4-create-spatial-predictor-variables}
+
+Now we'll create features that might help predict burglaries. We'll use
+``broken windows theory'' logic: signs of disorder predict crime.
+
+\subsubsection{4.1 \textbar{} Load 311 Abandoned Vehicle
+Calls}\label{load-311-abandoned-vehicle-calls}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{abandoned\_cars }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"data/abandoned\_cars\_2017.csv"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(Latitude), }\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(Longitude)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{st\_as\_sf}\NormalTok{(}\AttributeTok{coords =} \FunctionTok{c}\NormalTok{(}\StringTok{"Longitude"}\NormalTok{, }\StringTok{"Latitude"}\NormalTok{), }\AttributeTok{crs =} \DecValTok{4326}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{st\_transform}\NormalTok{(}\StringTok{\textquotesingle{}ESRI:102271\textquotesingle{}}\NormalTok{)}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"✓ Loaded abandoned vehicle calls}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+✓ Loaded abandoned vehicle calls
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"  {-} Number of calls:"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(abandoned\_cars), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  - Number of calls: 31390 
+\end{verbatim}
+
+\begin{tcolorbox}[enhanced jigsaw, colback=white, toprule=.15mm, rightrule=.15mm, bottomrule=.15mm, left=2mm, opacitybacktitle=0.6, coltitle=black, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, opacityback=0, bottomtitle=1mm, toptitle=1mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Data Loading Note}, arc=.35mm, leftrule=.75mm, breakable, colframe=quarto-callout-note-color-frame]
+
+The data was downloaded from Chicago's Open Data Portal. You can now
+request an api from the Chicago portal and tap into the data there.
+
+\textbf{Consider:} How might the 311 reporting system itself be biased?
+Who calls 311? What neighborhoods have better 311 awareness?
+
+\end{tcolorbox}
+
+\subsubsection{4.2 \textbar{} Count of Abandoned Cars per
+Cell}\label{count-of-abandoned-cars-per-cell}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Aggregate abandoned car calls to fishnet}
+\NormalTok{abandoned\_fishnet }\OtherTok{\textless{}{-}} \FunctionTok{st\_join}\NormalTok{(abandoned\_cars, fishnet, }\AttributeTok{join =}\NormalTok{ st\_within) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{st\_drop\_geometry}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(uniqueID) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{abandoned\_cars =} \FunctionTok{n}\NormalTok{())}
+
+\CommentTok{\# Join to fishnet}
+\NormalTok{fishnet }\OtherTok{\textless{}{-}}\NormalTok{ fishnet }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(abandoned\_fishnet, }\AttributeTok{by =} \StringTok{"uniqueID"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{abandoned\_cars =} \FunctionTok{replace\_na}\NormalTok{(abandoned\_cars, }\DecValTok{0}\NormalTok{))}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Abandoned car distribution:}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Abandoned car distribution:
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(fishnet}\SpecialCharTok{$}\NormalTok{abandoned\_cars)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   0.00    2.00    9.00   12.74   19.00  123.00 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fishnet, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ abandoned\_cars), }\AttributeTok{color =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_viridis\_c}\NormalTok{(}\AttributeTok{name =} \StringTok{"Count"}\NormalTok{, }\AttributeTok{option =} \StringTok{"magma"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Abandoned Vehicle 311 Calls"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_crime}\NormalTok{()}
+
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fishnet, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ countBurglaries), }\AttributeTok{color =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_viridis\_c}\NormalTok{(}\AttributeTok{name =} \StringTok{"Count"}\NormalTok{, }\AttributeTok{option =} \StringTok{"plasma"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Burglaries"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_crime}\NormalTok{()}
+
+\NormalTok{p1 }\SpecialCharTok{+}\NormalTok{ p2 }\SpecialCharTok{+}
+  \FunctionTok{plot\_annotation}\NormalTok{(}\AttributeTok{title =} \StringTok{"Are abandoned cars and burglaries correlated?"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{assignment4_template_files/figure-pdf/visualize-abandoned-cars-1.pdf}}
+
+\subsubsection{4.3 \textbar{} k-Nearest Neighbors (kNN)
+Features}\label{k-nearest-neighbors-knn-features}
+
+Count in a cell is one measure. Distance to the nearest 3 abandoned cars
+captures local context.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate mean distance to 3 nearest abandoned cars}
+\CommentTok{\# (Do this OUTSIDE of mutate to avoid sf conflicts)}
+
+\CommentTok{\# Get coordinates}
+\NormalTok{fishnet\_coords }\OtherTok{\textless{}{-}} \FunctionTok{st\_coordinates}\NormalTok{(}\FunctionTok{st\_centroid}\NormalTok{(fishnet))}
+\NormalTok{abandoned\_coords }\OtherTok{\textless{}{-}} \FunctionTok{st\_coordinates}\NormalTok{(abandoned\_cars)}
+
+\CommentTok{\# Calculate k nearest neighbors and distances}
+\NormalTok{nn\_result }\OtherTok{\textless{}{-}} \FunctionTok{get.knnx}\NormalTok{(abandoned\_coords, fishnet\_coords, }\AttributeTok{k =} \DecValTok{3}\NormalTok{)}
+
+\CommentTok{\# Add to fishnet}
+\NormalTok{fishnet }\OtherTok{\textless{}{-}}\NormalTok{ fishnet }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{abandoned\_cars.nn =} \FunctionTok{rowMeans}\NormalTok{(nn\_result}\SpecialCharTok{$}\NormalTok{nn.dist)}
+\NormalTok{  )}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"✓ Calculated nearest neighbor distances}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+✓ Calculated nearest neighbor distances
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(fishnet}\SpecialCharTok{$}\NormalTok{abandoned\_cars.nn)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+   4.386   88.247  143.293  246.946  271.283 2195.753 
+\end{verbatim}
+
+\subsubsection{4.4 \textbar{} Local Moran's I; Identify Hotspots;
+Distance to Hot
+Spots}\label{local-morans-i-identify-hotspots-distance-to-hot-spots}
+
+Let's identify clusters of abandoned cars using Local Moran's I, then
+calculate distance to these hot spots.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Function to calculate Local Moran\textquotesingle{}s I}
+\NormalTok{calculate\_local\_morans }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, variable, }\AttributeTok{k =} \DecValTok{5}\NormalTok{) \{}
+  
+  \CommentTok{\# Create spatial weights}
+\NormalTok{  coords }\OtherTok{\textless{}{-}} \FunctionTok{st\_coordinates}\NormalTok{(}\FunctionTok{st\_centroid}\NormalTok{(data))}
+\NormalTok{  neighbors }\OtherTok{\textless{}{-}} \FunctionTok{knn2nb}\NormalTok{(}\FunctionTok{knearneigh}\NormalTok{(coords, }\AttributeTok{k =}\NormalTok{ k))}
+\NormalTok{  weights }\OtherTok{\textless{}{-}} \FunctionTok{nb2listw}\NormalTok{(neighbors, }\AttributeTok{style =} \StringTok{"W"}\NormalTok{, }\AttributeTok{zero.policy =} \ConstantTok{TRUE}\NormalTok{)}
+  
+  \CommentTok{\# Calculate Local Moran\textquotesingle{}s I}
+\NormalTok{  local\_moran }\OtherTok{\textless{}{-}} \FunctionTok{localmoran}\NormalTok{(data[[variable]], weights)}
+  
+  \CommentTok{\# Classify clusters}
+\NormalTok{  mean\_val }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(data[[variable]], }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+  
+\NormalTok{  data }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{mutate}\NormalTok{(}
+      \AttributeTok{local\_i =}\NormalTok{ local\_moran[, }\DecValTok{1}\NormalTok{],}
+      \AttributeTok{p\_value =}\NormalTok{ local\_moran[, }\DecValTok{5}\NormalTok{],}
+      \AttributeTok{is\_significant =}\NormalTok{ p\_value }\SpecialCharTok{\textless{}} \FloatTok{0.05}\NormalTok{,}
+      
+      \AttributeTok{moran\_class =} \FunctionTok{case\_when}\NormalTok{(}
+        \SpecialCharTok{!}\NormalTok{is\_significant }\SpecialCharTok{\textasciitilde{}} \StringTok{"Not Significant"}\NormalTok{,}
+\NormalTok{        local\_i }\SpecialCharTok{\textgreater{}} \DecValTok{0} \SpecialCharTok{\&}\NormalTok{ .data[[variable]] }\SpecialCharTok{\textgreater{}}\NormalTok{ mean\_val }\SpecialCharTok{\textasciitilde{}} \StringTok{"High{-}High"}\NormalTok{,}
+\NormalTok{        local\_i }\SpecialCharTok{\textgreater{}} \DecValTok{0} \SpecialCharTok{\&}\NormalTok{ .data[[variable]] }\SpecialCharTok{\textless{}=}\NormalTok{ mean\_val }\SpecialCharTok{\textasciitilde{}} \StringTok{"Low{-}Low"}\NormalTok{,}
+\NormalTok{        local\_i }\SpecialCharTok{\textless{}} \DecValTok{0} \SpecialCharTok{\&}\NormalTok{ .data[[variable]] }\SpecialCharTok{\textgreater{}}\NormalTok{ mean\_val }\SpecialCharTok{\textasciitilde{}} \StringTok{"High{-}Low"}\NormalTok{,}
+\NormalTok{        local\_i }\SpecialCharTok{\textless{}} \DecValTok{0} \SpecialCharTok{\&}\NormalTok{ .data[[variable]] }\SpecialCharTok{\textless{}=}\NormalTok{ mean\_val }\SpecialCharTok{\textasciitilde{}} \StringTok{"Low{-}High"}\NormalTok{,}
+        \ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}} \StringTok{"Not Significant"}
+\NormalTok{      )}
+\NormalTok{    )}
+\NormalTok{\}}
+
+\CommentTok{\# Apply to abandoned cars}
+\NormalTok{fishnet }\OtherTok{\textless{}{-}} \FunctionTok{calculate\_local\_morans}\NormalTok{(fishnet, }\StringTok{"abandoned\_cars"}\NormalTok{, }\AttributeTok{k =} \DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Visualize hot spots}
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ fishnet, }
+    \FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ moran\_class), }
+    \AttributeTok{color =} \ConstantTok{NA}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}
+    \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}
+      \StringTok{"High{-}High"} \OtherTok{=} \StringTok{"\#d7191c"}\NormalTok{,}
+      \StringTok{"High{-}Low"} \OtherTok{=} \StringTok{"\#fdae61"}\NormalTok{,}
+      \StringTok{"Low{-}High"} \OtherTok{=} \StringTok{"\#abd9e9"}\NormalTok{,}
+      \StringTok{"Low{-}Low"} \OtherTok{=} \StringTok{"\#2c7bb6"}\NormalTok{,}
+      \StringTok{"Not Significant"} \OtherTok{=} \StringTok{"gray90"}
+\NormalTok{    ),}
+    \AttributeTok{name =} \StringTok{"Cluster Type"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Local Moran\textquotesingle{}s I: Abandoned Car Clusters"}\NormalTok{,}
+    \AttributeTok{subtitle =} \StringTok{"High{-}High = Hot spots of disorder"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_crime}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{assignment4_template_files/figure-pdf/visualize-morans-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Get centroids of "High{-}High" cells (hot spots)}
+\NormalTok{hotspots }\OtherTok{\textless{}{-}}\NormalTok{ fishnet }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(moran\_class }\SpecialCharTok{==} \StringTok{"High{-}High"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{st\_centroid}\NormalTok{()}
+
+\CommentTok{\# Calculate distance from each cell to nearest hot spot}
+\ControlFlowTok{if}\NormalTok{ (}\FunctionTok{nrow}\NormalTok{(hotspots) }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) \{}
+\NormalTok{  fishnet }\OtherTok{\textless{}{-}}\NormalTok{ fishnet }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{mutate}\NormalTok{(}
+      \AttributeTok{dist\_to\_hotspot =} \FunctionTok{as.numeric}\NormalTok{(}
+        \FunctionTok{st\_distance}\NormalTok{(}\FunctionTok{st\_centroid}\NormalTok{(fishnet), hotspots }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{st\_union}\NormalTok{())}
+\NormalTok{      )}
+\NormalTok{    )}
+  
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"✓ Calculated distance to abandoned car hot spots}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"  {-} Number of hot spot cells:"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(hotspots), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{  fishnet }\OtherTok{\textless{}{-}}\NormalTok{ fishnet }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{mutate}\NormalTok{(}\AttributeTok{dist\_to\_hotspot =} \DecValTok{0}\NormalTok{)}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"⚠ No significant hot spots found}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+✓ Calculated distance to abandoned car hot spots
+  - Number of hot spot cells: 275 
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Part 5: Join Police Districts for
+Cross-Validation}\label{part-5-join-police-districts-for-cross-validation}
+
+We'll use police districts for our spatial cross-validation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Join district information to fishnet}
+\NormalTok{fishnet }\OtherTok{\textless{}{-}} \FunctionTok{st\_join}\NormalTok{(}
+\NormalTok{  fishnet,}
+\NormalTok{  policeDistricts,}
+  \AttributeTok{join =}\NormalTok{ st\_within,}
+  \AttributeTok{left =} \ConstantTok{TRUE}
+\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(District))  }\CommentTok{\# Remove cells outside districts}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"✓ Joined police districts}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+✓ Joined police districts
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"  {-} Districts:"}\NormalTok{, }\FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(fishnet}\SpecialCharTok{$}\NormalTok{District)), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  - Districts: 22 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"  {-} Cells:"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(fishnet), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  - Cells: 1708 
+\end{verbatim}
+
+\section{Part 6: Count Regression Model
+Fitting}\label{part-6-count-regression-model-fitting}
+
+\subsubsection{6.1 \textbar{} Poisson
+Regression}\label{poisson-regression}
+
+Burglary counts are count data (0, 1, 2, 3\ldots). We'll use
+\textbf{Poisson regression}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create clean modeling dataset}
+\NormalTok{fishnet\_model }\OtherTok{\textless{}{-}}\NormalTok{ fishnet }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{st\_drop\_geometry}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}
+\NormalTok{    uniqueID,}
+\NormalTok{    District,}
+\NormalTok{    countBurglaries,}
+\NormalTok{    abandoned\_cars,}
+\NormalTok{    abandoned\_cars.nn,}
+\NormalTok{    dist\_to\_hotspot}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{na.omit}\NormalTok{()  }\CommentTok{\# Remove any remaining NAs}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"✓ Prepared modeling data}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+✓ Prepared modeling data
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"  {-} Observations:"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(fishnet\_model), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  - Observations: 1708 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"  {-} Variables:"}\NormalTok{, }\FunctionTok{ncol}\NormalTok{(fishnet\_model), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  - Variables: 6 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Fit Poisson regression}
+\NormalTok{model\_poisson }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(}
+\NormalTok{  countBurglaries }\SpecialCharTok{\textasciitilde{}}\NormalTok{ abandoned\_cars }\SpecialCharTok{+}\NormalTok{ abandoned\_cars.nn }\SpecialCharTok{+} 
+\NormalTok{    dist\_to\_hotspot,}
+  \AttributeTok{data =}\NormalTok{ fishnet\_model,}
+  \AttributeTok{family =} \StringTok{"poisson"}
+\NormalTok{)}
+
+\CommentTok{\# Summary}
+\FunctionTok{summary}\NormalTok{(model\_poisson)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+glm(formula = countBurglaries ~ abandoned_cars + abandoned_cars.nn + 
+    dist_to_hotspot, family = "poisson", data = fishnet_model)
+
+Coefficients:
+                      Estimate   Std. Error z value            Pr(>|z|)    
+(Intercept)        1.976262369  0.042512701  46.486 <0.0000000000000002 ***
+abandoned_cars    -0.001360741  0.001089805  -1.249               0.212    
+abandoned_cars.nn -0.004965200  0.000198914 -24.962 <0.0000000000000002 ***
+dist_to_hotspot    0.000002874  0.000006206   0.463               0.643    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 6710.3  on 1707  degrees of freedom
+Residual deviance: 5070.6  on 1704  degrees of freedom
+AIC: 9138.9
+
+Number of Fisher Scoring iterations: 6
+\end{verbatim}
+
+\subsubsection{6.2 \textbar{} Check for
+Overdispersion}\label{check-for-overdispersion}
+
+Poisson regression assumes mean = variance. Real count data often
+violates this (overdispersion).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate dispersion parameter}
+\NormalTok{dispersion }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(model\_poisson, }\AttributeTok{type =} \StringTok{"pearson"}\NormalTok{)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{/} 
+\NormalTok{              model\_poisson}\SpecialCharTok{$}\NormalTok{df.residual}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Dispersion parameter:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(dispersion, }\DecValTok{2}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Dispersion parameter: 3.38 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Rule of thumb: \textgreater{}1.5 suggests overdispersion}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Rule of thumb: >1.5 suggests overdispersion
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ (dispersion }\SpecialCharTok{\textgreater{}} \FloatTok{1.5}\NormalTok{) \{}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"⚠ Overdispersion detected! Consider Negative Binomial model.}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"✓ Dispersion looks okay for Poisson model.}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+⚠ Overdispersion detected! Consider Negative Binomial model.
+\end{verbatim}
+
+\subsubsection{6.3 \textbar{} Negative Binomial
+Regression}\label{negative-binomial-regression}
+
+If overdispersed, use \textbf{Negative Binomial regression} (more
+flexible).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Fit Negative Binomial model}
+\NormalTok{model\_nb }\OtherTok{\textless{}{-}} \FunctionTok{glm.nb}\NormalTok{(}
+\NormalTok{  countBurglaries }\SpecialCharTok{\textasciitilde{}}\NormalTok{ abandoned\_cars }\SpecialCharTok{+}\NormalTok{ abandoned\_cars.nn }\SpecialCharTok{+} 
+\NormalTok{    dist\_to\_hotspot,}
+  \AttributeTok{data =}\NormalTok{ fishnet\_model}
+\NormalTok{)}
+
+\CommentTok{\# Summary}
+\FunctionTok{summary}\NormalTok{(model\_nb)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+glm.nb(formula = countBurglaries ~ abandoned_cars + abandoned_cars.nn + 
+    dist_to_hotspot, data = fishnet_model, init.theta = 1.603099596, 
+    link = log)
+
+Coefficients:
+                      Estimate   Std. Error z value            Pr(>|z|)    
+(Intercept)        2.092907737  0.077469423  27.016 <0.0000000000000002 ***
+abandoned_cars    -0.002006352  0.002091851  -0.959               0.337    
+abandoned_cars.nn -0.005844829  0.000321389 -18.186 <0.0000000000000002 ***
+dist_to_hotspot    0.000006861  0.000011049   0.621               0.535    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for Negative Binomial(1.6031) family taken to be 1)
+
+    Null deviance: 2534.0  on 1707  degrees of freedom
+Residual deviance: 1796.6  on 1704  degrees of freedom
+AIC: 7522.6
+
+Number of Fisher Scoring iterations: 1
+
+              Theta:  1.6031 
+          Std. Err.:  0.0888 
+
+ 2 x log-likelihood:  -7512.5850 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Compare AIC (lower is better)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{Model Comparison:}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Model Comparison:
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Poisson AIC:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(}\FunctionTok{AIC}\NormalTok{(model\_poisson), }\DecValTok{1}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Poisson AIC: 9138.9 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Negative Binomial AIC:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(}\FunctionTok{AIC}\NormalTok{(model\_nb), }\DecValTok{1}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Negative Binomial AIC: 7522.6 
+\end{verbatim}
+
+\subsubsection{6.4 \textbar{} Compare Model Fit
+(AIC)}\label{compare-model-fit-aic}
+
+\begin{itemize}
+\tightlist
+\item
+  To clarify what does AIC mean??
+\end{itemize}
+
+\section{Part 7: Spatial LOGO-CV
+(2017)}\label{part-7-spatial-logo-cv-2017}
+
+\textbf{Leave-One-Group-Out (LOGO) Cross-Validation} trains on all
+districts except one, then tests on the held-out district.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Get unique districts}
+\NormalTok{districts }\OtherTok{\textless{}{-}} \FunctionTok{unique}\NormalTok{(fishnet\_model}\SpecialCharTok{$}\NormalTok{District)}
+\NormalTok{cv\_results }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{()}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Running LOGO Cross{-}Validation...}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Running LOGO Cross-Validation...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \FunctionTok{seq\_along}\NormalTok{(districts)) \{}
+  
+\NormalTok{  test\_district }\OtherTok{\textless{}{-}}\NormalTok{ districts[i]}
+  
+  \CommentTok{\# Split data}
+\NormalTok{  train\_data }\OtherTok{\textless{}{-}}\NormalTok{ fishnet\_model }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(District }\SpecialCharTok{!=}\NormalTok{ test\_district)}
+\NormalTok{  test\_data }\OtherTok{\textless{}{-}}\NormalTok{ fishnet\_model }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(District }\SpecialCharTok{==}\NormalTok{ test\_district)}
+  
+  \CommentTok{\# Fit model on training data}
+\NormalTok{  model\_cv }\OtherTok{\textless{}{-}} \FunctionTok{glm.nb}\NormalTok{(}
+\NormalTok{    countBurglaries }\SpecialCharTok{\textasciitilde{}}\NormalTok{ abandoned\_cars }\SpecialCharTok{+}\NormalTok{ abandoned\_cars.nn }\SpecialCharTok{+} 
+\NormalTok{      dist\_to\_hotspot,}
+    \AttributeTok{data =}\NormalTok{ train\_data}
+\NormalTok{  )}
+  
+  \CommentTok{\# Predict on test data}
+\NormalTok{  test\_data }\OtherTok{\textless{}{-}}\NormalTok{ test\_data }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{mutate}\NormalTok{(}
+      \AttributeTok{prediction =} \FunctionTok{predict}\NormalTok{(model\_cv, test\_data, }\AttributeTok{type =} \StringTok{"response"}\NormalTok{)}
+\NormalTok{    )}
+  
+  \CommentTok{\# Calculate metrics}
+\NormalTok{  mae }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(}\FunctionTok{abs}\NormalTok{(test\_data}\SpecialCharTok{$}\NormalTok{countBurglaries }\SpecialCharTok{{-}}\NormalTok{ test\_data}\SpecialCharTok{$}\NormalTok{prediction))}
+\NormalTok{  rmse }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((test\_data}\SpecialCharTok{$}\NormalTok{countBurglaries }\SpecialCharTok{{-}}\NormalTok{ test\_data}\SpecialCharTok{$}\NormalTok{prediction)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+  
+  \CommentTok{\# Store results}
+\NormalTok{  cv\_results }\OtherTok{\textless{}{-}} \FunctionTok{bind\_rows}\NormalTok{(}
+\NormalTok{    cv\_results,}
+    \FunctionTok{tibble}\NormalTok{(}
+      \AttributeTok{fold =}\NormalTok{ i,}
+      \AttributeTok{test\_district =}\NormalTok{ test\_district,}
+      \AttributeTok{n\_test =} \FunctionTok{nrow}\NormalTok{(test\_data),}
+      \AttributeTok{mae =}\NormalTok{ mae,}
+      \AttributeTok{rmse =}\NormalTok{ rmse}
+\NormalTok{    )}
+\NormalTok{  )}
+  
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"  Fold"}\NormalTok{, i, }\StringTok{"/"}\NormalTok{, }\FunctionTok{length}\NormalTok{(districts), }\StringTok{"{-} District"}\NormalTok{, test\_district, }
+      \StringTok{"{-} MAE:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(mae, }\DecValTok{2}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  Fold 1 / 22 - District 5 - MAE: 2.04 
+  Fold 2 / 22 - District 4 - MAE: 1.84 
+  Fold 3 / 22 - District 22 - MAE: 2.26 
+  Fold 4 / 22 - District 6 - MAE: 3.3 
+  Fold 5 / 22 - District 8 - MAE: 2.53 
+  Fold 6 / 22 - District 7 - MAE: 3.08 
+  Fold 7 / 22 - District 3 - MAE: 6.05 
+  Fold 8 / 22 - District 2 - MAE: 2.69 
+  Fold 9 / 22 - District 9 - MAE: 2.16 
+  Fold 10 / 22 - District 10 - MAE: 2.19 
+  Fold 11 / 22 - District 1 - MAE: 1.76 
+  Fold 12 / 22 - District 12 - MAE: 3.1 
+  Fold 13 / 22 - District 15 - MAE: 2.08 
+  Fold 14 / 22 - District 11 - MAE: 3.19 
+  Fold 15 / 22 - District 18 - MAE: 2.75 
+  Fold 16 / 22 - District 25 - MAE: 2.75 
+  Fold 17 / 22 - District 14 - MAE: 2.96 
+  Fold 18 / 22 - District 19 - MAE: 2.1 
+  Fold 19 / 22 - District 16 - MAE: 2.98 
+  Fold 20 / 22 - District 17 - MAE: 2.17 
+  Fold 21 / 22 - District 20 - MAE: 2.68 
+  Fold 22 / 22 - District 24 - MAE: 2.65 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Overall results}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{✓ Cross{-}Validation Complete}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+✓ Cross-Validation Complete
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Mean MAE:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(cv\_results}\SpecialCharTok{$}\NormalTok{mae), }\DecValTok{2}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Mean MAE: 2.7 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Mean RMSE:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(cv\_results}\SpecialCharTok{$}\NormalTok{rmse), }\DecValTok{2}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Mean RMSE: 3.61 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Show results}
+\NormalTok{cv\_results }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(mae)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable}\NormalTok{(}
+    \AttributeTok{digits =} \DecValTok{2}\NormalTok{,}
+    \AttributeTok{caption =} \StringTok{"LOGO CV Results by District"}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{bootstrap\_options =} \FunctionTok{c}\NormalTok{(}\StringTok{"striped"}\NormalTok{, }\StringTok{"hover"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[t]{rlrrr}
+\caption{\label{tab:cv-results-table}LOGO CV Results by District}\\
+\toprule
+fold & test\_district & n\_test & mae & rmse\\
+\midrule
+7 & 3 & 43 & 6.05 & 8.08\\
+4 & 6 & 63 & 3.30 & 4.75\\
+14 & 11 & 43 & 3.19 & 4.09\\
+12 & 12 & 73 & 3.10 & 4.62\\
+6 & 7 & 52 & 3.08 & 4.07\\
+\addlinespace
+19 & 16 & 129 & 2.98 & 3.48\\
+17 & 14 & 46 & 2.96 & 4.24\\
+16 & 25 & 85 & 2.75 & 3.62\\
+15 & 18 & 30 & 2.75 & 4.15\\
+8 & 2 & 56 & 2.69 & 3.60\\
+\addlinespace
+21 & 20 & 30 & 2.68 & 3.11\\
+22 & 24 & 41 & 2.65 & 2.98\\
+5 & 8 & 197 & 2.53 & 3.48\\
+3 & 22 & 112 & 2.26 & 2.83\\
+10 & 10 & 63 & 2.19 & 3.09\\
+\addlinespace
+20 & 17 & 82 & 2.17 & 2.60\\
+9 & 9 & 107 & 2.16 & 2.59\\
+18 & 19 & 63 & 2.10 & 2.57\\
+13 & 15 & 32 & 2.08 & 2.67\\
+1 & 5 & 98 & 2.04 & 3.09\\
+\addlinespace
+2 & 4 & 235 & 1.84 & 3.69\\
+11 & 1 & 28 & 1.76 & 2.11\\
+\bottomrule
+\end{longtable}
+
+\section{Part 8: Model Predictions and
+Comparison}\label{part-8-model-predictions-and-comparison}
+
+\subsubsection{8.1 \textbar{} Generate Final
+Predictions}\label{generate-final-predictions}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Fit final model on all data}
+\NormalTok{final\_model }\OtherTok{\textless{}{-}} \FunctionTok{glm.nb}\NormalTok{(}
+\NormalTok{  countBurglaries }\SpecialCharTok{\textasciitilde{}}\NormalTok{ abandoned\_cars }\SpecialCharTok{+}\NormalTok{ abandoned\_cars.nn }\SpecialCharTok{+} 
+\NormalTok{    dist\_to\_hotspot,}
+  \AttributeTok{data =}\NormalTok{ fishnet\_model}
+\NormalTok{)}
+
+\CommentTok{\# Add predictions back to fishnet}
+\NormalTok{fishnet }\OtherTok{\textless{}{-}}\NormalTok{ fishnet }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{prediction\_nb =} \FunctionTok{predict}\NormalTok{(final\_model, fishnet\_model, }\AttributeTok{type =} \StringTok{"response"}\NormalTok{)[}\FunctionTok{match}\NormalTok{(uniqueID, fishnet\_model}\SpecialCharTok{$}\NormalTok{uniqueID)]}
+\NormalTok{  )}
+
+\CommentTok{\# Also add KDE predictions (normalize to same scale as counts)}
+\NormalTok{kde\_sum }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(fishnet}\SpecialCharTok{$}\NormalTok{kde\_value, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{count\_sum }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(fishnet}\SpecialCharTok{$}\NormalTok{countBurglaries, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{fishnet }\OtherTok{\textless{}{-}}\NormalTok{ fishnet }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{prediction\_kde =}\NormalTok{ (kde\_value }\SpecialCharTok{/}\NormalTok{ kde\_sum) }\SpecialCharTok{*}\NormalTok{ count\_sum}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{8.2 \textbar{} Compare Model vs.~KDE
+Baseline}\label{compare-model-vs.-kde-baseline}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create three maps}
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fishnet, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ countBurglaries), }\AttributeTok{color =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_viridis\_c}\NormalTok{(}\AttributeTok{name =} \StringTok{"Count"}\NormalTok{, }\AttributeTok{option =} \StringTok{"plasma"}\NormalTok{, }\AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{15}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Actual Burglaries"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_crime}\NormalTok{()}
+
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fishnet, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ prediction\_nb), }\AttributeTok{color =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_viridis\_c}\NormalTok{(}\AttributeTok{name =} \StringTok{"Predicted"}\NormalTok{, }\AttributeTok{option =} \StringTok{"plasma"}\NormalTok{, }\AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{15}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Model Predictions (Neg. Binomial)"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_crime}\NormalTok{()}
+
+\NormalTok{p3 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fishnet, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ prediction\_kde), }\AttributeTok{color =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_viridis\_c}\NormalTok{(}\AttributeTok{name =} \StringTok{"Predicted"}\NormalTok{, }\AttributeTok{option =} \StringTok{"plasma"}\NormalTok{, }\AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{15}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"KDE Baseline Predictions"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_crime}\NormalTok{()}
+
+\NormalTok{p1 }\SpecialCharTok{+}\NormalTok{ p2 }\SpecialCharTok{+}\NormalTok{ p3 }\SpecialCharTok{+}
+  \FunctionTok{plot\_annotation}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Actual vs. Predicted Burglaries"}\NormalTok{,}
+    \AttributeTok{subtitle =} \StringTok{"Does our complex model outperform simple KDE?"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{assignment4_template_files/figure-pdf/compare-models-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate performance metrics}
+\NormalTok{comparison }\OtherTok{\textless{}{-}}\NormalTok{ fishnet }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{st\_drop\_geometry}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(prediction\_nb), }\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(prediction\_kde)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarize}\NormalTok{(}
+    \AttributeTok{model\_mae =} \FunctionTok{mean}\NormalTok{(}\FunctionTok{abs}\NormalTok{(countBurglaries }\SpecialCharTok{{-}}\NormalTok{ prediction\_nb)),}
+    \AttributeTok{model\_rmse =} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((countBurglaries }\SpecialCharTok{{-}}\NormalTok{ prediction\_nb)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)),}
+    \AttributeTok{kde\_mae =} \FunctionTok{mean}\NormalTok{(}\FunctionTok{abs}\NormalTok{(countBurglaries }\SpecialCharTok{{-}}\NormalTok{ prediction\_kde)),}
+    \AttributeTok{kde\_rmse =} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((countBurglaries }\SpecialCharTok{{-}}\NormalTok{ prediction\_kde)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\NormalTok{  )}
+
+\NormalTok{comparison }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\FunctionTok{everything}\NormalTok{(), }\AttributeTok{names\_to =} \StringTok{"metric"}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{"value"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{separate}\NormalTok{(metric, }\AttributeTok{into =} \FunctionTok{c}\NormalTok{(}\StringTok{"approach"}\NormalTok{, }\StringTok{"metric"}\NormalTok{), }\AttributeTok{sep =} \StringTok{"\_"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_wider}\NormalTok{(}\AttributeTok{names\_from =}\NormalTok{ metric, }\AttributeTok{values\_from =}\NormalTok{ value) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable}\NormalTok{(}
+    \AttributeTok{digits =} \DecValTok{2}\NormalTok{,}
+    \AttributeTok{caption =} \StringTok{"Model Performance Comparison"}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{bootstrap\_options =} \FunctionTok{c}\NormalTok{(}\StringTok{"striped"}\NormalTok{, }\StringTok{"hover"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[t]{lrr}
+\caption{\label{tab:model-comparison-metrics}Model Performance Comparison}\\
+\toprule
+approach & mae & rmse\\
+\midrule
+model & 2.48 & 3.59\\
+kde & 2.06 & 2.95\\
+\bottomrule
+\end{longtable}
+
+\subsubsection{8.3 \textbar{} Where Does the Model Work
+Well?}\label{where-does-the-model-work-well}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate errors}
+\NormalTok{fishnet }\OtherTok{\textless{}{-}}\NormalTok{ fishnet }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{error\_nb =}\NormalTok{ countBurglaries }\SpecialCharTok{{-}}\NormalTok{ prediction\_nb,}
+    \AttributeTok{error\_kde =}\NormalTok{ countBurglaries }\SpecialCharTok{{-}}\NormalTok{ prediction\_kde,}
+    \AttributeTok{abs\_error\_nb =} \FunctionTok{abs}\NormalTok{(error\_nb),}
+    \AttributeTok{abs\_error\_kde =} \FunctionTok{abs}\NormalTok{(error\_kde)}
+\NormalTok{  )}
+
+\CommentTok{\# Map errors}
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fishnet, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ error\_nb), }\AttributeTok{color =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_gradient2}\NormalTok{(}
+    \AttributeTok{name =} \StringTok{"Error"}\NormalTok{,}
+    \AttributeTok{low =} \StringTok{"\#2166ac"}\NormalTok{, }\AttributeTok{mid =} \StringTok{"white"}\NormalTok{, }\AttributeTok{high =} \StringTok{"\#b2182b"}\NormalTok{,}
+    \AttributeTok{midpoint =} \DecValTok{0}\NormalTok{,}
+    \AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{10}\NormalTok{, }\DecValTok{10}\NormalTok{)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Model Errors (Actual {-} Predicted)"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_crime}\NormalTok{()}
+
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fishnet, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ abs\_error\_nb), }\AttributeTok{color =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_viridis\_c}\NormalTok{(}\AttributeTok{name =} \StringTok{"Abs. Error"}\NormalTok{, }\AttributeTok{option =} \StringTok{"magma"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Absolute Model Errors"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_crime}\NormalTok{()}
+
+\NormalTok{p1 }\SpecialCharTok{+}\NormalTok{ p2}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{assignment4_template_files/figure-pdf/prediction-errors-1.pdf}}
+
+\subsubsection{8.4 \textbar{} Assess Model Performance ACross
+Time}\label{assess-model-performance-across-time}
+
+\section{Part 9: Summary Statistics}\label{part-9-summary-statistics}
+
+\subsubsection{9.1 \textbar{} Model Summary
+Table}\label{model-summary-table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create nice summary table}
+\NormalTok{model\_summary }\OtherTok{\textless{}{-}}\NormalTok{ broom}\SpecialCharTok{::}\FunctionTok{tidy}\NormalTok{(final\_model, }\AttributeTok{exponentiate =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \FunctionTok{across}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.numeric), }\SpecialCharTok{\textasciitilde{}}\FunctionTok{round}\NormalTok{(., }\DecValTok{3}\NormalTok{))}
+\NormalTok{  )}
+
+\NormalTok{model\_summary }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable}\NormalTok{(}
+    \AttributeTok{caption =} \StringTok{"Final Negative Binomial Model Coefficients (Exponentiated)"}\NormalTok{,}
+    \AttributeTok{col.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"Variable"}\NormalTok{, }\StringTok{"Rate Ratio"}\NormalTok{, }\StringTok{"Std. Error"}\NormalTok{, }\StringTok{"Z"}\NormalTok{, }\StringTok{"P{-}Value"}\NormalTok{)}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{bootstrap\_options =} \FunctionTok{c}\NormalTok{(}\StringTok{"striped"}\NormalTok{, }\StringTok{"hover"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{footnote}\NormalTok{(}
+    \AttributeTok{general =} \StringTok{"Rate ratios \textgreater{} 1 indicate positive association with burglary counts."}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[t]{lrrrr}
+\caption{\label{tab:model-summary-table}Final Negative Binomial Model Coefficients (Exponentiated)}\\
+\toprule
+Variable & Rate Ratio & Std. Error & Z & P-Value\\
+\midrule
+(Intercept) & 8.108 & 0.077 & 27.016 & 0.000\\
+abandoned\_cars & 0.998 & 0.002 & -0.959 & 0.337\\
+abandoned\_cars.nn & 0.994 & 0.000 & -18.186 & 0.000\\
+dist\_to\_hotspot & 1.000 & 0.000 & 0.621 & 0.535\\
+\bottomrule
+\multicolumn{5}{l}{\rule{0pt}{1em}\textit{Note: }}\\
+\multicolumn{5}{l}{\rule{0pt}{1em}Rate ratios > 1 indicate positive association with burglary counts.}\\
+\end{longtable}
+
+\subsection{Key Findings Checklist}\label{key-findings-checklist}
+
+\textbf{Technical Performance:}
+
+\begin{itemize}
+\tightlist
+\item
+  Cross-validation MAE: 2.7
+\item
+  Model vs.~KDE: {[}Which performed better?{]}
+\item
+  Most predictive variable: {[}Which had largest effect?{]}
+\end{itemize}
+
+\textbf{Spatial Patterns:}
+
+\begin{itemize}
+\tightlist
+\item
+  Burglaries are {[}evenly distributed / clustered{]}
+\item
+  Hot spots are located in {[}describe{]}
+\item
+  Model errors show {[}random / systematic{]} patterns
+\end{itemize}
+
+\textbf{Model Limitations:}
+
+\begin{itemize}
+\tightlist
+\item
+  Overdispersion: {[}Yes/No{]}
+\item
+  Spatial autocorrelation in residuals: {[}Test this!{]}
+\item
+  Cells with zero counts: {[}What \% of data?{]}
+\end{itemize}
+
+
+
+
+\end{document}

@@ -74,5 +74,15 @@
   },
   "weekly-notes/week-09-notes.qmd": {
     "week-09-notes.html": "8d8af9a3"
+  },
+  "labs/lab_4/assignment4_template.qmd": {
+    "assignment4_template.tex": "56927b3e",
+    "assignment4_template.html": "70e75047"
+  },
+  "labs/lab_4/assignment4_class_template.qmd": {
+    "assignment4_class_template.html": "5f3efece"
+  },
+  "labs/lab_4/Assignment4_Instructions.md": {
+    "Assignment4_Instructions.html": "fff006fd"
   }
 }
