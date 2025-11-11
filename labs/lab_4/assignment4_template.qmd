@@ -1,7 +1,7 @@
 ---
 title: "Assignment 4: Predictive Policing & Analysis"
 author: "Jed Chew"
-date: 11/10/2025
+date: 11/11/2025
 format:
   html:
     code-fold: show
@@ -22,8 +22,6 @@ execute:
 In this lab, you will apply the spatial predictive modeling techniques demonstrated in the class exercise to a 311 service request type of your choice. You will build a complete spatial predictive model, document your process, and interpret your results.
 
 # Learning Objectives
-
-By the end of this exercise, you will be able to:
 
 1.  Create a fishnet grid for aggregating point-level crime data
 2.  Calculate spatial features including k-nearest neighbors and distance measures
@@ -48,7 +46,6 @@ By the end of this exercise, you will be able to:
 #| warning: false
 #| results: 'hide'
 
-# Load required packages
 library(tidyverse)      # Data manipulation
 library(sf)             # Spatial operations
 library(here)           # Relative file paths
@@ -62,10 +59,7 @@ library(knitr)          # Tables
 library(kableExtra)     # Table formatting
 library(classInt)       # Classification intervals
 library(janitor)        # Clean Names
-
 library(here)
-
-# Spatstat split into sub-packages
 library(spatstat.geom)    # Spatial geometries
 library(spatstat.explore) # Spatial exploration/KDE
 
@@ -96,22 +90,17 @@ cat("✓ All packages loaded successfully!\n")
 cat("✓ Working directory:", getwd(), "\n")
 ```
 
-# Part 1: Analyze Chosen 311 Violation Type
-
-# Choose your 311 Violation Type
-
--   Browse the available service request types (e.g., Graffiti Removal, Pothole Repair, Street Light Out, Sanitation Code Violations, etc.) and **choose one violation type** that interests you.
-
--   Chicago 311 Service Requests dataset: [**https://data.cityofchicago.org/stories/s/311-Dataset-Changes-12-11-2018/d7nq-5g7t**](https://data.cityofchicago.org/stories/s/311-Dataset-Changes-12-11-2018/d7nq-5g7t)
-
--   Use `ESRI:102271` (Illinois State Plane East, NAD83, US Feet) as CRS
+# Part 1: Load Chicago Spatial and Crime Data
 
 ### 1.1 \| Load Chicago Spatial Data
 
 ```{r load-boundaries}
 #| message: false
+#| warning: false
+#| results: 'hide'
 
-# Load police districts (used for spatial cross-validation)
+# Load police districts (used for spatial CV)
+# Use ESRI:102271 (Illinois State Plane East, NAD83, US Feet) as CRS
 policeDistricts <- 
   st_read("https://data.cityofchicago.org/api/geospatial/24zt-jpfn?method=export&format=GeoJSON") %>%
   st_transform('ESRI:102271') %>%
@@ -137,6 +126,7 @@ cat("  - Police beats:", nrow(policeBeats), "\n")
 
 ```{r load-burglaries}
 #| message: false
+#| warning: false
 
 # Load from provided data file (downloaded from Chicago open data portal)
 burglaries <- st_read("data/burglaries.shp") %>% 
@@ -183,8 +173,7 @@ p2 <- ggplot() +
 # Combine plots using patchwork
 p1 + p2 + 
   plot_annotation(
-    title = "Spatial Distribution of Burglaries in Chicago",
-    tag_levels = 'A'
+    title = "Spatial Distribution of Burglaries in Chicago"
   )
 ```
 
@@ -198,7 +187,9 @@ p1 + p2 +
 
 # Part 2: Create Fishnet Grid
 
-A **fishnet grid** converts irregular point data into a regular grid of cells where we can aggregate counts / calculate spatial features / apply regression models
+-   A fishnet grid converts irregular point data into a regular grid of cells where we can aggregate counts / calculate spatial features / apply regression models.
+
+-   A fishnet is more useful than administrative units such as census tracts because crime risk is a phenomenon that varies across the landscape rather than across administrative units.
 
 ### 2.1 \| Create 500 m x 500 m Fishnet Grid
 
@@ -223,6 +214,10 @@ cat("  - Cell area:", round(st_area(fishnet[1,])), "square meters\n")
 ```
 
 ### 2.2 \| Aggregate Burglaries to Grid
+
+-   `mutate` a ‘counter’ field, `countBurglaries`, for each burglary event,
+-   spatial join (`aggregate`) burglary points to the `fishnet`, taking the sum of `countBurglaries`
+-   A random `uniqueID` is generated for each grid cell
 
 ```{r aggregate-burglaries}
 # Spatial join: which cell contains each burglary?
@@ -268,12 +263,22 @@ ggplot() +
   theme_crime()
 ```
 
+::: callout-note
+## Observed Patterns
+
+-   This map reinforces the summary statistics of the aggregated burglary count which state that 31.8% of cells had zero burglaries in 2017 (these are shown in dark purple in the map)
+-   Burglary incidents are mostly concentrated in clusters across Chicago’s South and West Sides, where many grid cells show counts above 20 burglaries
+-   There are clear hotspots of elevated burglary risk separated by lower-activity zones – this will be useful in Part 4 when we calculate spatial measures such as kNN, LISA (local Moran's I), and the distance to hot spots
+:::
+
 # Part 3: Create a Kernel Density Estimate (KDE) Baseline
 
 -   KDE represents our *null hypothesis*: burglaries happen where they happened before, with no other information
+-   In this context, KDE involves centering a smooth kernel, or curve, atop each crime point such that the curve is at its highest directly over the point and the lowest at the range of a circular *search radius* parameter (commonly known as *kernel density* in ArcGIS)
 
 ```{r kde-baseline}
 #| message: false
+#| warning: false
 
 # Convert burglaries to ppp (point pattern) format for spatstat
 burglaries_ppp <- as.ppp(
@@ -325,7 +330,16 @@ ggplot() +
 
 # Part 4: Create Spatial Predictor Variables
 
-Now we'll create features that might help predict burglaries. We'll use "broken windows theory" logic: signs of disorder predict crime. In this report, I specifically focus on 311 calls to report vacant and abandoned buildings.
+Now we'll create features that might help predict burglaries. We'll use "broken windows theory" logic: signs of disorder predict crime. In this lab report, I specifically focus on 311 calls to report *vacant and abandoned buildings*. The data source is the Chicago 311 Service Requests dataset which I accessed through <https://data.cityofchicago.org/stories/s/311-Dataset-Changes-12-11-2018/d7nq-5g7t>
+
+In this section, I first load, filter and clean the "Vacant and Abandoned Buildings Reported" dataset. While this preliminary report does not look at specific columns, there are variables such as `vacant_due_to_fire` or `ppl_using_prop` that could potentially be applied to a more complex random forest model in order to better predict crime risk.
+
+Next, I calculate different spatial measures that each capture an aspect of spatial proximity to our indicator variable of burglary risk.
+
+-   Count → How much disorder is HERE?
+-   k-NN Distance → How CLOSE are we to disorder?
+-   Hot Spots (LISA) → Where does disorder CLUSTER?
+-   Distance to Hot Spots → How close to concentrated disorder?
 
 ### 4.1 \| Load 311 Vacant and Abandoned Buildings Reported
 
@@ -410,9 +424,8 @@ cat("  - Number of calls:", nrow(vacant_abandoned_bldg_2017), "\n")
 ::: callout-note
 ## Note of Caution
 
-**Chicago Open Data Source:** <https://data.cityofchicago.org/Service-Requests/311-Service-Requests-Vacant-and-Abandoned-Building/7nii-7srd/data_preview>
-
-**Consider:** How might the 311 reporting system itself be biased? Who calls 311? What neighborhoods have better 311 awareness?
+-   The 311 reporting system in Chicago may be biased because it relies on residents to voluntarily report issues, meaning that neighborhoods with higher civic engagement or stronger trust in city services are more likely to generate reports.
+-   As a result, 311 data in Chicago may underrepresent conditions in lower-income or marginalized communities, where residents may be less aware of or less inclined to call the hotline.
 :::
 
 ### 4.2 \| Count of Reported Vacant/Abandoned Buildings per Cell
@@ -421,7 +434,9 @@ cat("  - Number of calls:", nrow(vacant_abandoned_bldg_2017), "\n")
 # Gut Check Visualization of Vacant/Abandoned Buildings
 ggplot() +
   geom_sf(data = chicagoBoundary) +
-  geom_sf(data = abandoned_bldg, alpha = 0.5) +
+  geom_sf(data = abandoned_bldg, aes(color = open_or_boarded), 
+          alpha = 0.7, size = 0.7) +
+  labs(title = "Location of Vacant/Abadoned Buildings 311 Calls") +
   theme_void()
 ```
 
@@ -443,9 +458,6 @@ summary(fishnet$abandoned_bldg)
 ```
 
 ```{r visualize-vacant_abandoned_bldg}
-#| fig-width: 10
-#| fig-height: 4
-
 p1 <- ggplot() +
   geom_sf(data = fishnet, aes(fill = abandoned_bldg), color = NA) +
   scale_fill_viridis_c(name = "Count", option = "magma") +
@@ -465,13 +477,13 @@ p1 + p2 +
 
 ### 4.3 \| k-Nearest Neighbors (kNN) Features
 
-Count in a cell is one measure. Distance to the nearest 3 abandoned cars captures local context.
+Count in a cell is one measure. Distance to the 5 nearest vacant and abandoed buildings that were reported through 311 calls captures additional local context that are not just limited to administrative boundaries such as census tracts.
 
 ```{r nn-feature}
 #| message: false
 #| warning: false
 
-# Calculate mean distance to 3 nearest abandoned cars
+# Calculate mean distance to 5 nearest vacant and abandoned buildings
 # (Do this OUTSIDE of mutate to avoid sf conflicts)
 
 # Get coordinates
@@ -479,7 +491,7 @@ fishnet_coords <- st_coordinates(st_centroid(fishnet))
 abandoned_coords <- st_coordinates(abandoned_bldg)
 
 # Calculate k nearest neighbors and distances
-nn_result <- get.knnx(abandoned_coords, fishnet_coords, k = 3)
+nn_result <- get.knnx(abandoned_coords, fishnet_coords, k = 5)
 
 # Add to fishnet
 fishnet <- fishnet %>%
@@ -557,7 +569,7 @@ ggplot() +
   ) +
   labs(
     title = "Local Moran's I: Vacant and Abandoned Building Clusters",
-    subtitle = "High-High = Hot spots of disorder"
+    subtitle = "High-High = Hot spots of disorder calls in Chicago"
   ) +
   theme_crime()
 ```
@@ -579,7 +591,7 @@ if (nrow(hotspots) > 0) {
       )
     )
   
-  cat("✓ Calculated distance to abandoned car hot spots\n")
+  cat("✓ Calculated distance to vacant and abandoned building hot spots\n")
   cat("  - Number of hot spot cells:", nrow(hotspots), "\n")
 } else {
   fishnet <- fishnet %>%
@@ -588,11 +600,20 @@ if (nrow(hotspots) > 0) {
 }
 ```
 
+::: callout-note
+## Observed Patterns
+
+-   **Distribution of Vacant/Abandoned Building 311 Calls:** The majority of reported properties are open rather than boarded, while boarded properties are relatively sparse and scattered
+-   **Count of Vacant/Abandoned Building 311 Calls:** The distribution is highly skewed, with most grid cells containing zero or one vacant property. Notably, the median value is 0 while the max value is 21. This indicates the presence of a few extreme hotspots of concentrated vacancy which is supported by the subsequent map visualizations.
+-   **Map of Vacant/Abandoned Building 311 Calls and Burglaries:** 311 calls for vacant buildings (left panel) are especially dense in a few concentrated areas, while burglary counts (right panel) are more spatially dispersed but still overlap with several high-vacancy zones
+-   **Local Moran's I:** High–High hotspot clusters (in red) indicate statistically significant concentrations of vacant or abandoned buildings, primarily located on the South and West Sides of Chicago
+:::
+
 ------------------------------------------------------------------------
 
 # Part 5: Join Police Districts for Cross-Validation
 
-We'll use police districts for our spatial cross-validation.
+We'll use the Chicago police districts for our spatial cross-validation.
 
 ```{r join-districts}
 # Join district information to fishnet
@@ -613,7 +634,7 @@ cat("  - Cells:", nrow(fishnet), "\n")
 
 ### 6.1 \| Poisson Regression
 
-Burglary counts are count data (0, 1, 2, 3...). We'll use **Poisson regression**.
+Poisson regression is used instead of OLS because crime counts are right-skewed with many zeroes (around 30% of fishnet cells have no burglaries in 2017) and also discrete (only integer values). This makes Poisson regression suitable for count data.
 
 ```{r prepare-data}
 # Create clean modeling dataset
@@ -649,7 +670,8 @@ summary(model_poisson)
 
 ### 6.2 \| Check for Overdispersion
 
-Poisson regression assumes mean = variance. Real count data often violates this (overdispersion).
+-   Poisson regression assumes variance = mean
+-   But in reality, real crime count data often violates this assumption because variance is significantly greater than the mean (i.e. overdispersion)
 
 ```{r check-overdispersion}
 # Calculate dispersion parameter
@@ -668,7 +690,7 @@ if (dispersion > 1.5) {
 
 ### 6.3 \| Negative Binomial Regression
 
-If overdispersed, use **Negative Binomial regression** (more flexible).
+Since overdispersion has been detected, we use Negative Binomial regression instead which is more flexible than Poisson Regression because it relaxes the variance = mean assumption
 
 ```{r fit-negbin}
 # Fit Negative Binomial model
@@ -677,26 +699,33 @@ model_nb <- glm.nb(
     dist_to_hotspot,
   data = fishnet_model
 )
-
-# Summary
 summary(model_nb)
+```
 
+### 6.4 \| Compare Model Fit (AIC)
+
+-   AIC stands for Akaike Information Criterion, and it’s a common metric used to compare model fit for non-linear regression models (i.e. AIC is used instead of R-Squared)
+-   For our purposes, AIC serves as a quick confirmation that the negative binomial regression model has a better fit than the poisson regression model because of its lower AIC (7788.5 vs 9357.9)
+-   AIC is relative, and not absolute — it’s only meaningful when comparing multiple models fit to the same dataset
+-   AIC is defined as $$AIC=−2×log-likelihood+2k$$ where log-likelihood measures how well the model fits the data (higher is better), and k is the number of estimated parameters in the model (including the intercept)
+
+```{r}
 # Compare AIC (lower is better)
 cat("\nModel Comparison:\n")
 cat("Poisson AIC:", round(AIC(model_poisson), 1), "\n")
 cat("Negative Binomial AIC:", round(AIC(model_nb), 1), "\n")
 ```
 
-### 6.4 \| Compare Model Fit (AIC)
+::: callout-note
+## Optimal Model Fit
 
--   AIC stands for **Akaike Information Criterion**, and it’s a common metric used to compare model fit for non-linear regression models (i.e. AIC is used instead of R-Squared)
--   For our purposes, AIC serves as a quick confirmation that the negative binomial regression model has a better fit than the poisson regression model because of its lower AIC (7788.5 vs 9357.9)
--   AIC is relative, and not absolute — it’s only meaningful when comparing multiple models fit to the same dataset
--   AIC is defined as $$AIC=−2×log-likelihood+2k$$ where log-likelihood measures how well the model fits the data (higher is better), and k is the number of estimated parameters in the model (including the intercept)
+As expected, due to overdispersion, negative binomial regression has a lower AIC than poisson regression and provides a more suitable model fit for the underlying crime dataset.
+:::
 
-# Part 7: Spatial LOGO-CV (2017)
+# Part 7: Spatial LOGO-CV for 2017 Data
 
-**Leave-One-Group-Out (LOGO) Cross-Validation** trains on all districts except one, then tests on the held-out district.
+-   Leave-One-Group-Out (LOGO) Cross-Validation trains on all districts except one, then tests on the held-out district.
+-   LOGO-CV is used here instead of k-fold CV or a validation set approach in order to prevent spatial leakage.
 
 ```{r spatial-cv}
 # Get unique districts
@@ -706,7 +735,6 @@ cv_results <- tibble()
 cat("Running LOGO Cross-Validation...\n")
 
 for (i in seq_along(districts)) {
-  
   test_district <- districts[i]
   
   # Split data
@@ -881,11 +909,17 @@ p2 <- ggplot() +
 p1 + p2
 ```
 
-### 8.4 \| Assess Model Performance Across Time
+::: callout-important
+## Assessing Model Performance
+
+-   **Spatial pattern of residuals:** The left panel shows both overpredictions (in blue) and underpredictions (in red), suggesting that the model’s performance varies systematically across neighborhoods rather than being random.
+
+-   **Magnitude of errors:** The right panel shows absolute errors concentrated in similar regions, confirming that prediction accuracy is uneven across thecity. Some fishnet grid cells exhibiting substantially higher deviations between observed and predicted values.
+
+-   **Error clustering:** Clusters of higher errors appear on the South and West Sides, which is also where crime data for 2017 is clustered as shown in earlier maps. This is a key limitation of the model – possibly due to unobserved local factors or data quality issues in these areas.
+:::
 
 # Part 9: Summary Statistics
-
-### 9.1 \| Model Summary Table
 
 ```{r model-summary-table}
 # Create nice summary table
@@ -910,17 +944,14 @@ model_summary %>%
 **Technical Performance:**
 
 -   Cross-validation MAE: `r round(mean(cv_results$mae), 2)`
--   Model vs. KDE: KDE performed better as it produced a lower MAE and RMSE than the model based on abandoned and vacant buildings
--   Most predictive variable: \[Which had largest effect?\]
+-   Model vs. KDE: KDE performed better than the final negative binomial model as it produced a lower MAE and RMSE than the model based on abandoned and vacant buildings
 
 **Spatial Patterns:**
 
 -   Burglaries are clustered as clearly visualized in the Kernel Density Estimation Baseline
--   Hot spots are located in \[describe\]
--   Model errors show \[random / systematic\] patterns
+-   Hot spots are largely located in the West Side and South Side neighborhoods
 
 **Model Limitations:**
 
--   Overdispersion: Yes – the dispersion parameter of 3.35 exceeds the rule of thumb of 1.5. This suggests that overdispersion in the Poisson distribution model is present and one should considered using a Negative Binomial model instead
--   Spatial autocorrelation in residuals: \[Test this!\]
+-   Overdispersion: the dispersion parameter of 3.35 exceeds the rule of thumb of 1.5. This suggests that overdispersion in the Poisson distribution model is present and hence a Negative Binomial model is used instead
 -   Cells with zero counts: 781 out of 2458 had zero burglaries (31.8 %)
