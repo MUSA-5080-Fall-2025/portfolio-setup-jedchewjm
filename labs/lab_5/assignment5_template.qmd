@@ -55,6 +55,7 @@ library(viridis)
 library(gridExtra)
 library(knitr)
 library(kableExtra)
+library(gganimate)
 
 options(scipen = 999)
 ```
@@ -1362,3 +1363,21 @@ Write 1-2 paragraphs addressing:
 -   Error analysis insights
 -   New features you added and why
 -   Critical reflection on deployment
+
+------------------------------------------------------------------------
+
+### Fun Animations
+
+```{r, eval = FALSE}
+rideshare_animation <-
+  ggplot() +
+    geom_sf(data = ride.animation.data, aes(fill = Trips)) +
+    scale_fill_manual(values = palette5) +
+    labs(title = "Rideshare pickups for one day in November 2018",
+         subtitle = "15 minute intervals: {current_frame}") +
+    transition_manual(interval15) + # new map generated for each 15-min interval
+    mapTheme()
+
+# create 20-sec gif    
+animate(rideshare_animation, duration=20, renderer = gifski_renderer())
+```
