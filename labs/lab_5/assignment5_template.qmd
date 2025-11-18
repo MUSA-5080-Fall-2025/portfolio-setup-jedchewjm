@@ -200,7 +200,7 @@ ggplot(hourly_patterns, aes(x = hour, y = avg_trips, color = day_type)) +
   geom_line(linewidth = 1.2) +
   scale_color_manual(values = c("Weekday" = "#08519c", "Weekend" = "#6baed6")) +
   labs(
-    title = "Average Hourly Ridership Patterns",
+    title = "Average Hourly Ridership Patterns - Q1 2025",
     subtitle = "Clear commute patterns on weekdays",
     x = "Hour of Day",
     y = "Average Trips per Hour",
@@ -219,7 +219,7 @@ top_stations <- indego %>%
   head(20)
 
 kable(top_stations, 
-      caption = "Top 20 Indego Stations by Trip Origins",
+      caption = "**Top 20 Indego Stations by Trip Origins - Q1 2025**",
       format.args = list(big.mark = ",")) %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 ```
@@ -640,30 +640,6 @@ head(study_panel)
 Temporal Persistence: past demand predicts future demand
 
 ### 5.1 \| Create Temporal Lags
-
-```{r}
-# Sort by station and time
-study_panel <- study_panel %>%
-  arrange(start_station, interval60)
-
-# Create lag variables WITHIN each station
-study_panel <- study_panel %>%
-  group_by(start_station) %>%
-  mutate(
-    lag1Hour = lag(Trip_Count, 1),
-    lag2Hours = lag(Trip_Count, 2),
-    lag3Hours = lag(Trip_Count, 3),
-    lag12Hours = lag(Trip_Count, 12),
-    lag1day = lag(Trip_Count, 24)
-  ) %>%
-  ungroup()
-
-# Remove rows with NA lags (first 24 hours for each station)
-study_panel_complete <- study_panel %>%
-  filter(!is.na(lag1day))
-
-cat("Rows after removing NA lags:", format(nrow(study_panel_complete), big.mark = ","), "\n")
-```
 
 ```{r}
 # Sort by station and time
@@ -1141,19 +1117,166 @@ grid.arrange(p1, p2, p3, ncol = 2)
 ## Part 10: Replicate with Q2 2025
 
 1.  **Download data** from: <https://www.rideindego.com/about/data/>
-
 2.  **Adapt this code** to work with your quarter:
-
     -   Update date ranges for weather data
     -   Check for any data structure changes
     -   Create the same 5 models
     -   Calculate MAE for each model
-
 3.  **Compare results** to Q1 2025:
-
     -   How do MAE values compare? Why might they differ?
     -   Are temporal patterns different (e.g., summer vs. winter)?
     -   Which features are most important in your quarter?
+
+### Data Cleaning/Wrangling for Q2 2025
+
+**Create Time Bins**
+
+```{r}
+indego_q2 <- indego_q2 %>%
+  mutate(
+    # Parse datetime
+    start_datetime = mdy_hm(start_time),
+    end_datetime = mdy_hm(end_time),
+    
+    # Create hourly bins
+    interval60 = floor_date(start_datetime, unit = "hour"),
+    
+    # Extract time features
+    week = week(interval60),
+    month = month(interval60, label = TRUE),
+    dotw = wday(interval60, label = TRUE),
+    hour = hour(interval60),
+    date = as.Date(interval60),
+    
+    # Create useful indicators
+    weekend = ifelse(dotw %in% c("Sat", "Sun"), 1, 0),
+    rush_hour = ifelse(hour %in% c(7, 8, 9, 16, 17, 18), 1, 0)
+  )
+```
+
+**Daily Trip Counts**
+
+```{r}
+daily_trips <- indego_q2 %>%
+  group_by(date) %>%
+  summarize(trips = n())
+
+ggplot(daily_trips, aes(x = date, y = trips)) +
+  geom_line(color = "#3182bd", linewidth = 1) +
+  geom_smooth(se = FALSE, color = "red", linetype = "dashed") +
+  labs(
+    title = "Indego Daily Ridership - Q2 2025",
+    subtitle = "Spring demand patterns in Philadelphia",
+    x = "Date",
+    y = "Daily Trips",
+    caption = "Source: Indego bike share"
+  ) +
+  plotTheme
+```
+
+**Filter out Non-Residential Bike Share Stations**
+
+```{r}
+# Filter trip data to valid stations only
+indego_q2_census <- indego_q2 %>%
+  filter(start_station %in% valid_stations) %>%
+  left_join(
+    stations_census %>% 
+      select(start_station, Med_Inc, Percent_Taking_Transit, 
+             Percent_White, Total_Pop),
+    by = "start_station"
+  )
+```
+
+### Space-Time Panel
+
+**Aggregate Trips to Station-Hour Level**
+
+```{r}
+trips_q2_panel <- indego_q2_census %>%
+  group_by(interval60, start_station, start_lat, start_lon,
+           Med_Inc, Percent_Taking_Transit, Percent_White, Total_Pop) %>%
+  summarize(Trip_Count = n()) %>%
+  ungroup()
+```
+
+**Create Complete Panel**
+
+```{r}
+study_q2_panel <- expand.grid(
+  interval60 = unique(trips_q2_panel$interval60),
+  start_station = unique(trips_q2_panel$start_station)
+) %>%
+  # Join trip counts
+  left_join(trips_q2_panel, by = c("interval60", "start_station")) %>%
+  # Replace NA trip counts with 0
+  mutate(Trip_Count = replace_na(Trip_Count, 0))
+
+# Fill in station attributes (they're the same for all hours)
+station_q2_attributes <- trips_q2_panel %>%
+  group_by(start_station) %>%
+  summarize(
+    start_lat = first(start_lat),
+    start_lon = first(start_lon),
+    Med_Inc = first(Med_Inc),
+    Percent_Taking_Transit = first(Percent_Taking_Transit),
+    Percent_White = first(Percent_White),
+    Total_Pop = first(Total_Pop)
+  )
+
+study_q2_panel <- study_q2_panel %>%
+  left_join(station_q2_attributes, by = "start_station")
+```
+
+**Add Time Features**
+
+```{r}
+study_q2_panel <- study_q2_panel %>%
+  mutate(
+    week = week(interval60),
+    month = month(interval60, label = TRUE),
+    dotw = wday(interval60, label = TRUE),
+    hour = hour(interval60),
+    date = as.Date(interval60),
+    weekend = ifelse(dotw %in% c("Sat", "Sun"), 1, 0),
+    rush_hour = ifelse(hour %in% c(7, 8, 9, 16, 17, 18), 1, 0)
+  )
+```
+
+**Join Weather Data**
+
+```{r}
+study_q2_panel <- study_q2_panel %>%
+  left_join(weather_q2, by = "interval60")
+summary(study_q2_panel %>% select(Trip_Count, Temperature, Precipitation))
+```
+
+### Create Temporal Lag Variables
+
+```{r}
+study_q2 <- study_q2_panel %>%
+  arrange(start_station, interval60)
+
+# Create lag variables WITHIN each station
+study_q2 <- study_q2 %>%
+  group_by(start_station) %>%
+  mutate(
+    lag1Hour = lag(Trip_Count, 1),
+    lag2Hours = lag(Trip_Count, 2),
+    lag3Hours = lag(Trip_Count, 3),
+    lag12Hours = lag(Trip_Count, 12),
+    lag1day = lag(Trip_Count, 24)
+  ) %>%
+  ungroup()
+
+# Remove rows with NA lags (first 24 hours for each station)
+study_q2_complete <- study_q2 %>%
+  filter(!is.na(lag1day))
+```
+
+### Temporal Train/Test Split
+
+### Build 5 Predictive Models
 
 ------------------------------------------------------------------------
 
