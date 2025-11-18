@@ -5,39 +5,239 @@ date: "2025-11-17"
 
 ## Key Concepts Learned
 
-### Logistic Regression – Binary Classification Problems in Policy
+### Understanding Panel Data
 
--   
+-   Panel structure lets us capture BOTH station differences AND time patterns. Each row = station-hour observation with features and outcome
+-   Station-specific baselines:
+    -   Station A (downtown): High demand during work hours
+
+    -   Station B (residential): High demand mornings/evenings
+
+    -   Station C (tourist area): High demand weekends Time-based patterns: Rush hour peaks Weekend vs. weekday differences Weather effects Holiday impacts
+
+![](images/clipboard-2036303385.png)
+
+### Temporal Validation
+
+![](images/clipboard-27451662.png)
+
+### Model Progression Strategy
+
+1.  Baseline: Time + Weather only
+2.  \+ Temporal lags: Add lag1Hour, lag1day
+3.  \+ Spatial features: Add demographics, location
+4.  \+ Station fixed effects: Control for station-specific baselines
+5.  \+ Holiday effects: Account for Memorial Day weekend
+
+```{r, eval = FALSE}
+model5 <- lm(
+  Trip_Count ~ hour + dotw + Temperature + Precipitation + #1: time + weather
+               lag1Hour + lag3Hours + lag1day +            #2: temporal lag
+               Med_Inc + Percent_Taking_Public_Trans +     #3: spatial features
+               Percent_White + 
+               as.factor(from_station_id) +                #4: stn fixed effect
+               holiday + holiday_lag1 + holiday_lag2,      #5: holiday indicator
+  data = train
+)
+```
+
+### Space-Time Error Analysis
+
+-   High MAE at high-volume stations might be acceptable
+-   High MAE at low-volume stations might indicate systematic bias
+-   Spatial patterns in errors suggest missing features
+-   Temporal patterns suggest missing time dynamics
+
+**Common Error Patterns**
+
+-   **Underpredicting peaks:** Missing high-demand periods (rush hour)
+-   **Weekend vs. weekday differences:** Holiday patterns not fully captured
+-   **Spatial clustering:** Errors concentrated in certain neighborhoods
+    -   Waterfront (leisure rides?)
+    -   Downtown (tourist activity?)
+    -   Transit hubs (commuter substitution?)
+-   **Critical question:** Are errors related to demographics? (Equity concern!)
 
 ------------------------------------------------------------------------
 
 ## Coding Techniques
 
--   **Example: Email Spam Detection**
-    -   number of exclamation marks
-
-    -   contains the word "free"
-
-    -   email length
+-   **Binning Data into Time Intervals**
 
 ```{r, eval = FALSE}
+# Hourly Binning
+dat60 <- dat %>%
+  mutate(interval60 = floor_date(ymd_hms(start_time), unit = "hour"))
+dat15 <- dat %>%
+  mutate(interval15 = floor_date(ymd_hms(start_time), unit = "15 mins"))
 
+# Extracting Time Features
+dat60 <- dat %>%
+  mutate(
+    interval60 = floor_date(ymd_hms(start_time), unit = "hour"),
+    week = week(interval60),             # Week of year (1-52)
+    dotw = wday(interval60, label=TRUE), # Day of week (Mon, Tue, ...)
+    hour = hour(interval60)              # Hour of day (0-23)
+  )
 ```
 
--   **Confusion Matrix**
+-   **Temporal Lags**
+    -   Note: lags are calculated *within* each station; model will learn which lags are most predictive for each station/time combination
+        -   lag1Hour: Short-term persistence (smooth demand changes)
+
+        -   lag3Hours: Medium-term trends (morning rush building)
+
+        -   lag12Hours: Half-day cycle (AM vs. PM patterns)
+
+        -   lag1day (24 hours): Daily periodicity (same time yesterday)
 
 ```{r, eval = FALSE}
-
+study.panel <- study.panel %>%
+  arrange(from_station_id, interval60) %>%  # Sort by station, then time
+  group_by(from_station_id) %>%
+  mutate(
+    lag1Hour = lag(Trip_Count, 1),    # Previous hour
+    lag2Hours = lag(Trip_Count, 2),   # 2 hours ago
+    lag3Hours = lag(Trip_Count, 3),   # 3 hours ago
+    lag12Hours = lag(Trip_Count, 12), # 12 hours ago
+    lag1day = lag(Trip_Count, 24)     # Yesterday same time
+  ) %>%
+  ungroup()
 ```
 
-## Questions & Challenges
+-   **Creating a Complete Space-Time Panel**
+    -   Not every station has trips every hour; lag calculations break if rows are missing
 
--   Private-sector software providers may be very hesitant to publicly share the inner workings and metrics of their predictive algorithms
+    -   use expand.grid() to create all combinations of the supplied vectors – it essentially build a full grid (a Carteisan product) of every possible pairing
 
-## Connections to Policy – Practical Recommendations
+```{r, eval = FALSE}
+# Create every possible station-hour combination
+study.panel <- expand.grid(
+  interval60 = unique(dat_census$interval60),
+  from_station_id = unique(dat_census$from_station_id)
+)
 
--   
+# Join to actual trip counts
+study.panel <- study.panel %>%
+  left_join(
+    dat_census %>% 
+      group_by(interval60, from_station_id) %>%
+      summarize(Trip_Count = n()),
+    by = c("interval60", "from_station_id")
+  ) %>%
+  mutate(Trip_Count = replace_na(Trip_Count, 0))  # Fill missing with 0
+```
 
-## Reflection
+```{r, eval = FALSE}
+# Joining Station Attributes
+station_data <- dat_census %>%
+  group_by(from_station_id) %>%
+  summarize(
+    from_latitude = first(from_latitude),
+    from_longitude = first(from_longitude),
+    Med_Inc = first(Med_Inc),
+    Percent_White = first(Percent_White),
+    # ... other demographics
+  )
 
--   
+# Join to panel
+study.panel <- study.panel %>%
+  left_join(station_data, by = "from_station_id")
+```
+
+-   **Errors and Demographics**
+
+```{r, eval = FALSE}
+# Join errors back to demographic data
+station_errors <- station_errors %>%
+  left_join(
+    dat_census %>% 
+      distinct(from_station_id, Med_Inc, 
+               Percent_Taking_Public_Trans, Percent_White),
+    by = "from_station_id"
+  )
+
+# Plot relationships
+station_errors %>%
+  pivot_longer(cols = c(Med_Inc, Percent_Taking_Public_Trans, 
+                        Percent_White),
+               names_to = "variable", values_to = "value") %>%
+  ggplot(aes(x = value, y = MAE)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~variable, scales = "free_x")
+```
+
+## Next Steps to Improve
+
+1.  **More temporal features:**
+    -   Precipitation *forecast* (not just current)
+    -   Event calendars (concerts, sports games)
+    -   School schedules
+2.  **More spatial features:**
+    -   Points of interest (offices, restaurants, parks)
+    -   Transit service frequency
+    -   Bike lane connectivity
+3.  **Better model specification:**
+    -   Interactions (e.g., `weekend * hour`)
+
+    -   Non-linear effects (splines for time of day)
+
+    -   Different models for different station types
+
+## Connections to Policy (Bike Rebalancing System)
+
+1.  **Prediction accuracy matters most at high-volume stations**
+    -   Running out of bikes downtown causes more complaints
+    -   But: Is this equitable?
+2.  **Temporal patterns reveal operational windows**
+    -   Rebalance during overnight hours (low demand)
+    -   Pre-position bikes before AM rush
+3.  **Spatial patterns suggest infrastructure gaps**
+    -   Persistent errors in certain neighborhoods
+
+    -   Maybe add more stations? Increase capacity?
+
+**Other Applications for Panel Data**
+
+-   Transportation: Transit ridership over time
+-   Public safety: Crime patterns by beat over months
+-   Housing: Rent changes in neighborhoods over years
+-   Health: Disease incidence by zip code over weeks
+-   Education: School performance over academic years
+-   Environment: Air quality at monitoring sites over days
+
+## Reflection/Further Reading – Citi Bike Rebalancing
+
+<https://c4sr.columbia.edu/projects/citibike-rebalancing-study>:
+
+-   Imbalance Matrices by hour of day for every single station & Imbalance Hotspots
+
+![](images/clipboard-69962528.png)
+
+![](images/clipboard-4237440262.png)
+
+-   <https://people.orie.cornell.edu/shane/pubs/BSOvernight.pdf>
+
+Abstract: "As bike-share systems expand in urban areas, the wealth of publicly available data has drawn researchers to address the novel operational challenges” these systems face. One key challenge is to meet user demand for available bikes and docks by rebalancing the system. This chapter reports on a collaborative effort with Citi Bike to develop and implement real data-driven optimization to guide their rebalancing efforts. In particular, we provide new models to guide truck routing for overnight rebalancing and new optimization problems for other non-motorized rebalancing efforts during the day. Finally, we evaluate how our practical methods have impacted rebalancing in New York City."
+
+-   <https://nycdatascience.com/blog/student-works/citi-bike-rebalancing-operations/> \| <https://goutam.io/projects/predicting-citi-bike-trip-demand/> \| \
+    <https://docs.google.com/presentation/d/1hLECuh326kjMFXcSYRieEquXj7Ms78OUbU8vR350Tzs/edit?slide=id.g120f23f450c_0_62#slide=id.g120f23f450c_0_62>
+
+Prediction Timescale: "Weekly resolution is far too sparse to capture meaningful relationships. Therefore, we would like to build models that predict at the Hourly timescale if we can, and if not, then use the Daily timescale. At the sub hourly timescale, the data became too unwieldy and noisy for a years worth, let alone for the many years of data Citi Bike has available. However in future extensions of this project we would like to take a second level resolution for one week for one station and predict the ridership at that level."
+
+Weather Data:
+
+![](images/clipboard-2353138133.png){width="452"}
+
+Models Used: "We attempted two models, the first of our models is the traditional SARIMA model, the second was a Long Short-Term Memory Recurrent Neural Network (LSTM-RNN RNN Recurrent Neural Network: This is a type of Artificial Neural Network that can also update all of its weights through time. RNN's are extremely powerful techniques that can allow for short-term memory to be introduced into the model. ). In this, we further distinguish the models by the time resolution, and whether or not the model was including weather data (i.e. had multidimensional inputs)."
+
+Identifying Rebalance Movements: "The easiest method for a given bike is to compare the starting station for each trip with the ending station of the previous trip. If the bike appears to have teleported from one station to another between trips, it most likely was rebalanced!"
+
+![](images/clipboard-1302163798.png)
+
+-   <https://www.nytimes.com/2024/09/19/nyregion/citi-bike-scam-nyc.html>
+
+To fix the imbalance, Citi Bike uses various tactics to move bikes to in-demand stations. One involves hiring workers to drive panel trucks around the city, delivering bikes where they’re needed.
+
+Another, created in 2016, is a program called Bike Angels, in which Citi Bike users move bikes in exchange for points that could be cashed in for swag like water bottles and backpacks, membership discounts and gift cards. Lyft pays 20 cents per point. Each ride generates a maximum of 24 points.

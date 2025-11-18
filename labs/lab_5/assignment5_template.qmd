@@ -236,7 +236,7 @@ kable(top_stations,
 
 ### 2.1 \| Load Philadelphia Census Data
 
-```{r load-census}
+```{r load-census, progress = FALSE, results = 'hide'}
 # Get Philadelphia census tracts
 philly_census <- get_acs(
   geography = "tract",
@@ -630,10 +630,7 @@ study_panel <- study_panel %>%
 
 # Check for missing values
 summary(study_panel %>% select(Trip_Count, Temperature, Precipitation))
-```
-
-```{r}
-study_panel
+head(study_panel)
 ```
 
 ------------------------------------------------------------------------
