@@ -1,0 +1,522 @@
+version_year,company_name,address,zip_code,record_type,primary_sic_code,primary_sic_description,primary_naics,primary_naics_description,location_employee_size_range,location_type,years_in_database,latitude,longitude
+2017,1400 N 15 St LLC,"1415 W Jefferson St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,15,39.9760904,-75.1596614
+2017,1400 N 15 St LLC,"1621 W Oxford St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,15,39.9780161,-75.1624385
+2017,1525 N 17th St Investment,"1525 N 17th St, Philadelphia, PA 19121",19121,Verified,621109,Investment Bankers,52315001,Investment Banking And Securities Intermediation,5 to 9,Single Loc,12,39.9772744,-75.162915
+2017,1600 Broad Assoc,"1600 N Broad St, Philadelphia, PA 19121",19121,Verified,811103,Attorneys,54111002,Offices Of Lawyers,5 to 9,Single Loc,16,39.9774961,-75.1584795
+2017,1627 French St LLC,"2025 N 15th St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,15,39.9840609,-75.1582347
+2017,1902 Holdings LLC,"1902 N 18th St, Philadelphia, PA 19121",19121,Verified,671901,Holding Companies (Non-Bank),55111201,Offices Of Other Holding Companies,1 to 4,Single Loc,11,39.9826937,-75.1637564
+2017,22nd Mini Market,"2201 W Oxford St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,26,39.9791422,-75.1713241
+2017,24 Hour Sunrise Childcare Svc,"1813 N 21st St, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,1 to 4,Single Loc,15,39.9820388,-75.1687294
+2017,247 Gold,"2015 N 29th St, Philadelphia, PA 19121",19121,Verified,594411,Gold Silver & Platinum-Dealers,45831009,Jewelry Retailers,1 to 4,Single Loc,13,39.9869119,-75.1806077
+2017,33rd Sunoco,"1701 N 33rd St, Philadelphia, PA 19121",19121,Verified,554101,Service Stations-Gasoline & Oil,45712003,Other Gasoline Stations,5 to 9,Branch,13,39.982752,-75.187913
+2017,7-Eleven,"2034 N Broad St, Philadelphia, PA 19121",19121,Verified,541103,Convenience Stores,44513101,Convenience Retailers,5 to 9,Branch,12,39.9845036,-75.1570915
+2017,7-Eleven,"1501 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,541103,Convenience Stores,44513101,Convenience Retailers,1 to 4,Branch,22,39.9790106,-75.1596076
+2017,A & B Auto Repairs,"2042 N Van Pelt St, Philadelphia, PA 19121",19121,Verified,753801,Automobile Repairing & Service,81111104,General Automotive Repair,1 to 4,Single Loc,42,39.9858164,-75.169043
+2017,A M Electric Inc,NA,19121,Verified,173101,Electric Contractors,23821007,Electrical Contractors And Other Wiring Installati,1 to 4,Single Loc,11,NA,NA
+2017,A M Electric Inc,"3111 Morse St, Philadelphia, PA 19121",19121,Verified,173101,Electric Contractors,23821007,Electrical Contractors And Other Wiring Installati,5 to 9,Single Loc,15,39.9842648,-75.1850748
+2017,A Mother's Touch Daycare,"1923 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,10 to 19,Single Loc,10,39.9800601,-75.1668168
+2017,AAA Roadside Assistance,"1754 N 26th St, Philadelphia, PA 19121",19121,Verified,754904,Roadside Assistance,48841001,Motor Vehicle Towing,1 to 4,Single Loc,12,39.982422,-75.1771752
+2017,Academic Center-Early Success,"1801 N 26th St, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,1 to 4,Single Loc,19,39.9827925,-75.1767523
+2017,Ace Cash Express,"2129 W Diamond St, Philadelphia, PA 19121",19121,Verified,614113,Payday Loans,52229111,Consumer Lending,1 to 4,Branch,38,39.9864193,-75.169017
+2017,Ace Check Exchange Inc,"2235 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,609903,Check Cashing Service,52232003,"Financial Transactions Processing, Reserve, And Cl",1 to 4,Single Loc,42,39.9806738,-75.1722362
+2017,Ace Discount,"2135 W Diamond St, Philadelphia, PA 19121",19121,Verified,516916,Chemicals (Whls),42469020,Other Chemical And Allied Products Merchant Wholes,1 to 4,Single Loc,33,39.9864234,-75.1690496
+2017,Acelero Camden Phila Inc,"1801 N 23rd St, Philadelphia, PA 19121",19121,Verified,835107,Head Start,62441008,Child Care Services,100 to 249,Single Loc,13,39.982209,-75.17203
+2017,Acts Recovery House,"1428 N 28th St, Philadelphia, PA 19121",19121,Verified,839901,Drug Abuse & Addiction Info & Treatment,81331904,Other Social Advocacy Organizations,5 to 9,Single Loc,25,39.9779569,-75.1812776
+2017,Adam Analysis & Logic LLC,"2111 W Master St, Philadelphia, PA 19121",19121,Verified,865101,Political Organizations,81394003,Political Organizations,1 to 4,Single Loc,16,NA,NA
+2017,Adjidja African Hair Braiding,"1230 N Broad St, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,1 to 4,Single Loc,26,39.9725931,-75.1592996
+2017,Advanced Transportation Co,"1445 N 32nd St, Philadelphia, PA 19121",19121,Verified,421401,Movers,48411009,"General Freight Trucking, Local",20 to 49,Branch,42,39.9788201,-75.1873681
+2017,Afifa,"1422 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,533101,Variety Stores,45521903,All Other General Merchandise Retailers,1 to 4,Single Loc,17,39.9862562,-75.1573217
+2017,"Ahye, Nicholas MD","6 Brewerytown Ct, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,1 to 4,Single Loc,11,39.9766313,-75.1871399
+2017,All Garage Repair Svc,"2815 Ridge Ave, Philadelphia, PA 19121",19121,Verified,175107,Garage Doors-Repairing,23835007,Finish Carpentry Contractors,5 to 9,Single Loc,11,39.9864694,-75.1793202
+2017,All Season Deli,"1216 N Broad St, Philadelphia, PA 19121",19121,Verified,581209,NA,NA,NA,1 to 4,Single Loc,20,39.9722445,-75.1596319
+2017,Alliance Of Black Social Wrkrs,"1924 W Diamond St, Philadelphia, PA 19121",19121,Verified,863101,Labor Organizations,81393001,Labor Unions And Similar Labor Organizations,5 to 9,Single Loc,25,39.9858027,-75.1655052
+2017,Allied Universal,"1538 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,738103,Armored Car Service,56161301,Armored Car Services,1 to 4,Branch,14,39.9789571,-75.1606309
+2017,Alpha & Omega Painting Inc,"1509 N Hollywood St, Philadelphia, PA 19121",19121,Verified,174203,Dry Wall Contractors,23831003,Drywall And Insulation Contractors,1 to 4,Single Loc,12,39.9792755,-75.1829253
+2017,Amc Broadstreet 7,"1600 N Broad St, Philadelphia, PA 19121",19121,Verified,783201,Theatres-Movie,51213101,Motion Picture Theaters (Except Drive-Ins),50 to 99,Branch,10,39.9774961,-75.1584795
+2017,Amos Playground,"1817 N 16th St, Philadelphia, PA 19121",19121,Verified,912104,Government Offices-City/Village & Twp,92112006,Legislative Bodies,10 to 19,Single Loc,34,39.9809461,-75.1606197
+2017,Andrew H Lawson Co,"2927 W Thompson St, Philadelphia, PA 19121",19121,Verified,275202,Printers (Mfrs),32311109,Commercial Printing (Except Screen And Books),10 to 19,Single Loc,26,39.9767863,-75.1843644
+2017,"Andros, David MD","1509 N 17th St, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,1 to 4,Single Loc,14,39.9768031,-75.1630104
+2017,Angie B Photo,"1242 N Hollywood St, Philadelphia, PA 19121",19121,Verified,733501,Photographers-Commercial,54192204,Commercial Photography,1 to 4,Single Loc,10,39.9758291,-75.1839418
+2017,Anns Nails,"2234 Ridge Ave, Philadelphia, PA 19121",19121,Verified,723102,Manicuring,81211302,Nail Salons,1 to 4,Single Loc,19,39.9800817,-75.1720942
+2017,Argo Trans Intl,"1531 N 16th St, Philadelphia, PA 19121",19121,Verified,874201,Business Management Consultants,54161401,"Process, Physical Distribution, And Logistics Cons",1 to 4,Single Loc,14,39.9773686,-75.1612245
+2017,Art Sanctuary,"1801 W Diamond St, Philadelphia, PA 19121",19121,Verified,599969,Art Galleries & Dealers,45992002,Art Dealers,1 to 4,Single Loc,11,39.9854865,-75.1631528
+2017,Asanti Hair Studio,"1220 N Broad St, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,5 to 9,Single Loc,14,39.9728561,-75.1594785
+2017,Ashanti's Hair Design,"2734 Ridge Ave, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,1 to 4,Single Loc,24,39.9854645,-75.1789173
+2017,Asian American Senior Assn-Pa,"1615 N 23rd St # 404, Philadelphia, PA 19121",19121,Verified,861102,Associations,81391002,Business Associations,1 to 4,Single Loc,11,NA,NA
+2017,Atelier Art Storage LLC,"1330 N 30th St, Philadelphia, PA 19121",19121,Verified,599969,Art Galleries & Dealers,45992002,Art Dealers,1 to 4,Single Loc,19,39.9773036,-75.1847393
+2017,Atelier Art Svc,"3060 W Jefferson St, Philadelphia, PA 19121",19121,Verified,899908,Art Restoring,71151031,"Independent Artists, Writers, And Performers",5 to 9,Single Loc,14,39.9789994,-75.1855032
+2017,Athletic Recreation Ctr,"1400 N 26th St, Philadelphia, PA 19121",19121,Verified,799701,Recreation Centers,71394015,Fitness And Recreational Sports Centers,1 to 4,Single Loc,28,39.977112,-75.178271
+2017,Atlas Heating & Cooling,"1601 W Jefferson St, Philadelphia, PA 19121",19121,Verified,171117,Air Conditioning Contractors & Systems,23822002,"Plumbing, Heating, And Air-Conditioning Contractor",1 to 4,Single Loc,13,39.9763126,-75.1627089
+2017,Atlas Insurance,"2020 Ridge Ave, Philadelphia, PA 19121",19121,Verified,738911,License Services,56149904,All Other Business Support Services,10 to 19,Single Loc,33,39.9759693,-75.1688662
+2017,Baker Funeral Home PC,"2008 N Broad St, Philadelphia, PA 19121",19121,Verified,726105,Funeral Plans (Pre-Arranged),81221005,Funeral Homes And Funeral Services,5 to 9,Single Loc,19,39.9835551,-75.1569549
+2017,Bakery Of Philadelphia,"1400 N 30th St, Philadelphia, PA 19121",19121,Verified,508404,Bakers Equipment (Whls),42383004,Industrial Machinery And Equipment Merchant Wholes,5 to 9,Single Loc,12,39.9779117,-75.1846128
+2017,Ballard Billiards,"2004 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,799912,Billiard Parlors,61162003,Sports And Recreation Instruction,1 to 4,Single Loc,13,39.9797974,-75.1677402
+2017,Bank Of America,"1600 N Broad St # 11, Philadelphia, PA 19121",19121,Verified,602101,Banks,52211002,Commercial Banking,10 to 19,Branch,20,39.9785151,-75.1582404
+2017,Barney's Breakfast & Lunch,"2453 Ridge Ave, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,12,39.9827773,-75.1750595
+2017,Beale Flowers-The Original,"1823 N 31st St, Philadelphia, PA 19121",19121,Verified,594712,Gift Shops,45942013,"Gift, Novelty, And Souvenir Retailers",1 to 4,Single Loc,42,39.9842554,-75.1844579
+2017,Beckett Gardens Apartments,"1402 N 16th St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,16,39.9750578,-75.1621112
+2017,Beech Capital Venture Corp,"1510 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,621109,Investment Bankers,52315001,Investment Banking And Securities Intermediation,5 to 9,Single Loc,17,39.9788762,-75.1599933
+2017,Beech Corp Inc,"1510 Cecil B Moore Ave # 300, Philadelphia, PA 19121",19121,Verified,839908,Human Services Organizations,81331101,Human Rights Organizations,10 to 19,Single Loc,15,NA,NA
+2017,Beech International Village,"1520 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,702103,Hostels,72131006,"Rooming And Boarding Houses, Dormitories, And Work",5 to 9,Single Loc,14,39.9786847,-75.161043
+2017,Bella's Breakfast & Lunch,"2159 Ridge Ave, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,23,39.9792689,-75.1704698
+2017,Bethany Child Care Ctr,"1910 W Diamond St, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,10 to 19,Single Loc,39,39.985729,-75.164934
+2017,Bliss Hair Loft,"2224 W Montgomery Ave, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,1 to 4,Single Loc,11,39.9818472,-75.1715631
+2017,Bob's Thrift Store,"1758 N 31st St, Philadelphia, PA 19121",19121,Verified,593222,Thrift Shops,45951040,Used Merchandise Retailers,1 to 4,Single Loc,9,39.9836255,-75.1850118
+2017,Bobby's Barber Shop,"2925 W Diamond St, Philadelphia, PA 19121",19121,Verified,724101,Barbers,81211101,Barber Shops,1 to 4,Single Loc,31,39.9879651,-75.1810979
+2017,Boot's Coin Op Laundromat,"2308 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,721501,Laundries-Self Service,81231001,Coin-Operated Laundries And Drycleaners,1 to 4,Single Loc,24,39.9804741,-75.1729146
+2017,Bp Food Shops,"1840 Ridge Ave, Philadelphia, PA 19121",19121,Verified,554101,Service Stations-Gasoline & Oil,45712003,Other Gasoline Stations,1 to 4,Branch,41,39.972452,-75.166708
+2017,Brewerytown Sharswood Cmnty,"2514 Stewart St, Philadelphia, PA 19121",19121,Verified,861102,Associations,81391002,Business Associations,1 to 4,Single Loc,17,39.9778078,-75.1770427
+2017,Brightside Academy,"2010 N Van Pelt St, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,10 to 19,Branch,14,39.9850513,-75.1691542
+2017,Broad Wellness & Chiro Ctr,"1248 N Broad St, Philadelphia, PA 19121",19121,Verified,804101,Chiropractors DC,62131002,Offices Of Chiropractors,1 to 4,Single Loc,15,39.9727265,-75.1592701
+2017,Brothers Corner,"2012 Ridge Ave, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,18,39.9756066,-75.1686765
+2017,Bruncheria,"1507 N 33rd St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,17,39.9799762,-75.1888327
+2017,Buie Tree Svc,"1613 N 29th St, Philadelphia, PA 19121",19121,Verified,078301,Tree Service,56173022,Landscaping Services,1 to 4,Single Loc,15,39.9807539,-75.1819065
+2017,Burger King,"1600 N Broad St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,20 to 49,Branch,11,39.9774961,-75.1584795
+2017,C & J Communication,"2242 Ridge Ave, Philadelphia, PA 19121",19121,Verified,489903,Communications,51781001,All Other Telecommunications,5 to 9,Single Loc,15,39.979968,-75.1717675
+2017,C & P Discount,"1406 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,571929,Housewares-Retail,44912936,All Other Home Furnishings Retailers,1 to 4,Single Loc,39,39.9862453,-75.156608
+2017,C Food Market,"2440 W Norris St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,18,39.9853658,-75.1745429
+2017,Calcutta House,"1221 N 19th St, Philadelphia, PA 19121",19121,Verified,805909,Personal Care Homes,62311019,Nursing Care Facilities (Skilled Nursing Facilitie,5 to 9,Single Loc,21,39.9736058,-75.1670359
+2017,Camp Shiloh,"1500 W Master St # 34, Philadelphia, PA 19121",19121,Verified,703203,Camps,72121403,Recreational And Vacation Camps (Except Campground,5 to 9,Single Loc,18,NA,NA
+2017,"Carandang-Pani, Norma H MD","1900 N 20th St, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,1 to 4,Single Loc,17,39.9834612,-75.1671295
+2017,Carelas Pch-Assisted Living LC,"1437 N 28th St, Philadelphia, PA 19121",19121,Verified,836105,Residential Care Homes,62331206,Assisted Living Facilities For The Elderly,5 to 9,Single Loc,16,39.9781334,-75.1808453
+2017,Cassidi's Bright Star Child Cr,"1622 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,5 to 9,Single Loc,11,39.9866569,-75.160209
+2017,Cecil B Computer Nerds,"2006 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,573407,Computer & Equipment Dealers,44921069,Electronics And Appliance Retailers,1 to 4,Single Loc,11,39.9798073,-75.1678035
+2017,Cecil B Moore Grocery,"2604 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,21,39.9810875,-75.177557
+2017,Cecil B Moore Library,"2320 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,823104,City Government-Libraries,51921001,Libraries And Archives,5 to 9,Branch,32,39.9804771,-75.1735413
+2017,Cecil B Moore Public Library,"2320 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,823106,Libraries-Public,51921006,Libraries And Archives,5 to 9,Branch,14,39.9804771,-75.1735413
+2017,Cedar Grove Museum,"Lansdowne Dr, Philadelphia, PA 19121",19121,Verified,841201,Museums,71211001,Museums,1 to 4,Single Loc,21,39.9753663,-75.1952104
+2017,Centurion Construction Corp,"1510 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,152144,Construction Companies,23611512,New Single-Family Housing Construction (Except For,1 to 4,Single Loc,13,39.9788762,-75.1599933
+2017,Champs Diner,"1539 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,5 to 9,Single Loc,11,39.9792738,-75.1609678
+2017,Checkers Drive-In Restaurant,"1208 N Broad St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,10 to 19,Branch,31,39.9719021,-75.1594533
+2017,Children Of Destiny,"1639 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,5 to 9,Single Loc,14,39.9795041,-75.1625481
+2017,Children's Learning Arc Too,"2316 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,829972,Education Centers,61171001,Educational Support Services,1 to 4,Single Loc,10,39.980519,-75.1731735
+2017,China Bowl,"1640 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,21,39.9866854,-75.1607006
+2017,China House,"2045 W Diamond St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,13,39.9862342,-75.1675591
+2017,China House,"1430 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,24,39.9786486,-75.1593601
+2017,China Lotus Restaurant,"1301 N 29th St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,35,39.9763765,-75.1828602
+2017,China Star,"1600 N Broad St # 5, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,10,NA,NA
+2017,Christle Barber & Beauty Salon,"2139 W Diamond St, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,1 to 4,Single Loc,14,39.9864261,-75.169071400000007
+2017,Cisse Tounkara Hair Braiding,"2221 Ridge Ave, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,1 to 4,Single Loc,30,39.9802308,-75.1717311
+2017,Citro Communications,"1504 N Carlisle St # 3, Philadelphia, PA 19121",19121,Verified,811113,Legal Service Plans,54111015,Offices Of Lawyers,1 to 4,Single Loc,29,NA,NA
+2017,City Food Market,"1445 N 19th St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,20,39.976776,-75.1662913
+2017,City Of Philadelphia,"1817 N 16th St, Philadelphia, PA 19121",19121,Verified,912104,Government Offices-City/Village & Twp,92112006,Legislative Bodies,5 to 9,Single Loc,11,39.9809461,-75.1606197
+2017,City Of Philadelphia,"2501 W Diamond St, Philadelphia, PA 19121",19121,Verified,912104,Government Offices-City/Village & Twp,92112006,Legislative Bodies,5 to 9,Single Loc,14,39.987124,-75.174504
+2017,City View Pizza,"1434 Cecil B Moore Ave # A, Philadelphia, PA 19121",19121,Verified,581222,Pizza,72251115,Full-Service Restaurants,5 to 9,Single Loc,19,39.978803,-75.1594789
+2017,Clara Baldwin Manor,"2600 W Susquehanna Ave # 104, Philadelphia, PA 19121",19121,Verified,805904,Retirement Communities & Homes,62331101,Continuing Care Retirement Communities,5 to 9,Single Loc,33,NA,NA
+2017,"Clay, Helen T MD","1800 N Broad St, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,1 to 4,Single Loc,11,39.980358,-75.15766
+2017,"Cohen, KARA M","2144 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,804907,Nurses-Practitioners,62139923,Offices Of All Other Miscellaneous Health Practiti,1 to 4,Single Loc,9,39.9801736,-75.1700423
+2017,Columbia Deli,"1634 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,581209,NA,NA,NA,1 to 4,Single Loc,17,39.9790938,-75.1626325
+2017,Community Concern Ctr,"2721 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,20 to 49,Single Loc,25,39.9816852,-75.1797613
+2017,Community Corrections Ctr,"1628 N 15th St, Philadelphia, PA 19121",19121,Verified,912102,Government Offices-State,92112008,Legislative Bodies,10 to 19,Branch,37,39.9785595,-75.1598784
+2017,Community Food Market,"2901 W Oxford St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,16,39.9806184,-75.1823176
+2017,Community Land Trust Corp,"1500 W Thompson St, Philadelphia, PA 19121",19121,Verified,839937,Environmental Conservation/Ecologcl Org,81331210,"Environment, Conservation And Wildlife Organizatio",20 to 49,Single Loc,20,39.9732231,-75.1609643
+2017,Complete Real Estate Svc,"1601 W Jefferson St, Philadelphia, PA 19121",19121,Verified,655202,Real Estate Developers,23721005,Land Subdivision,5 to 9,Single Loc,12,39.9763126,-75.1627089
+2017,Compro Tax,"1618 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,729101,Tax Return Preparation & Filing,54121301,Tax Preparation Services,5 to 9,Single Loc,23,39.979015,-75.1618423
+2017,Computer Repair,"2132 Ridge Ave, Philadelphia, PA 19121",19121,Verified,737801,Computers-Service & Repair,81121022,Electronic And Precision Equipment Repair And Main,1 to 4,Single Loc,9,39.978699,-75.170323
+2017,Computers Ruscorporation,"1906 N 22nd St, Philadelphia, PA 19121",19121,Verified,573407,Computer & Equipment Dealers,44921069,Electronics And Appliance Retailers,1 to 4,Single Loc,9,39.983661,-75.1704108
+2017,Congressman Robert Nc Nix Hms,"1418 N 15th St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,1 to 4,Single Loc,42,39.9750401,-75.1604965
+2017,Creative Image Unisex Salon,"2737 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,724101,Barbers,81211101,Barber Shops,1 to 4,Single Loc,13,39.9817442,-75.1801432
+2017,Cricket Wireless Auth Retailer,"2314 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,481207,Cellular Telephones (Services),51711214,Wireless Telecommunications Carriers (Except Satel,1 to 4,Branch,11,39.9805143,-75.1731062
+2017,Crispus Attucks Post 151 Amer,"1718 N 24th St, Philadelphia, PA 19121",19121,Verified,864102,Veterans' & Military Organizations,81341003,Civic And Social Organizations,1 to 4,Single Loc,17,39.9813153,-75.1741649
+2017,Curls,"1757 N Newkirk St, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,1 to 4,Single Loc,15,39.9828201,-75.1804641
+2017,Cycles LLC,"1426 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,594141,Bicycles-Dealers,45911006,Sporting Goods Retailers,1 to 4,Single Loc,10,39.9862335,-75.1574582
+2017,D & J Cleaners,"1518 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,721201,Cleaners,81232002,Drycleaning And Laundry Services (Except Coin-Oper,1 to 4,Single Loc,13,39.978902,-75.160204
+2017,D & J Hardware,"1525 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,525104,Hardware-Retail,44414005,Hardware Retailers,1 to 4,Single Loc,42,39.9792425,-75.1605307
+2017,D'Zert Club Inc,"1600 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,864108,Clubs,81341004,Civic And Social Organizations,1 to 4,Single Loc,23,39.9789497,-75.161362
+2017,"Daniels, Patricia A Dpm","1900 N 20th St, Philadelphia, PA 19121",19121,Verified,804301,Podiatrists,62139103,Offices Of Podiatrists,1 to 4,Single Loc,17,39.9834612,-75.1671295
+2017,Darryl Turner Grocery,"1753 N 21st St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,31,39.9815765,-75.1687457
+2017,David Thompson Photography,"1702 W Diamond St, Philadelphia, PA 19121",19121,Verified,722121,Photography,54192121,"Photography Studios, Portrait",1 to 4,Single Loc,12,39.9852813,-75.1615845
+2017,David's Place,"2340 Ridge Ave, Philadelphia, PA 19121",19121,Verified,581212,Caterers,72232001,Caterers,5 to 9,Single Loc,13,39.9814677,-75.1737923
+2017,De Body Fashion,"2610 W Montgomery Ave, Philadelphia, PA 19121",19121,Verified,562101,Women's Apparel-Retail,45811017,Clothing And Clothing Accessories Retailers,1 to 4,Single Loc,15,39.9826036,-75.1773882
+2017,Deli Grocery,"2027 N 16th St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,15,39.9844165,-75.1597815
+2017,Dialogue Institute,"1700 N Broad St # 315, Philadelphia, PA 19121",19121,Verified,861102,Associations,81391002,Business Associations,1 to 4,Single Loc,11,NA,NA
+2017,Diamond Green,NA,19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,14,NA,NA
+2017,Diamond Park,"1700 W Susquehanna Ave # 17, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,39,NA,NA
+2017,Diamond Pizza,NA,19121,Verified,581222,Pizza,72251115,Full-Service Restaurants,1 to 4,Single Loc,14,NA,NA
+2017,Dodge City,"US Highway 130, Philadelphia, PA 19121",19121,Verified,751404,Automobile Leasing,53211105,Passenger Car Rental,5 to 9,Single Loc,17,NA,NA
+2017,Dollar General,"2815 Ridge Ave # A, Philadelphia, PA 19121",19121,Verified,533101,Variety Stores,45521903,All Other General Merchandise Retailers,5 to 9,Branch,15,39.9864694,-75.1793202
+2017,"Dowen, Karin","1800 N Broad St # 106, Philadelphia, PA 19121",19121,Verified,804918,Physical Therapists,62134007,"Offices Of Physical, Occupational And Speech Thera",1 to 4,Single Loc,11,NA,NA
+2017,Dragon Express,"2400 Ridge Ave, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,26,39.9815856,-75.1740753
+2017,Draught Horse,"1431 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,20 to 49,Single Loc,22,39.9789247,-75.1588816
+2017,Drews Iron & Fencing Svc,"2001 N 19th St, Philadelphia, PA 19121",19121,Verified,503903,Fence (Whls),42339013,Other Construction Material Merchant Wholesalers,5 to 9,Single Loc,42,39.9845824,-75.164592
+2017,Drm International Inc,"1510 Cecil B Moore Ave # 304, Philadelphia, PA 19121",19121,Verified,871111,Engineers-Consulting,54133016,Engineering Services,10 to 19,Single Loc,19,NA,NA
+2017,Duafe Holistic Hair Care,"1544 N 29th St, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,10 to 19,Single Loc,24,39.9799928,-75.1824921
+2017,Dunkin' Donuts,"1420 Cecil B Moore Ave # A, Philadelphia, PA 19121",19121,Verified,546105,Doughnuts,72251510,Snack And Nonalcoholic Beverage Bars,10 to 19,Branch,19,39.9786493,-75.1589954
+2017,Dupree Funeral Home Inc,"2809 W Diamond St, Philadelphia, PA 19121",19121,Verified,726103,Funeral Directors,81221002,Funeral Homes And Funeral Services,1 to 4,Single Loc,23,39.9877363,-75.1792757
+2017,Dupree Funeral Home Inc,"2809 W Diamond St, Philadelphia, PA 19121",19121,Verified,726103,Funeral Directors,81221002,Funeral Homes And Funeral Services,1 to 4,Single Loc,40,39.9877363,-75.1792757
+2017,E N I 1639 Inc,"1639 W Susquehanna Ave # 43, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,12,NA,NA
+2017,Eastern Electrical Liquidators,"1511 N 26th St, Philadelphia, PA 19121",19121,Verified,561102,Salvage & Surplus Merchandise,45811003,Clothing And Clothing Accessories Retailers,5 to 9,Single Loc,42,39.9789631,-75.1773558
+2017,Eastern Lofts,"3002 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,651202,Office Buildings & Parks,53112004,Lessors Of Nonresidential Buildings (Except Miniwa,1 to 4,Single Loc,10,39.9817776,-75.1843259
+2017,Eatible Delights,"2338 Ridge Ave, Philadelphia, PA 19121",19121,Verified,581212,Caterers,72232001,Caterers,10 to 19,Single Loc,19,39.9814415,-75.173806
+2017,Edge Avenue North,"1601 N 15th St # 2, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,20 to 49,Single Loc,19,NA,NA
+2017,Eight Diamonds Town Houses,"2028 W Norris St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,24,39.9845445,-75.1678596
+2017,Election Learning Ctr,"1708 N 22nd St, Philadelphia, PA 19121",19121,Verified,874825,Educational Consultants,61171012,Educational Support Services,1 to 4,Single Loc,17,39.980612,-75.170948
+2017,Equinox Management & Constr,"1535 N Sydenham St, Philadelphia, PA 19121",19121,Verified,152103,General Contractors,23611505,New Single-Family Housing Construction (Except For,5 to 9,Single Loc,15,39.9772607,-75.1605607
+2017,Esquinal,"1959 N 23rd St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,15,39.9849779,-75.1713218
+2017,Ev-Air-Tight Calking Co,"1619 W Thompson St, Philadelphia, PA 19121",19121,Verified,179919,Steeple Jacks,23829022,Other Building Equipment Contractors,5 to 9,Single Loc,16,39.9739733,-75.1629274
+2017,Excuse Me Who Styled That Hair,"2017 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,5 to 9,Single Loc,20,39.9877146,-75.1666984
+2017,Fallen Leaf Productions,"1512 N 17th St, Philadelphia, PA 19121",19121,Verified,781217,Production Services,51211017,Motion Picture And Video Production,1 to 4,Single Loc,11,39.976968,-75.1634531
+2017,Family Practice,"2124 W Diamond St, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,1 to 4,Single Loc,25,39.9862597,-75.1690713
+2017,Fast Cash Atm,"1301 N 15th St, Philadelphia, PA 19121",19121,Verified,609903,Check Cashing Service,52232003,"Financial Transactions Processing, Reserve, And Cl",1 to 4,Single Loc,18,39.973528,-75.160628
+2017,Fast Cash Inc,"1920 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,609903,Check Cashing Service,52232003,"Financial Transactions Processing, Reserve, And Cl",1 to 4,Single Loc,12,39.9873694,-75.1652467
+2017,Fine Interior Finishes,"3115 W Thompson St, Philadelphia, PA 19121",19121,Verified,738902,Interior Decorators Design & Consultants,54141003,Interior Design Services,1 to 4,Single Loc,12,39.9768527,-75.1866764
+2017,"Finley, Laurene Phd","2122 N 18th St, Philadelphia, PA 19121",19121,Verified,804922,Psychologists,62139936,Offices Of All Other Miscellaneous Health Practiti,1 to 4,Single Loc,35,39.9863599,-75.1629636
+2017,Fishers Of Knowledge,"2701 W Diamond St, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,10 to 19,Single Loc,19,39.987536,-75.177688
+2017,"Fleming, W Greg","1513 N Newkirk St, Philadelphia, PA 19121",19121,Verified,866106,Clergy,81311009,Religious Organizations,1 to 4,Single Loc,24,39.9791413,-75.1812621
+2017,"Fleming, William","1749 N 21st St, Philadelphia, PA 19121",19121,Verified,866106,Clergy,81311009,Religious Organizations,1 to 4,Single Loc,24,39.9814919,-75.168838
+2017,Foot Locker,"1600 N Broad St # 2, Philadelphia, PA 19121",19121,Verified,566101,Shoes-Retail,45821007,Shoe Retailers,5 to 9,Branch,14,NA,NA
+2017,Foster Trophy & Awards Co,"1718 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,599925,Plaques,45521935,All Other General Merchandise Retailers,1 to 4,Single Loc,42,39.97923,-75.1634331
+2017,Franklin Electric Co Inc,"1511 N 26th St # 37, Philadelphia, PA 19121",19121,Verified,173101,Electric Contractors,23821007,Electrical Contractors And Other Wiring Installati,50 to 99,Branch,42,39.9789631,-75.1773558
+2017,Frazier Enterprises,"2113 N 17th St, Philadelphia, PA 19121",19121,Verified,738917,Transcribing Service-Tape Disc Etc,51229004,Other Sound Recording Industries,1 to 4,Single Loc,25,39.9860421,-75.1610325
+2017,Fresenius Medical Care,"1241 N Taney St, Philadelphia, PA 19121",19121,Verified,809203,Dialysis,62149202,Kidney Dialysis Centers,20 to 49,Branch,20,39.9747746,-75.1793796
+2017,Fresh Market,"1707 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Branch,10,39.9794727,-75.1629776
+2017,Friends Of River Field,"26th St & Ben Franklin Pkwy, Philadelphia, PA 19121",19121,Verified,861102,Associations,81391002,Business Associations,1 to 4,Single Loc,24,NA,NA
+2017,Friends Rehabilitation Program,"1959 N 31st St, Philadelphia, PA 19121",19121,Verified,833102,Vocational Rehabilitation Services,62431009,Vocational Rehabilitation Services,10 to 19,Single Loc,12,39.9866221,-75.1840282
+2017,Future Net Inc,"2020 Ridge Ave, Philadelphia, PA 19121",19121,Verified,737904,Computers-Networking,54151905,Other Computer Related Services,10 to 19,Single Loc,23,39.9759693,-75.1688662
+2017,Futurenet Inc,"1601 W Jefferson St, Philadelphia, PA 19121",19121,Verified,737801,Computers-Service & Repair,81121022,Electronic And Precision Equipment Repair And Main,1 to 4,Single Loc,12,39.9763126,-75.1627089
+2017,G O Medical Assoc,"1216 N Broad St, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,1 to 4,Single Loc,11,39.9722445,-75.1596319
+2017,G O Medical Assoc,"1216 N Broad St, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,1 to 4,Single Loc,13,39.9722445,-75.1596319
+2017,Garage Door Squad,"2441 W Berks St # B, Philadelphia, PA 19121",19121,Verified,521101,Doors-Garage,44418018,Other Building Material Dealers,5 to 9,Single Loc,11,NA,NA
+2017,Gaudenzia Inc,"1819 W Thompson St, Philadelphia, PA 19121",19121,Verified,839901,Drug Abuse & Addiction Info & Treatment,81331904,Other Social Advocacy Organizations,10 to 19,Single Loc,12,39.974293,-75.1660785
+2017,"Gebrehana, Razel","2118 W Diamond St, Philadelphia, PA 19121",19121,Verified,591205,Pharmacies,45611009,Pharmacies And Drug Retailers,5 to 9,Single Loc,11,39.986256,-75.169042
+2017,General Auto Repair,"2835 Ridge Ave, Philadelphia, PA 19121",19121,Verified,753801,Automobile Repairing & Service,81111104,General Automotive Repair,1 to 4,Single Loc,34,39.9865494,-75.1803616
+2017,Genesis Community Devmnt Ctr,"1900 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,593222,Thrift Shops,45951040,Used Merchandise Retailers,1 to 4,Single Loc,17,39.9795741,-75.1659965
+2017,Ghost Tours Of Philadelphia,NA,19121,Verified,799601,Amusement Places,71311001,Amusement And Theme Parks,10 to 19,Single Loc,42,NA,NA
+2017,Girard College Alumni Assn,"2101 S College Ave # 605, Philadelphia, PA 19121",19121,Verified,861102,Associations,81391002,Business Associations,1 to 4,Single Loc,33,NA,NA
+2017,Girard College Devmnt Fund,"2101 S College Ave # 307, Philadelphia, PA 19121",19121,Verified,839998,Non-Profit Organizations,81331908,Other Social Advocacy Organizations,1 to 4,Single Loc,14,NA,NA
+2017,Girard College Library,"2101 S College Ave # 301, Philadelphia, PA 19121",19121,Verified,823109,Libraries-Institutional,51921005,Libraries And Archives,5 to 9,Single Loc,29,NA,NA
+2017,Girard Court Apartments LP,"2101 N College Ave # H2, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,1 to 4,Single Loc,37,NA,NA
+2017,"Goodheart, Harry","1825 N Willington St, Philadelphia, PA 19121",19121,Verified,154213,Building Contractors,23622005,Commercial And Institutional Building Construction,1 to 4,Single Loc,12,39.9786046,-75.162043
+2017,"Goodheart, Harry","1846 N 17th St, Philadelphia, PA 19121",19121,Verified,154213,Building Contractors,23622005,Commercial And Institutional Building Construction,1 to 4,Single Loc,12,39.982053,-75.1623015
+2017,Grannys Kids Two,"2121 N 17th St, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,5 to 9,Single Loc,11,39.9862077,-75.1610057
+2017,Greater Media Philadelphia,"2501 Ben Franklin Pkwy, Philadelphia, PA 19121",19121,Verified,483201,Radio Stations & Broadcasting Companies,51611003,Radio Broadcasting Stations,20 to 49,Branch,13,NA,NA
+2017,H&R Block,"1220 N Broad St # 1242, Philadelphia, PA 19121",19121,Verified,729101,Tax Return Preparation & Filing,54121301,Tax Preparation Services,20 to 49,Branch,31,NA,NA
+2017,Habitat For Humanity Restore,"1829 N 19th St, Philadelphia, PA 19121",19121,Verified,593207,Building Materials-Used,45951009,Used Merchandise Retailers,5 to 9,Branch,15,39.9819921,-75.1649424
+2017,Hair Fashion & Beyond,"1600 N Broad St # 9, Philadelphia, PA 19121",19121,Verified,508702,Beauty Salons-Equipment & Supplies (Whls),42385091,Service Establishment Equipment And Supplies Merch,10 to 19,Single Loc,19,NA,NA
+2017,Hank Gathers Youth Access Ctr,"2501 W Diamond St, Philadelphia, PA 19121",19121,Verified,912104,Government Offices-City/Village & Twp,92112006,Legislative Bodies,5 to 9,Single Loc,29,39.987124,-75.174504
+2017,Harry Goodheart,"1846 N 17th St, Philadelphia, PA 19121",19121,Verified,154213,Building Contractors,23622005,Commercial And Institutional Building Construction,1 to 4,Single Loc,12,39.982053,-75.1623015
+2017,Haven Peniel Senior Residence,"1615 N 23rd St, Philadelphia, PA 19121",19121,Verified,836105,Residential Care Homes,62331206,Assisted Living Facilities For The Elderly,5 to 9,Single Loc,16,39.9797401,-75.1721129
+2017,"Henderson, Matthew","2926 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,866106,Clergy,81311009,Religious Organizations,1 to 4,Single Loc,24,39.9893788,-75.1811005
+2017,Henry W Kirchner-Londergan,"1233-37 Ritner St, Philadelphia, PA 19121",19121,Verified,726103,Funeral Directors,81221002,Funeral Homes And Funeral Services,1 to 4,Single Loc,11,39.9217411,-75.1789734
+2017,Hgp Management,"1521 W Oxford St, Philadelphia, PA 19121",19121,Verified,874130,Management Services,56111022,Office Administrative Services,1 to 4,Single Loc,11,39.9777039,-75.1608553
+2017,Ho Wan Take Out,"2512 Ridge Ave, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,33,39.9828331,-75.1757455
+2017,Hok Heng,"1716 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,12,39.9791978,-75.1633805
+2017,Hoodco Inc,"2800 Ridge Ave, Philadelphia, PA 19121",19121,Verified,504604,Restaurant/Commercial Kitchen Equipment & Sup,42344032,Other Commercial Equipment Merchant Wholesalers,5 to 9,Single Loc,30,39.9859344,-75.1802819
+2017,Hooks Barber Shop,"1804 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,724101,Barbers,81211101,Barber Shops,1 to 4,Single Loc,42,39.9869461,-75.1629141
+2017,Hornstein Platt & Assoc,"1526 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,804922,Psychologists,62139936,Offices Of All Other Miscellaneous Health Practiti,5 to 9,Single Loc,14,39.9789477,-75.1605583
+2017,Hue Food Market,"1601 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,541101,Grocers-Delicatessen,44511001,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,14,39.9793231,-75.1612476
+2017,IBM,"1510 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,357101,Computers-Electronic-Manufacturers,33411101,Electronic Computer Manufacturing,50 to 99,Branch,11,39.9788762,-75.1599933
+2017,Imagicakes Cake Designers,"1508 W Seybert St, Philadelphia, PA 19121",19121,Verified,205198,Bread/Other Bakery Prod-Ex Cookies,31181202,Commercial Bakeries,10 to 19,Single Loc,12,NA,NA
+2017,Imperial Services Cleaning,"2137 N 32nd St, Philadelphia, PA 19121",19121,Verified,734902,Janitor Service,56172001,Janitorial Services,5 to 9,Single Loc,9,39.9893385,-75.1850353
+2017,Imunch Cafe,"1233 N 31st St, Philadelphia, PA 19121",19121,Verified,581228,Coffee Shops,72251505,Snack And Nonalcoholic Beverage Bars,1 to 4,Single Loc,14,39.9759262,-75.1863127
+2017,In Touch Medical,"2109 W Diamond St, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,1 to 4,Single Loc,36,39.986367,-75.168602
+2017,In Touch Medical Assoc Inc,"2109 W Diamond St, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,5 to 9,Single Loc,36,39.986367,-75.168602
+2017,Infinite Comm Inc,"2314 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,481207,Cellular Telephones (Services),51711214,Wireless Telecommunications Carriers (Except Satel,1 to 4,Single Loc,14,39.9805143,-75.1731062
+2017,International Solid Gold,"2901 W Montgomery Ave, Philadelphia, PA 19121",19121,Verified,599402,Magazines-Dealers,45921017,Book Retailers And News Dealers,1 to 4,Single Loc,11,39.9835727,-75.1819806
+2017,Interstate Blood Bank Inc,"1250 N Broad St # 52, Philadelphia, PA 19121",19121,Verified,809916,Blood & Organ Banks & Centers,62199101,Blood And Organ Banks,20 to 49,Single Loc,17,NA,NA
+2017,Interstate Blood Bank Inc,"1250 52 N Broad St, Philadelphia, PA 19121",19121,Verified,809916,Blood & Organ Banks & Centers,62199101,Blood And Organ Banks,10 to 19,Single Loc,11,39.9722989,-75.1593329
+2017,J & H Fuel Oil Co,"1610 N 26th St, Philadelphia, PA 19121",19121,Verified,517206,Oils-Fuel (Whls),42472014,Petroleum And Petroleum Products Merchant Wholesal,1 to 4,Single Loc,42,39.980023,-75.177635
+2017,J & M Deli Grocery,"2455 W Berks St, Philadelphia, PA 19121",19121,Verified,581209,NA,NA,NA,1 to 4,Single Loc,13,39.9841339,-75.1748806
+2017,J M Systems Inc,"1900 N Ringgold St, Philadelphia, PA 19121",19121,Verified,862101,Professional Organizations,81392006,Professional Organizations,1 to 4,Single Loc,19,39.9839843,-75.1740977
+2017,Jack Hassler Co Inc,"1619 W Thompson St, Philadelphia, PA 19121",19121,Verified,179919,Steeple Jacks,23829022,Other Building Equipment Contractors,1 to 4,Single Loc,38,39.9739733,-75.1629274
+2017,Jackie's Garden,"1836 N 20th St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,27,39.982046,-75.167059
+2017,"Jarosh, Samara L MD","1900 N 20th St # 5, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,1 to 4,Single Loc,21,NA,NA
+2017,Jason Lloyd Funeral Home Inc,"2125 N 22nd St, Philadelphia, PA 19121",19121,Verified,726103,Funeral Directors,81221002,Funeral Homes And Funeral Services,1 to 4,Single Loc,12,39.9870655,-75.1692158
+2017,Jay Street Food Market Inc,"1442 N 17th St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,11,39.976412,-75.1635457
+2017,Jefferson Food Market,"1501 N 29th St, Philadelphia, PA 19121",19121,Verified,541103,Convenience Stores,44513101,Convenience Retailers,1 to 4,Single Loc,17,39.9790229,-75.1822752
+2017,Jenkintown Building,"1445 N 32nd St, Philadelphia, PA 19121",19121,Verified,154213,Building Contractors,23622005,Commercial And Institutional Building Construction,1 to 4,Single Loc,10,39.9788201,-75.1873681
+2017,Jimmy John's,"1601 N 15th St # 5, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,50 to 99,Branch,19,NA,NA
+2017,Jmp Laundromat,"2121 W Diamond St, Philadelphia, PA 19121",19121,Verified,721501,Laundries-Self Service,81231001,Coin-Operated Laundries And Drycleaners,1 to 4,Single Loc,19,39.9864138,-75.1689734
+2017,Job 2 LP,"1432 N Broad St, Philadelphia, PA 19121",19121,Verified,736103,Employment Agencies & Opportunities,56131102,Employment Placement Agencies,5 to 9,Single Loc,12,39.9755936,-75.1589901
+2017,Job 2 LP,"1718 N Sydenham St, Philadelphia, PA 19121",19121,Verified,736103,Employment Agencies & Opportunities,56131102,Employment Placement Agencies,5 to 9,Single Loc,15,39.9793747,-75.1603715
+2017,Job LP,"1432 N Broad St, Philadelphia, PA 19121",19121,Verified,736103,Employment Agencies & Opportunities,56131102,Employment Placement Agencies,5 to 9,Single Loc,14,39.9755936,-75.1589901
+2017,John Pomp Studios Inc,"1520 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,571216,Furniture-Dealers-Retail,44911012,Furniture Retailers,1 to 4,Single Loc,13,39.9786847,-75.161043
+2017,Jones Memorial Community Corp,"1603 Cecil B Moore Ave # 200, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,34,NA,NA
+2017,Juniors Barber Shop,"2224 Ridge Ave, Philadelphia, PA 19121",19121,Verified,724101,Barbers,81211101,Barber Shops,1 to 4,Single Loc,42,39.9799416,-75.1718185
+2017,Kairos House,"1440 N Broad St, Philadelphia, PA 19121",19121,Verified,809305,Outpatient Mental Health & Substance Abuse Ce,62142002,Outpatient Mental Health And Substance Abuse Cente,10 to 19,Single Loc,15,39.9750748,-75.1587793
+2017,Karen Mini Market,"1400 N 30th St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,22,39.9779117,-75.1846128
+2017,"Keeny, Heather","1244 N 29th St, Philadelphia, PA 19121",19121,Verified,804920,Physicians Assistants,62139932,Offices Of All Other Miscellaneous Health Practiti,1 to 4,Single Loc,11,39.9758549,-75.1833973
+2017,Keyme,"1528 N Broad St, Philadelphia, PA 19121",19121,Verified,769991,Key Duplicating Service Kiosks,56162206,Locksmiths,1 to 4,Branch,9,39.9763239,-75.158539
+2017,KFC,"1200 N Broad St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,20 to 49,Branch,42,39.971603,-75.15952
+2017,Kidazzle Kids,"1930 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,5 to 9,Single Loc,11,39.9873082,-75.1655652
+2017,Kids First Daycare Ctr,"2200 Ridge Ave, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,5 to 9,Single Loc,19,39.979529,-75.1712582
+2017,Kids R Special Clubhouse Inc,"2100 Bolton St, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,5 to 9,Single Loc,15,39.9780261,-75.1704315
+2017,King Center,"2101 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,912104,Government Offices-City/Village & Twp,92112006,Legislative Bodies,10 to 19,Single Loc,34,39.980601,-75.1704043
+2017,King Dragon II,"2349 W Oxford St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,17,39.9795193,-75.1742635
+2017,Kirbi Construction,"1955 N 18th St, Philadelphia, PA 19121",19121,Verified,152144,Construction Companies,23611512,New Single-Family Housing Construction (Except For,1 to 4,Single Loc,10,39.9839307,-75.1631086
+2017,Koja Grille,"1600 N Broad St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,19,39.9774961,-75.1584795
+2017,Krispy Krunchy Chicken,"1701 N 33rd St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Branch,11,39.982752,-75.187913
+2017,Kurt Hunte,"1608 N 21st St, Philadelphia, PA 19121",19121,Verified,733604,Artists-Commercial,54143002,Graphic Design Services,1 to 4,Single Loc,11,39.9789065,-75.1696758
+2017,L & K Food Market,"2163 N 21st St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,20,39.9876434,-75.167452
+2017,Lamarra Frank R Inc,"1616 W Thompson St, Philadelphia, PA 19121",19121,Verified,154213,Building Contractors,23622005,Commercial And Institutional Building Construction,1 to 4,Single Loc,24,39.9734624,-75.1629803
+2017,Lanchang Sheng,"2006 Ridge Ave, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,21,39.9754572,-75.1686284
+2017,Lee Korman Discount Inc,"2163 Ridge Ave, Philadelphia, PA 19121",19121,Verified,531104,Retail Shops,45511003,Department Stores,1 to 4,Single Loc,24,39.979653,-75.1708569
+2017,Lee Young Food Market,"1422 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,5 to 9,Single Loc,42,39.9786737,-75.159075
+2017,Lee's Food Market,"1615 W Montgomery Ave, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,31,39.9808345,-75.1617298
+2017,"Lee, Cynthia","1528 N Broad St, Philadelphia, PA 19121",19121,Verified,804939,Pharmacists,62133002,Offices Of Mental Health Practitioners (Except Phy,1 to 4,Single Loc,11,39.9763239,-75.158539
+2017,Lees Hoagie Hse At Temple Univ,"1428 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,581219,NA,NA,NA,1 to 4,Single Loc,11,39.9789008,-75.1602337
+2017,Lescheuvux,"2004 Ridge Ave, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,1 to 4,Single Loc,14,39.9754161,-75.1686047
+2017,Let Out,"1621 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,581223,NA,NA,NA,5 to 9,Single Loc,11,39.9794943,-75.162054
+2017,Liacorus Center,"1776 N Broad St, Philadelphia, PA 19121",19121,Verified,651211,Event Centers,71131005,"Promoters Of Performing Arts, Sports, And Similar",1 to 4,Single Loc,11,39.9798139,-75.1585825
+2017,Lisa's Learning Ctr,"2815 W Sedgley Ave, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,5 to 9,Single Loc,11,39.9870426,-75.179373
+2017,Livewire Electric LLC,"3217 Turner St, Philadelphia, PA 19121",19121,Verified,173101,Electric Contractors,23821007,Electrical Contractors And Other Wiring Installati,1 to 4,Single Loc,15,39.9819193,-75.187417
+2017,Locating Logistics LLC,"1510 Cecil B Moore Ave # 301, Philadelphia, PA 19121",19121,Verified,493903,Utilities-Underground-Cable Locating Svc,23713022,Power And Communication Line And Related Structure,5 to 9,Single Loc,15,NA,NA
+2017,Lock & Key Locksmith Svc,"1752 N 26th St, Philadelphia, PA 19121",19121,Verified,769962,Locks & Locksmiths,56162204,Locksmiths,5 to 9,Single Loc,12,39.9823865,-75.1772066
+2017,Lopsonzski 1844 N 16 St LP,"1844 N 16th St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,11,39.981768,-75.1607283
+2017,Lora Mini Market,"1918 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,41,39.9873683,-75.1652371
+2017,Lorenzo's,"1301 N 25th St, Philadelphia, PA 19121",19121,Verified,724101,Barbers,81211101,Barber Shops,1 to 4,Single Loc,26,39.9755799,-75.1766677
+2017,Lsw Hair Design,"1539 W Thompson St, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,1 to 4,Single Loc,28,39.9737223,-75.1618695
+2017,Lwc City,"1531 N 31st St, Philadelphia, PA 19121",19121,Verified,734904,Window Cleaning,23899096,All Other Specialty Trade Contractors,5 to 9,Single Loc,12,39.979676,-75.1855551
+2017,M & T Foods,"2905 Ridge Ave, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,14,39.9872068,-75.1810797
+2017,M L King Recreation Ctr,"2100 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,799701,Recreation Centers,71394015,Fitness And Recreational Sports Centers,5 to 9,Single Loc,28,39.9799247,-75.1695751
+2017,"Madden, Ann M Pa","1845 N 23rd St, Philadelphia, PA 19121",19121,Verified,804920,Physicians Assistants,62139932,Offices Of All Other Miscellaneous Health Practiti,1 to 4,Single Loc,11,39.9831913,-75.1716659
+2017,"Magner, Alan L MD","1920 N 20th St, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,1 to 4,Single Loc,13,39.9833333,-75.1667796
+2017,Mander Playground,"2140 N 33rd St, Philadelphia, PA 19121",19121,Verified,912104,Government Offices-City/Village & Twp,92112006,Legislative Bodies,10 to 19,Single Loc,33,39.9893341,-75.1870182
+2017,"Mansell, Jamie Lee","1800 N Broad St, Philadelphia, PA 19121",19121,Verified,804918,Physical Therapists,62134007,"Offices Of Physical, Occupational And Speech Thera",1 to 4,Single Loc,11,39.980358,-75.15766
+2017,Mansion Management Corp,"3035 W Diamond St, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,1 to 4,Single Loc,35,39.988197,-75.1829088
+2017,Mansion Management Corp,"3035 W Diamond St, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,1 to 4,Single Loc,15,39.988197,-75.1829088
+2017,Maria Mini Market,"2450 W Montgomery Ave, Philadelphia, PA 19121",19121,Verified,541103,Convenience Stores,44513101,Convenience Retailers,1 to 4,Single Loc,13,39.982382200000004,-75.1752533
+2017,Martin Luther King Adult Ctr,"2101 Cecil B Moore Ave # 35, Philadelphia, PA 19121",19121,Verified,912104,Government Offices-City/Village & Twp,92112006,Legislative Bodies,10 to 19,Single Loc,25,39.980601,-75.1704043
+2017,Martin Luther King Recreation,"2101 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,799951,Parks,71219004,Nature Parks And Other Similar Institutions,20 to 49,Single Loc,34,39.980601,-75.1704043
+2017,Martinez Grocery,"1752 N 20th St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,22,39.9813934,-75.1673282
+2017,Marvina Hudson Bolton Meml,"2814 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,726103,Funeral Directors,81221002,Funeral Homes And Funeral Services,1 to 4,Single Loc,14,39.9814741,-75.1809361
+2017,Masters Bar & Restaurant,"1535 N Carlisle St # 37, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,5 to 9,Single Loc,12,39.9770978,-75.159078
+2017,Maternity Care Coalition,"1510 Cecil B Moore Ave # B, Philadelphia, PA 19121",19121,Verified,832215,Marriage & Family Counselors,62419011,Other Individual And Family Services,10 to 19,Single Loc,10,NA,NA
+2017,"Mayo, Sylvester","1223 N 29th St, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,1 to 4,Single Loc,28,39.9751745,-75.1831131
+2017,Maze Group Development Inc,"1810 N 16th St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,13,39.9809884,-75.1609359
+2017,Mc Coy's Tire Svc Ctr,"2323 Ridge Ave, Philadelphia, PA 19121",19121,Verified,753401,Tire-Retreading & Repairing,32621201,Tire Retreading,1 to 4,Single Loc,19,39.9813815,-75.1730994
+2017,"Mc Coy, Lillian","1609 N Sydenham St, Philadelphia, PA 19121",19121,Verified,866106,Clergy,81311009,Religious Organizations,1 to 4,Single Loc,42,39.9779146,-75.1603775
+2017,Meade Family Health Ctr,"1600 N 18th St, Philadelphia, PA 19121",19121,Verified,801104,Clinics,62111129,Offices Of Physicians (Except Mental Health Specia,5 to 9,Single Loc,32,39.97823,-75.164659
+2017,Mecca Unisex Salon,"1428 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,1 to 4,Single Loc,11,39.9789008,-75.1602337
+2017,"Medina Mccurdy, Monica P","1845 N 23rd St, Philadelphia, PA 19121",19121,Verified,804920,Physicians Assistants,62139932,Offices Of All Other Miscellaneous Health Practiti,1 to 4,Single Loc,11,39.9831913,-75.1716659
+2017,Men & Woman For Human Excllnc,"2630 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,833102,Vocational Rehabilitation Services,62431009,Vocational Rehabilitation Services,10 to 19,Single Loc,14,39.9811726,-75.1785411
+2017,Men & Women For Human Excllnc,"1634 W Master St # 40, Philadelphia, PA 19121",19121,Verified,832218,Social Service & Welfare Organizations,62419012,Other Individual And Family Services,10 to 19,Single Loc,12,NA,NA
+2017,Men & Women For Human Excllnc,"2603 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,808201,Home Health Service,62161001,Home Health Care Services,5 to 9,Single Loc,23,39.9814302,-75.1774122
+2017,Men & Women For Human Excllnce,"2600 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,839908,Human Services Organizations,81331101,Human Rights Organizations,5 to 9,Single Loc,18,39.9810345,-75.1774605
+2017,Mercado Food Market,"1859 N Van Pelt St, Philadelphia, PA 19121",19121,Verified,581209,NA,NA,NA,1 to 4,Single Loc,18,39.9831746,-75.169219
+2017,Metro Pcs,"2239 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,481207,Cellular Telephones (Services),51711214,Wireless Telecommunications Carriers (Except Satel,1 to 4,Branch,17,39.9807665,-75.172344
+2017,Michael's Used Furn & Cleanout,"1427 N Bouvier St, Philadelphia, PA 19121",19121,Verified,593217,Furniture-Used,45951019,Used Merchandise Retailers,1 to 4,Single Loc,15,39.9761565,-75.1639713
+2017,Miracle Moments Early Learning,"1601 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,5 to 9,Single Loc,12,39.9868986,-75.1595431
+2017,Mitchell's Business Solutions,"1610 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,729101,Tax Return Preparation & Filing,54121301,Tax Preparation Services,1 to 4,Single Loc,15,39.9789672,-75.1615881
+2017,Montgomery Beer Distributors,"1824 W Montgomery Ave, Philadelphia, PA 19121",19121,Verified,518101,Beer & Ale-Wholesale,42481001,Beer And Ale Merchant Wholesalers,5 to 9,Single Loc,19,39.9810588,-75.1648471
+2017,Moore William B Manor,"1999 Ridge Ave, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,22,39.9753034,-75.1679385
+2017,Mr Bravo Pizza & Grill,"2310 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,581222,Pizza,72251115,Full-Service Restaurants,5 to 9,Single Loc,17,39.9804035,-75.1729907
+2017,Muhammad's Temple-Islam,"2725 W Jefferson St, Philadelphia, PA 19121",19121,Verified,866114,Mosques,81311015,Religious Organizations,1 to 4,Single Loc,18,39.9787669,-75.1804652
+2017,Murphy Family Auto Repair,"2001 Ridge Ave, Philadelphia, PA 19121",19121,Verified,753801,Automobile Repairing & Service,81111104,General Automotive Repair,1 to 4,Single Loc,32,39.97583,-75.16846
+2017,My T Fine Cleaners,"2432 Ridge Ave, Philadelphia, PA 19121",19121,Verified,721201,Cleaners,81232002,Drycleaning And Laundry Services (Except Coin-Oper,1 to 4,Single Loc,42,39.982074,-75.1749062
+2017,Nanchang Restaurant,"2136 W Oxford St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,42,39.978821,-75.1708152
+2017,Nasir's Bbq,"2159 Ridge Ave, Philadelphia, PA 19121",19121,Verified,581224,NA,NA,NA,5 to 9,Single Loc,10,39.9792689,-75.1704698
+2017,Nest Arms Temple,"1528 N Carlisle St, Philadelphia, PA 19121",19121,Verified,866112,Synagogues,81311026,Religious Organizations,5 to 9,Single Loc,12,39.9769941,-75.1594088
+2017,New Barber's Hall,"1402 W Oxford St, Philadelphia, PA 19121",19121,Verified,799935,Halls & Auditoriums,71394010,Fitness And Recreational Sports Centers,10 to 19,Single Loc,42,39.9770964,-75.1589451
+2017,New China Taste,"2400 W Norris St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,25,39.9851783,-75.173276
+2017,New Creations Of Life,"2143 N Woodstock St, Philadelphia, PA 19121",19121,Verified,832218,Social Service & Welfare Organizations,62419012,Other Individual And Family Services,10 to 19,Single Loc,14,39.9872472,-75.1663522
+2017,New Diamond Restaurant,"2950 Ridge Ave, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,37,39.9875531,-75.1820306
+2017,North 19th Grocery Store,"1821 N 19th St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,19,39.9817802,-75.165229
+2017,North 33rd Realty,"2133 N 33rd St, Philadelphia, PA 19121",19121,Verified,655202,Real Estate Developers,23721005,Land Subdivision,5 to 9,Single Loc,15,39.9899222,-75.1863355
+2017,North Central Victim Svc,"1722 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,839998,Non-Profit Organizations,81331908,Other Social Advocacy Organizations,1 to 4,Single Loc,20,39.9792851,-75.1639114
+2017,Northeast Treatment,"3133 Ridge Ave, Philadelphia, PA 19121",19121,Verified,839999,Social Services NEC,81331909,Other Social Advocacy Organizations,50 to 99,Single Loc,11,39.9901656,-75.1844655
+2017,O'Day Law Assoc Attorneys,"2004 N Broad St, Philadelphia, PA 19121",19121,Verified,811103,Attorneys,54111002,Offices Of Lawyers,5 to 9,Single Loc,20,39.9834546,-75.1569754
+2017,Oic Human Development,"1600 N 19th St, Philadelphia, PA 19121",19121,Verified,839908,Human Services Organizations,81331101,Human Rights Organizations,10 to 19,Single Loc,35,39.9795881,-75.1658738
+2017,One Day At A Time Inc,"1715 W Montgomery Ave, Philadelphia, PA 19121",19121,Verified,839901,Drug Abuse & Addiction Info & Treatment,81331904,Other Social Advocacy Organizations,1 to 4,Single Loc,25,39.9811213,-75.1628705
+2017,One Helping Another,"2429 W Montgomery Ave, Philadelphia, PA 19121",19121,Verified,808201,Home Health Service,62161001,Home Health Care Services,10 to 19,Single Loc,10,39.9825702,-75.1748329
+2017,Oxford Village Apartments,"1612 N 15th St, Philadelphia, PA 19121",19121,Verified,702106,Student Housing,72131009,"Rooming And Boarding Houses, Dormitories, And Work",10 to 19,Single Loc,19,39.9780389,-75.1599989
+2017,"Parker-Johnson, Stacey W Do","1900 N 20th St, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,1 to 4,Single Loc,14,39.9834612,-75.1671295
+2017,Partner LP,"1238 N 28th St, Philadelphia, PA 19121",19121,Verified,655202,Real Estate Developers,23721005,Land Subdivision,5 to 9,Single Loc,11,39.975678,-75.1817577
+2017,Pate's Barber & TV Shop,"2412 W Thompson St, Philadelphia, PA 19121",19121,Verified,724101,Barbers,81211101,Barber Shops,1 to 4,Single Loc,42,39.9752433,-75.1757924
+2017,Patterson Transportation Svc,"2035 N 29th St, Philadelphia, PA 19121",19121,Verified,478977,Transportation,48821008,Support Activities For Rail Transportation,10 to 19,Single Loc,12,39.9873925,-75.1804974
+2017,Pazzo Pazzo Pizza,"1614 Cecil B Moore Ave # 1, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,10,NA,NA
+2017,"Penn-Ellington, Lola","1717 N Croskey St, Philadelphia, PA 19121",19121,Verified,832282,Counselors,62419036,Other Individual And Family Services,1 to 4,Single Loc,11,39.9809567,-75.1714727
+2017,Pennick Funeral Home,"2312 W Montgomery Ave, Philadelphia, PA 19121",19121,Verified,726103,Funeral Directors,81221002,Funeral Homes And Funeral Services,1 to 4,Single Loc,42,39.982008,-75.172644
+2017,Pennrose Management,"1301 N 31st St, Philadelphia, PA 19121",19121,Verified,655202,Real Estate Developers,23721005,Land Subdivision,20 to 49,Single Loc,19,39.976831,-75.18617
+2017,Pennrose Service Co,"3226 Clifford St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,13,39.9831132,-75.1875523
+2017,Pentecostal Assembly-Jesus,"1629 N 20th St, Philadelphia, PA 19121",19121,Verified,866110,Religious Organizations,81311021,Religious Organizations,5 to 9,Single Loc,20,39.979268,-75.167453
+2017,Perfect Touch Auto Repair,"2101 Nassau St, Philadelphia, PA 19121",19121,Verified,753801,Automobile Repairing & Service,81111104,General Automotive Repair,1 to 4,Single Loc,13,39.977795,-75.169975
+2017,Pete's Barber Shop,"1209 N 29th St, Philadelphia, PA 19121",19121,Verified,724101,Barbers,81211101,Barber Shops,1 to 4,Single Loc,24,39.974724,-75.1833258
+2017,Phi Sigma Sigma Sorority,"1427 W Diamond St, Philadelphia, PA 19121",19121,Verified,864101,Fraternal Organizations,81341002,Civic And Social Organizations,1 to 4,Single Loc,33,39.9880425,-75.1821736
+2017,Phila Corp For Aging,NA,19121,Verified,836101,Senior Citizens Service Organizations,62331205,Assisted Living Facilities For The Elderly,5 to 9,Single Loc,12,NA,NA
+2017,Phila-Locksmith,"1324 N 15th St, Philadelphia, PA 19121",19121,Verified,769962,Locks & Locksmiths,56162204,Locksmiths,5 to 9,Single Loc,11,39.974289,-75.160675
+2017,Philadelphia District Health,"1900 N 20th St, Philadelphia, PA 19121",19121,Verified,912104,Government Offices-City/Village & Twp,92112006,Legislative Bodies,100 to 249,Single Loc,35,39.9834612,-75.1671295
+2017,Philadelphia Garage Doors,"2007 N 17th St, Philadelphia, PA 19121",19121,Verified,521101,Doors-Garage,44418018,Other Building Material Dealers,5 to 9,Single Loc,11,39.9840499,-75.1614836
+2017,Philadelphia Housing Authority,"3218 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,912104,Government Offices-City/Village & Twp,92112006,Legislative Bodies,1 to 4,Single Loc,25,39.9899471,-75.1857945
+2017,Philadelphia Housing Authority,"2632 W Thompson St, Philadelphia, PA 19121",19121,Verified,653132,Housing Authorities,53131106,Residential Property Managers,50 to 99,Single Loc,33,39.975784,-75.1796706
+2017,Philadelphia Housing Authority,"2303 W Norris St, Philadelphia, PA 19121",19121,Verified,653132,Housing Authorities,53131106,Residential Property Managers,5 to 9,Single Loc,17,39.9851974,-75.1717004
+2017,Philadelphia Housing Authority,"2500 W Norris St, Philadelphia, PA 19121",19121,Verified,912104,Government Offices-City/Village & Twp,92112006,Legislative Bodies,5 to 9,Single Loc,25,39.98545,-75.174873
+2017,Philadelphia Housing Authority,"2309 W Diamond St, Philadelphia, PA 19121",19121,Verified,912104,Government Offices-City/Village & Twp,92112006,Legislative Bodies,5 to 9,Single Loc,25,39.9867279,-75.1715108
+2017,Philadelphia Housing Authority,"2301 Edgley St, Philadelphia, PA 19121",19121,Verified,653132,Housing Authorities,53131106,Residential Property Managers,10 to 19,Branch,24,39.987336,-75.171205
+2017,Philadelphia Housing Authority,"1710 N Croskey St, Philadelphia, PA 19121",19121,Verified,912104,Government Offices-City/Village & Twp,92112006,Legislative Bodies,20 to 49,Single Loc,29,39.9811426,-75.1718188
+2017,Philadelphia Management,"1500 N 15th St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,21,39.9764056,-75.1606732
+2017,Philadelphia Police 22nd-23rd,"1747 N 17th St, Philadelphia, PA 19121",19121,Verified,922104,Police Departments,92212003,Police Protection,100 to 249,Single Loc,31,39.9800143,-75.1624333
+2017,Philadelphia Regency Apartment,"1220 N Broad St # 302, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,10 to 19,Single Loc,42,NA,NA
+2017,Philadelphia School District,"3133 Ridge Ave # 3, Philadelphia, PA 19121",19121,Verified,821120,School Districts,61111018,Elementary And Secondary Schools,10 to 19,Single Loc,30,NA,NA
+2017,Philadelphia School District,"2100 W Norris St, Philadelphia, PA 19121",19121,Verified,821120,School Districts,61111018,Elementary And Secondary Schools,10 to 19,Single Loc,14,39.984625,-75.168478
+2017,Philadelphia Transporting,"2516 W Oxford St, Philadelphia, PA 19121",19121,Verified,421304,Trucking,48423013,"Specialized Freight (Except Used Goods) Trucking,",1 to 4,Single Loc,9,39.9794784,-75.1766502
+2017,Philadelphia Travelers Mc,"2063 Ridge Ave, Philadelphia, PA 19121",19121,Verified,864108,Clubs,81341004,Civic And Social Organizations,1 to 4,Single Loc,42,39.9770059,-75.1693688
+2017,Philli Central Food,"1643 W Diamond St, Philadelphia, PA 19121",19121,Verified,514101,Food Products (Whls),42442005,Packaged Frozen Food Merchant Wholesalers,1 to 4,Single Loc,19,39.9873533,-75.1768519
+2017,Philly Diva's Hair Whole Sale,NA,19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,1 to 4,Single Loc,9,NA,NA
+2017,Philly Dog Spot,"1316 N 26th St, Philadelphia, PA 19121",19121,Verified,075204,Pet Washing & Grooming,81291021,Pet Care (Except Veterinary) Services,1 to 4,Single Loc,15,39.9762439,-75.1785586
+2017,Philly Family Connections LLC,"1827 N Taylor St, Philadelphia, PA 19121",19121,Verified,478977,Transportation,48821008,Support Activities For Rail Transportation,10 to 19,Single Loc,11,39.9831118,-75.1745008
+2017,Philly Style Pizza,"2010 N Broad St, Philadelphia, PA 19121",19121,Verified,581222,Pizza,72251115,Full-Service Restaurants,10 to 19,Single Loc,13,39.9837006,-75.1571964
+2017,Pieces Of The Puzzle Learning,"2316 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,5 to 9,Single Loc,18,39.980519,-75.1731735
+2017,"Pinckney, Laval","2101 S College Ave, Philadelphia, PA 19121",19121,Verified,832282,Counselors,62419036,Other Individual And Family Services,1 to 4,Single Loc,11,39.9737899,-75.170157
+2017,Pizanos Brick Oven Pizzeria,"1536 N Carlisle St, Philadelphia, PA 19121",19121,Verified,581222,Pizza,72251115,Full-Service Restaurants,1 to 4,Single Loc,10,39.9772495,-75.1593458
+2017,Pizza Hut,"1505 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,581222,Pizza,72251115,Full-Service Restaurants,1 to 4,Branch,12,39.9790245,-75.1598026
+2017,Plaza Pizza,"1600 N Broad St # 10b, Philadelphia, PA 19121",19121,Verified,581222,Pizza,72251115,Full-Service Restaurants,20 to 49,Single Loc,19,NA,NA
+2017,Point Breeze Deli,"1800 N 23rd St, Philadelphia, PA 19121",19121,Verified,518101,Beer & Ale-Wholesale,42481001,Beer And Ale Merchant Wholesalers,1 to 4,Single Loc,30,39.982235,-75.172241
+2017,Police Athletic League,"1845 N 23rd St, Philadelphia, PA 19121",19121,Verified,869905,Athletic Organizations,81399005,"Other Similar Organizations (Except Business, Prof",1 to 4,Single Loc,38,39.9831913,-75.1716659
+2017,Polyviron LLC,"1510 Cecil B Moore Ave # 301, Philadelphia, PA 19121",19121,Verified,999966,Federal Government Contractors,99999005,Unclassified Establishments,5 to 9,Single Loc,13,NA,NA
+2017,Poppy Deli & Mini Market,"2301 Nicholas St, Philadelphia, PA 19121",19121,Verified,581209,NA,NA,NA,1 to 4,Single Loc,14,39.9801956,-75.172704
+2017,Posh Beauty Bar,"1211 N 29th St, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,1 to 4,Single Loc,16,39.974743,-75.183322
+2017,Prince Of Peace,"1844 N 32nd St, Philadelphia, PA 19121",19121,Verified,839919,Charitable Institutions,81331104,Human Rights Organizations,1 to 4,Single Loc,15,39.9852827,-75.1865776
+2017,Project H O M E,"2144 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,1 to 4,Single Loc,10,39.9801736,-75.1700423
+2017,Project H O M E,"2144 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,802101,Dentists,62121003,Offices Of Dentists,1 to 4,Single Loc,10,39.9801736,-75.1700423
+2017,Project H O M E,"2144 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,802101,Dentists,62121003,Offices Of Dentists,1 to 4,Single Loc,10,39.9801736,-75.1700423
+2017,Project H O M E,"2144 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,801104,Clinics,62111129,Offices Of Physicians (Except Mental Health Specia,10 to 19,Single Loc,11,39.9801736,-75.1700423
+2017,Project H O M E,"1845 N 23rd St, Philadelphia, PA 19121",19121,Verified,801104,Clinics,62111129,Offices Of Physicians (Except Mental Health Specia,10 to 19,Single Loc,12,39.9831913,-75.1716659
+2017,Project Home,"1850 N Croskey St, Philadelphia, PA 19121",19121,Verified,832218,Social Service & Welfare Organizations,62419012,Other Individual And Family Services,10 to 19,Single Loc,17,39.9831285,-75.1712971
+2017,Project Home,"2729 W Diamond St # 9, Philadelphia, PA 19121",19121,Verified,832218,Social Service & Welfare Organizations,62419012,Other Individual And Family Services,1 to 4,Single Loc,20,NA,NA
+2017,Project Home,"2826 W Diamond St, Philadelphia, PA 19121",19121,Verified,152112,Home Builders,23611506,New Single-Family Housing Construction (Except For,1 to 4,Single Loc,15,39.9876278,-75.1797423
+2017,Project Homes,"1936 N Judson St, Philadelphia, PA 19121",19121,Verified,832218,Social Service & Welfare Organizations,62419012,Other Individual And Family Services,10 to 19,Single Loc,14,39.9829242,-75.1725784
+2017,Psychoanalytic Center,"3810 Mount Pleasant Dr, Philadelphia, PA 19121",19121,Verified,862101,Professional Organizations,81392006,Professional Organizations,1 to 4,Single Loc,21,39.9833968,-75.1994732
+2017,Pub WEBB,"1527 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,14,39.9791463,-75.1605142
+2017,Public Health,"1900 N 20th St, Philadelphia, PA 19121",19121,Verified,804939,Pharmacists,62133002,Offices Of Mental Health Practitioners (Except Phy,1 to 4,Single Loc,11,39.9834612,-75.1671295
+2017,Q The Tire Doctor,"1961 1965 N 29 St, Philadelphia, PA 19121",19121,Verified,553123,Tire-Dealers-Retail,44134001,Tire Dealers,1 to 4,Single Loc,15,NA,NA
+2017,Qdoba Mexican Eats,"1600 N Broad St # 12, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,20 to 49,Branch,20,39.9785422,-75.1585024
+2017,R V Medical Assoc,"1216 N Broad St, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,5 to 9,Single Loc,15,39.9722445,-75.1596319
+2017,Ralph's,"1434 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,544101,Candy & Confectionery-Retail,44529202,Confectionery And Nut Retailers,1 to 4,Single Loc,14,39.9863524,-75.1574175
+2017,Rconstruction Construction,"2130 N Carlisle St, Philadelphia, PA 19121",19121,Verified,152144,Construction Companies,23611512,New Single-Family Housing Construction (Except For,1 to 4,Single Loc,10,39.9856042,-75.1575341
+2017,Remark Investment Group Iv LLC,"2020 N Woodstock St, Philadelphia, PA 19121",19121,Verified,628203,Financial Advisory Services,52394006,Portfolio Management And Investment Advice,5 to 9,Single Loc,15,39.985232,-75.1670874
+2017,Richard's Roofing,"1311 N 27th St # 1313, Philadelphia, PA 19121",19121,Verified,176103,Gutters & Downspouts,23816004,Roofing Contractors,5 to 9,Single Loc,25,NA,NA
+2017,Ridge Food Market,"2632 Ridge Ave, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,26,39.9841758,-75.1775971
+2017,Ridge Grocery,"2700 Ridge Ave, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,16,39.9847228,-75.1782785
+2017,Ridge Laundermat,"2300 Ridge Ave # 2, Philadelphia, PA 19121",19121,Verified,721501,Laundries-Self Service,81231001,Coin-Operated Laundries And Drycleaners,1 to 4,Single Loc,15,NA,NA
+2017,Rite Aid,"1528 N Broad St, Philadelphia, PA 19121",19121,Verified,591205,Pharmacies,45611009,Pharmacies And Drug Retailers,10 to 19,Branch,42,39.9763239,-75.158539
+2017,Rite Aid Gnc Live Well Store,"1528 N Broad St, Philadelphia, PA 19121",19121,Verified,549904,Vitamin & Food Supplements,45619106,Food (Health) Supplement Retailers,10 to 19,Branch,14,39.9763239,-75.158539
+2017,Rite Care Pharmacy,"2213 Ridge Ave, Philadelphia, PA 19121",19121,Verified,591205,Pharmacies,45611009,Pharmacies And Drug Retailers,5 to 9,Single Loc,11,39.9801032,-75.1715227
+2017,Robin's Nest Early Learning,"1801 N 26th St, Philadelphia, PA 19121",19121,Verified,829972,Education Centers,61171001,Educational Support Services,1 to 4,Single Loc,12,39.9827925,-75.1767523
+2017,Rodin Museum,"22 Parkway St, Philadelphia, PA 19121",19121,Verified,841201,Museums,71211001,Museums,1 to 4,Single Loc,15,39.9440307,-75.2380733
+2017,Rodriguez Grocery,"1800 N 31st St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,21,39.9838613,-75.1849504
+2017,Rodriguez Supermarket,"1700 N 28th St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,23,39.9817023,-75.1804489
+2017,Roy Ham Restaurant,"3130 Ridge Ave, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,23,39.9897139,-75.1844348
+2017,S R Svc Ctr,"3222 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,753801,Automobile Repairing & Service,81111104,General Automotive Repair,1 to 4,Single Loc,40,39.9823815,-75.18777
+2017,S R Svc Ctr,"3222 W Columbia Ave, Philadelphia, PA 19121",19121,Verified,899999,Services NEC,54199009,"All Other Professional, Scientific, And Technical",1 to 4,Single Loc,19,39.9823815,-75.18777
+2017,"Sandler, Jeffrey D Dpm","2233 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,804301,Podiatrists,62139103,Offices Of Podiatrists,1 to 4,Single Loc,38,39.9807474,-75.1721626
+2017,Sanjer Food Svc LLC,"1614 Cecil B Moore Ave # 1b, Philadelphia, PA 19121",19121,Verified,581220,Restaurant Management,72231009,Food Service Contractors,10 to 19,Single Loc,12,NA,NA
+2017,Sarah's Salon,"1804 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,1 to 4,Single Loc,30,39.9869461,-75.1629141
+2017,Sartain Apartments Rental Ofc,"3017 W Oxford St, Philadelphia, PA 19121",19121,Verified,653113,Real Estate-Rental Service,53121006,Offices Of Real Estate Agents And Brokers,1 to 4,Single Loc,34,39.9809873,-75.1846556
+2017,Screen Gems Inc,"2927 W Thompson St, Philadelphia, PA 19121",19121,Verified,275202,Printers (Mfrs),32311109,Commercial Printing (Except Screen And Books),10 to 19,Single Loc,29,39.9767863,-75.1843644
+2017,Sedgley Plaza Pharmacy Inc,"2815 Ridge Ave # B, Philadelphia, PA 19121",19121,Verified,591205,Pharmacies,45611009,Pharmacies And Drug Retailers,5 to 9,Single Loc,12,NA,NA
+2017,"Senif, Daniel","1800 N Broad St, Philadelphia, PA 19121",19121,Verified,804918,Physical Therapists,62134007,"Offices Of Physical, Occupational And Speech Thera",1 to 4,Single Loc,11,39.980358,-75.15766
+2017,Service Master True Image,"1428 N Broad St, Philadelphia, PA 19121",19121,Verified,734915,Cleaning Services-Industrial,56172008,Janitorial Services,10 to 19,Branch,13,39.9753832,-75.1590084
+2017,Seven Plus,"1240 N Broad St, Philadelphia, PA 19121",19121,Verified,481207,Cellular Telephones (Services),51711214,Wireless Telecommunications Carriers (Except Satel,1 to 4,Single Loc,35,39.9726672,-75.1592832
+2017,Shake Rattle Roll Inc,"1214 N Broad St Frnt, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,5 to 9,Single Loc,17,NA,NA
+2017,Sharswood II,"1450 N 21st St, Philadelphia, PA 19121",19121,Verified,472402,Travel Agencies & Bureaus,56151007,Travel Agencies,1 to 4,Single Loc,19,39.977095,-75.170067
+2017,Shields Business Solutions,"1510 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,738999,Business Services NEC,56199001,All Other Support Services,1 to 4,Single Loc,14,39.9788762,-75.1599933
+2017,Shin's Market,"2248 Ridge Ave, Philadelphia, PA 19121",19121,Verified,542101,Seafood-Retail,44525004,Fish And Seafood Retailers,1 to 4,Single Loc,42,39.9800204,-75.1718406
+2017,Shinder Auto Repair,"1247 N 26th St, Philadelphia, PA 19121",19121,Verified,753801,Automobile Repairing & Service,81111104,General Automotive Repair,1 to 4,Single Loc,15,39.9751546,-75.1782029
+2017,Sidberry Beauty Salon,"1643 N 29th St, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,1 to 4,Single Loc,42,39.9813848,-75.1818047
+2017,Silk Tent,"1346 N Broad St, Philadelphia, PA 19121",19121,Verified,599988,Craft Galleries & Dealers,45521987,All Other General Merchandise Retailers,1 to 4,Single Loc,14,39.9738253,-75.1590313
+2017,Skies The Limit Day Care,"1346 N 27th St, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,5 to 9,Single Loc,14,39.9769854,-75.1800467
+2017,Smart Start Daycare & Learning,"2139 Ridge Ave, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,5 to 9,Single Loc,9,39.9792207,-75.1702568
+2017,Smith Memorial Playground,"3500 Reservoir Dr, Philadelphia, PA 19121",19121,Verified,799951,Parks,71219004,Nature Parks And Other Similar Institutions,10 to 19,Single Loc,32,39.9888167,-75.1926661
+2017,Sofistcated Investments Inc,"1603 W Diamond St, Philadelphia, PA 19121",19121,Verified,628203,Financial Advisory Services,52394006,Portfolio Management And Investment Advice,5 to 9,Single Loc,15,39.9873533,-75.1768519
+2017,Sophisticated Investments,"1924 N 18th St, Philadelphia, PA 19121",19121,Verified,621111,Investments,52391001,Miscellaneous Intermediation,5 to 9,Single Loc,14,39.983223,-75.1636882
+2017,Sophisticuts Dominican Beauty,"2836 Ridge Ave, Philadelphia, PA 19121",19121,Verified,723106,Beauty Salons,81211202,Beauty Salons,1 to 4,Single Loc,15,39.9864187,-75.1805636
+2017,St Elizabeth's,"1850 N Croskey St, Philadelphia, PA 19121",19121,Verified,832241,Homeless Shelters,62422102,Temporary Shelters,5 to 9,Single Loc,20,39.9831285,-75.1712971
+2017,St Elizabeth's Phila Plan,"1845 N 23rd St, Philadelphia, PA 19121",19121,Verified,832218,Social Service & Welfare Organizations,62419012,Other Individual And Family Services,10 to 19,Single Loc,30,39.9831913,-75.1716659
+2017,Star Perfume & Variety Store,"1411 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,599992,Cosmetics & Perfumes-Retail,45612001,"Cosmetics, Beauty Supplies, And Perfume Retailers",1 to 4,Single Loc,14,39.9864367,-75.1567854
+2017,Star Perfumers,"1411 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,512204,Cosmetics-Wholesale,42421002,Drugs And Druggists' Sundries Merchant Wholesalers,1 to 4,Single Loc,15,39.9864367,-75.1567854
+2017,Starspirit International,"1730 N 27th St, Philadelphia, PA 19121",19121,Verified,869903,Organizations,81341018,Civic And Social Organizations,5 to 9,Single Loc,17,39.982268,-75.1788644
+2017,Stepping Stones Learning Acad,"2329 Ridge Ave, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,5 to 9,Single Loc,15,39.9815505,-75.1732251
+2017,Stop 19 Supermarket,"19th & Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,14,39.9774779,-75.1485765
+2017,"Strauch, Kimberly A","2144 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,804908,Nurses-Registered Rn,62139920,Offices Of All Other Miscellaneous Health Practiti,1 to 4,Single Loc,10,39.9801736,-75.1700423
+2017,Subway,"1511 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Branch,22,39.9790628,-75.1600337
+2017,Sun's Cleaners,"1220 N Broad St, Philadelphia, PA 19121",19121,Verified,721201,Cleaners,81232002,Drycleaning And Laundry Services (Except Coin-Oper,1 to 4,Single Loc,36,39.9728561,-75.1594785
+2017,Sunny Nails,"1725 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,723102,Manicuring,81211302,Nail Salons,1 to 4,Single Loc,14,39.9796136,-75.1636333
+2017,Sunoco A Plus Mini Market,"1300 N Broad St, Philadelphia, PA 19121",19121,Verified,554101,Service Stations-Gasoline & Oil,45712003,Other Gasoline Stations,1 to 4,Branch,24,39.97334,-75.159135
+2017,Susquehanna Food Market,"2163 N 21st St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,20,39.9876434,-75.167452
+2017,Susquehanna Village LP,"1421 W Susquehanna Ave # B, Philadelphia, PA 19121",19121,Verified,734908,Property Maintenance,23899081,All Other Specialty Trade Contractors,5 to 9,Single Loc,19,NA,NA
+2017,T & G Construction,"1610 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,152103,General Contractors,23611505,New Single-Family Housing Construction (Except For,1 to 4,Single Loc,23,39.9865669,-75.1598908
+2017,T-Mobile,"1600 N Broad St # 8, Philadelphia, PA 19121",19121,Verified,481207,Cellular Telephones (Services),51711214,Wireless Telecommunications Carriers (Except Satel,5 to 9,Branch,13,NA,NA
+2017,"Tadepalli, Naga S Dmd","1630 N Sydenham St # 3, Philadelphia, PA 19121",19121,Verified,802101,Dentists,62121003,Offices Of Dentists,1 to 4,Single Loc,9,NA,NA
+2017,Taylor Robinson Music & Voice,"1537 N Bouvier St, Philadelphia, PA 19121",19121,Verified,829909,Tutoring,61169102,Exam Preparation And Tutoring,5 to 9,Single Loc,12,39.9774422,-75.1637692
+2017,Teachin Tots Learning Ctr,"2632 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,5 to 9,Single Loc,13,39.9812133,-75.1785969
+2017,Telcel.Com,"1700 N Broad St, Philadelphia, PA 19121",19121,Verified,731917,Advertising-Computer,54189002,Other Services Related To Advertising,10 to 19,Single Loc,13,39.9785703,-75.1579015
+2017,Temple Buffet,"1521 Cecil B Moore Ave # 1, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,14,NA,NA
+2017,Temple Israel,"1700 N Broad St, Philadelphia, PA 19121",19121,Verified,866112,Synagogues,81311026,Religious Organizations,5 to 9,Single Loc,11,39.9785703,-75.1579015
+2017,Temple Nest Apartments,"1504 N Carlisle St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,12,39.9763861,-75.159547
+2017,Temple Star Chinese Restaurant,"1412 W Diamond St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,23,39.9880425,-75.1821736
+2017,Temple Town Pizza,"2001 N Gratz St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,11,39.9842316,-75.1641197
+2017,Temple Town Realty,"1535 N Sydenham St, Philadelphia, PA 19121",19121,Verified,655202,Real Estate Developers,23721005,Land Subdivision,1 to 4,Single Loc,24,39.9772607,-75.1605607
+2017,Temple University,"1800 N Broad St, Philadelphia, PA 19121",19121,Verified,822101,Schools-Universities & Colleges Academic,61131009,"Colleges, Universities, And Professional Schools",10 to 19,Branch,14,39.980358,-75.15766
+2017,Temple University,"1700 N Broad St # 203b, Philadelphia, PA 19121",19121,Verified,822101,Schools-Universities & Colleges Academic,61131009,"Colleges, Universities, And Professional Schools",10 to 19,Branch,11,NA,NA
+2017,Temple University,"1776 N Broad St, Philadelphia, PA 19121",19121,Verified,822101,Schools-Universities & Colleges Academic,61131009,"Colleges, Universities, And Professional Schools",10 to 19,Branch,14,39.9798139,-75.1585825
+2017,Temple University Campus Rec,"1701 N 15th St, Philadelphia, PA 19121",19121,Verified,799701,Recreation Centers,71394015,Fitness And Recreational Sports Centers,1 to 4,Branch,17,39.979014,-75.159423
+2017,Temple University Sm Bus Dvmnt,"1510 Cecil B Moore Ave # 200, Philadelphia, PA 19121",19121,Verified,912104,Government Offices-City/Village & Twp,92112006,Legislative Bodies,20 to 49,Single Loc,14,NA,NA
+2017,Temple Villas,"1611 N 17th St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,14,39.9782429,-75.1627067
+2017,Temple Villas,"1811 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,11,39.979773,-75.1646823
+2017,Temple Villas,"1848 N 17th St, Philadelphia, PA 19121",19121,Verified,506324,Burglar Alarm Systems (Whls),42361007,"Electrical Apparatus And Equipment, Wiring Supplie",1 to 4,Single Loc,13,39.9821001,-75.1623143
+2017,Temple Villas,"1531 N 15th St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,14,39.977218,-75.1596538
+2017,Temple Villas Airm 1816,"1816 N 17th St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,12,39.9813584,-75.162478
+2017,Temple Villas Alarm 1820,"1820 N 17th St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,13,39.9814503,-75.1624557
+2017,Temple Villas Alrm 1818,"1818 N 17th St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,12,39.9814037,-75.1624675
+2017,Temple Villas Alrm 2015,"2015 N 17th St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,12,39.9843367,-75.1613848
+2017,Temple Villas I,"1623 W Diamond St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,12,39.9873533,-75.1768519
+2017,Temple Villas I LLC,"1709 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,13,39.9795168,-75.1630544
+2017,Temple Villas I LLC,"1726 W Diamond St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,14,39.985321,-75.1618909
+2017,Temple Villas I LLC,"1527 W Norris St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,14,39.9836567,-75.1594745
+2017,Temple Villas I LLC,"1511 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,13,39.9867764,-75.1585471
+2017,Temple Villas I LLC,"1700 N 17th St, Philadelphia, PA 19121",19121,Verified,738967,Incentive Programs,56199010,All Other Support Services,5 to 9,Single Loc,14,39.9796704,-75.1628517
+2017,Temple Villas LLC,"1614 Cecil B Moore Ave # 2, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,1 to 4,Single Loc,14,NA,NA
+2017,Temple Villas LLC,"1816 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,13,39.979403,-75.1648802
+2017,Temple Villas LLC,"2014 N 17th St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,13,39.9843802,-75.161783
+2017,Temple Villas LLC,"1609 N Willington St, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,5 to 9,Single Loc,13,NA,NA
+2017,Temple Villas LLC,"1409 W Jefferson St, Philadelphia, PA 19121",19121,Verified,701101,Hotels & Motels,72111002,Hotels (Except Casino Hotels) And Motels,10 to 19,Single Loc,14,39.9760872,-75.1596368
+2017,Temple Villas LLC,"1720 Fontain St, Philadelphia, PA 19121",19121,Verified,738967,Incentive Programs,56199010,All Other Support Services,5 to 9,Single Loc,15,39.9847417,-75.1624198
+2017,Tempo Rainbow,"2156 N Broad St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,19,39.9861435,-75.1566152
+2017,Thaddeous Capital Inc,"1909 N 30th St, Philadelphia, PA 19121",19121,Verified,628203,Financial Advisory Services,52394006,Portfolio Management And Investment Advice,5 to 9,Single Loc,14,39.9851903,-75.1826621
+2017,Three Sisters Grocery Store,"2500 W Master St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,25,39.97595,-75.170124
+2017,Tjs Autobotz,"3127 W Master St, Philadelphia, PA 19121",19121,Verified,753201,Automobile Body-Repairing & Painting,81112102,"Automotive Body, Paint, And Interior Repair And Ma",1 to 4,Single Loc,15,NA,NA
+2017,Together,"2201 Ridge Ave, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,23,39.9799783,-75.1713048
+2017,Tomorrow Gift,"2246 Ridge Ave, Philadelphia, PA 19121",19121,Verified,594712,Gift Shops,45942013,"Gift, Novelty, And Souvenir Retailers",1 to 4,Single Loc,38,39.980003,-75.1718162
+2017,Torres Rodriguez Inc,"2163 N 15th St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,11,39.9863814,-75.1577057
+2017,Tower Investments Inc,"1600 N Broad St, Philadelphia, PA 19121",19121,Verified,621111,Investments,52391001,Miscellaneous Intermediation,5 to 9,Single Loc,19,39.9774961,-75.1584795
+2017,Town Supermarket,"2229 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,11,39.9807077,-75.1720378
+2017,Tree House Books,"1430 W Susquehanna Ave, Philadelphia, PA 19121",19121,Verified,078301,Tree Service,56173022,Landscaping Services,1 to 4,Single Loc,21,39.9863249,-75.1575518
+2017,Trojan Childrens Positive,"2058 Ridge Ave # 1, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,1 to 4,Single Loc,12,NA,NA
+2017,Tropicana Lounge,"1559 N 29th St, Philadelphia, PA 19121",19121,Verified,581303,Cocktail Lounges,72241003,Drinking Places (Alcoholic Beverages),5 to 9,Single Loc,12,39.9802475,-75.1820135
+2017,Turner Grocery,"2454 Turner St, Philadelphia, PA 19121",19121,Verified,541105,Grocers-Retail,44511003,Supermarkets And Other Grocery Retailers (Except C,1 to 4,Single Loc,13,39.9799124,-75.1758092
+2017,Twenty Nine Oxford Restaurant,"2843 W Oxford St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,27,39.9805428,-75.18203
+2017,U-Haul International Inc,"1701 N 33rd St, Philadelphia, PA 19121",19121,Verified,751303,Truck Renting & Leasing,53212016,"Truck, Utility Trailer, And Rv (Recreational Vehic",1 to 4,Branch,11,39.982752,-75.187913
+2017,U-Haul Neighborhood Dealer,"1901 N 20th St, Philadelphia, PA 19121",19121,Verified,751303,Truck Renting & Leasing,53212016,"Truck, Utility Trailer, And Rv (Recreational Vehic",1 to 4,Branch,15,39.983049,-75.166627
+2017,Ugot Munchies,"2012 N Broad St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,14,39.9837745,-75.157143
+2017,Umoja Tours,"1521 N Hollywood St, Philadelphia, PA 19121",19121,Verified,472402,Travel Agencies & Bureaus,56151007,Travel Agencies,1 to 4,Single Loc,17,39.9795254,-75.1828726
+2017,United States Air Force,"1600 N Broad St, Philadelphia, PA 19121",19121,Verified,971101,Federal Government-National Security,92811003,National Security,5 to 9,Branch,17,39.9774961,-75.1584795
+2017,United States Army Recruit Sta,"1600 N Broad St, Philadelphia, PA 19121",19121,Verified,971101,Federal Government-National Security,92811003,National Security,10 to 19,Branch,15,39.9774961,-75.1584795
+2017,Unity Mission Church Home Schl,"1530 N 16th St, Philadelphia, PA 19121",19121,Verified,822298,Junior-Community College-Tech Institutes,61121002,Junior Colleges,10 to 19,Single Loc,15,39.9773875,-75.1618383
+2017,University Thrift Store,"1723 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,593222,Thrift Shops,45951040,Used Merchandise Retailers,1 to 4,Single Loc,17,39.9796124,-75.1635445
+2017,Us Facilities Inc,"1981 N Woodstock St, Philadelphia, PA 19121",19121,Verified,734911,Building Maintenance,23899052,All Other Specialty Trade Contractors,1 to 4,Single Loc,20,39.9841919,-75.1673362
+2017,USA Mobile Commissary Inc,"1501 N 31st St, Philadelphia, PA 19121",19121,Verified,481207,Cellular Telephones (Services),51711214,Wireless Telecommunications Carriers (Except Satel,1 to 4,Single Loc,13,39.9796428,-75.1849694
+2017,Usmc Recruiting,"1600 N Broad St # 3, Philadelphia, PA 19121",19121,Verified,736105,Executive Search Consultants,56131201,Executive Search Services,1 to 4,Single Loc,18,NA,NA
+2017,V Capital Management,"1508 W Montgomery Ave, Philadelphia, PA 19121",19121,Verified,651303,Apartments,53111002,Lessors Of Residential Buildings And Dwellings,1 to 4,Single Loc,20,39.9804108,-75.1601351
+2017,Victory Christian Pre-School,"2341 Ridge Ave, Philadelphia, PA 19121",19121,Verified,835101,Child Care Service,62441003,Child Care Services,5 to 9,Single Loc,17,39.9816227,-75.1736859
+2017,Vince Beverage,"2048 Ridge Ave, Philadelphia, PA 19121",19121,Verified,518101,Beer & Ale-Wholesale,42481001,Beer And Ale Merchant Wholesalers,1 to 4,Single Loc,15,39.9765894,-75.1692793
+2017,"Vital, Filipinas T MD","1900 N 20th St # 5, Philadelphia, PA 19121",19121,Verified,801101,Physicians & Surgeons,62111107,Offices Of Physicians (Except Mental Health Specia,1 to 4,Single Loc,16,NA,NA
+2017,Wagner Free Institute-Science,"1700 W Montgomery Ave, Philadelphia, PA 19121",19121,Verified,841201,Museums,71211001,Museums,10 to 19,Single Loc,31,39.9805863,-75.1628639
+2017,Water Damage Squad,"2441 W Berks St, Philadelphia, PA 19121",19121,Verified,152114,Fire Damage Restoration,23611813,Residential Remodelers,5 to 9,Single Loc,11,39.9840708,-75.174524
+2017,Wayland Temple Baptist Cu,"2500 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,606101,Credit Unions,52213003,Credit Unions,1 to 4,Single Loc,32,39.9807766,-75.1759461
+2017,"Weldon, Jennifer","2144 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,804907,Nurses-Practitioners,62139923,Offices Of All Other Miscellaneous Health Practiti,1 to 4,Single Loc,11,39.9801736,-75.1700423
+2017,Wellness Pharmacy,"2337 Ridge Ave, Philadelphia, PA 19121",19121,Verified,591205,Pharmacies,45611009,Pharmacies And Drug Retailers,5 to 9,Single Loc,12,39.9815984,-75.1735456
+2017,Wendy's,"1700 N Broad St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,20 to 49,Branch,12,39.9785703,-75.1579015
+2017,Wendy's,"1708 N Broad St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,20 to 49,Branch,23,39.9790933,-75.1580982
+2017,Willington Garage Doors,"1801 N 27th St, Philadelphia, PA 19121",19121,Verified,175107,Garage Doors-Repairing,23835007,Finish Carpentry Contractors,5 to 9,Single Loc,11,39.9829973,-75.1783173
+2017,Wine & Spirits Store,"2115 N 22nd St, Philadelphia, PA 19121",19121,Verified,592103,Wines-Retail,44532005,"Beer, Wine, And Liquor Retailers",5 to 9,Single Loc,12,39.9868788,-75.1692119
+2017,Women For Greater Philadelphia,"7201 Randolph Dr, Philadelphia, PA 19121",19121,Verified,832218,Social Service & Welfare Organizations,62419012,Other Individual And Family Services,1 to 4,Single Loc,19,NA,NA
+2017,Woodstock Family Ctr,"1981 N Woodstock St, Philadelphia, PA 19121",19121,Verified,832218,Social Service & Welfare Organizations,62419012,Other Individual And Family Services,20 to 49,Single Loc,32,39.9841919,-75.1673362
+2017,WRTI,"1509 Cecil B Moore Ave # 3, Philadelphia, PA 19121",19121,Verified,483201,Radio Stations & Broadcasting Companies,51611003,Radio Broadcasting Stations,50 to 99,Single Loc,33,NA,NA
+2017,Wyde Bodi Auto Tags,"1711 N 24th St, Philadelphia, PA 19121",19121,Verified,729954,Vehicle & Drivers Licensing Services,56199022,All Other Support Services,1 to 4,Single Loc,12,39.9811234,-75.1738101
+2017,Ymca,"1400 N Broad St, Philadelphia, PA 19121",19121,Verified,832222,Youth Organizations & Centers,62411006,Child And Youth Services,20 to 49,Branch,21,39.9749831,-75.1591506
+2017,Ymca,"2108 Cecil B Moore Ave, Philadelphia, PA 19121",19121,Verified,832222,Youth Organizations & Centers,62411006,Child And Youth Services,10 to 19,Branch,15,39.9800841,-75.1702874
+2017,Ymca-North Pa Hdstrt Prgrm,"1400 N Broad St, Philadelphia, PA 19121",19121,Verified,832222,Youth Organizations & Centers,62411006,Child And Youth Services,20 to 49,Branch,18,39.9749831,-75.1591506
+2017,Yuri Deli,"1618 N 29th St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,23,39.9810028,-75.1823144
+2017,Zavelle Bookstore,"1520 N Broad St, Philadelphia, PA 19121",19121,Verified,594201,Book Dealers-Retail,45921005,Book Retailers And News Dealers,1 to 4,Single Loc,27,39.976227,-75.1585584
+2017,Zhang Jian L,"2034 N 22nd St, Philadelphia, PA 19121",19121,Verified,581208,Restaurants,72251117,Full-Service Restaurants,1 to 4,Single Loc,31,39.9854673,-75.1698931

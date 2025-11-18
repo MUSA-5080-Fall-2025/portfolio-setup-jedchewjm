@@ -105,6 +105,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -172,6 +201,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../weekly-notes/week-10-notes.html">
  <span class="dropdown-text">Week 10 Notes - Logistic Regression for Binary Outcomes</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../weekly-notes/week-10-notes.html">
+ <span class="dropdown-text">Week 10 Notes - Logistic Regression for Binary Outcomes</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -209,6 +242,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li>
     <a class="dropdown-item" href="../labs/lab_4/assignment4_template.html">
  <span class="dropdown-text">Assignment 4: Predictive Policing &amp; Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab_5/assignment5_template.qmd">
+ <span class="dropdown-text"></span></a>
   </li>  
     </ul>
   </li>
@@ -309,9 +346,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Confusion Matrix</strong></p>
 <p><img src="images/clipboard-2939296991.png" class="img-fluid" width="238"></p>
 <ul>
-<li><strong>Sensitivity (Recall, True Positive Rate):</strong> [ = ] <em>“Of all actual positives, how many did we catch?”</em></li>
-<li><strong>Specificity (True Negative Rate):</strong> [ = ] <em>“Of all actual negatives, how many did we correctly identify?”</em></li>
-<li><strong>Precision (Positive Predictive Value):</strong> [ = ] <em>“Of all our positive predictions, how many were correct?”</em></li>
+<li><strong>Sensitivity (Recall, True Positive Rate):</strong> <span class="math display">\[ = \frac{TP}{TP + FN}\]</span>
+<ul>
+<li><em>“Of all actual positives, how many did we catch?” / “Sense the sick”</em></li>
+<li>False Positive Rate = 1 - Specificity</li>
+</ul></li>
+<li><strong>Specificity (True Negative Rate):</strong> <span class="math display">\[ = \frac{TN}{TN + FP}\]</span>
+<ul>
+<li><em>“Of all actual negatives, how many did we correctly identify?” / “Spare the healthy”</em></li>
+</ul></li>
+<li><strong>Precision (Positive Predictive Value):</strong> <span class="math display">\[ = \frac{TP}{TP + FP}\]</span>
+<ul>
+<li><em>“Of all our positive predictions, how many were correct?”</em></li>
+</ul></li>
+<li><strong>Accuracy:</strong> <span class="math display">\[= \frac{TP + TN}{TP + FP + TN + FN}\]</span></li>
 </ul>
 </section>
 <section id="disparate-impact-algorithmic-bias-in-action" class="level3">

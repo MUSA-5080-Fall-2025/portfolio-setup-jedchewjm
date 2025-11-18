@@ -1,0 +1,43 @@
+---
+title: "Week 11 Notes - Space Time Prediction"
+date: "2025-11-17"
+---
+
+## Key Concepts Learned
+
+### Logistic Regression – Binary Classification Problems in Policy
+
+-   
+
+------------------------------------------------------------------------
+
+## Coding Techniques
+
+-   **Example: Email Spam Detection**
+    -   number of exclamation marks
+
+    -   contains the word "free"
+
+    -   email length
+
+```{r, eval = FALSE}
+
+```
+
+-   **Confusion Matrix**
+
+```{r, eval = FALSE}
+
+```
+
+## Questions & Challenges
+
+-   Private-sector software providers may be very hesitant to publicly share the inner workings and metrics of their predictive algorithms
+
+## Connections to Policy – Practical Recommendations
+
+-   
+
+## Reflection
+
+-   

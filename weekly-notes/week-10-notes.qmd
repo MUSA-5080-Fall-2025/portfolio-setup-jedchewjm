@@ -21,9 +21,14 @@ date: "2025-11-10"
 
 ![](images/clipboard-2939296991.png){width="238"}
 
--   **Sensitivity (Recall, True Positive Rate):** \[\text{Sensitivity} = \frac{TP}{TP + FN}\] *“Of all actual positives, how many did we catch?”*
--   **Specificity (True Negative Rate):** \[\text{Specificity} = \frac{TN}{TN + FP}\] *“Of all actual negatives, how many did we correctly identify?”*
--   **Precision (Positive Predictive Value):** \[\text{Precision} = \frac{TP}{TP + FP}\] *“Of all our positive predictions, how many were correct?”*
+-   **Sensitivity (Recall, True Positive Rate):** $$ = \frac{TP}{TP + FN}$$
+    -   *“Of all actual positives, how many did we catch?” / “Sense the sick”*
+    -   False Positive Rate = 1 - Specificity
+-   **Specificity (True Negative Rate):** $$ = \frac{TN}{TN + FP}$$
+    -   *“Of all actual negatives, how many did we correctly identify?” / “Spare the healthy”*
+-   **Precision (Positive Predictive Value):** $$ = \frac{TP}{TP + FP}$$
+    -   *“Of all our positive predictions, how many were correct?”*
+-   **Accuracy:** $$= \frac{TP + TN}{TP + FP + TN + FN}$$
 
 ### Disparate Impact & Algorithmic Bias in Action
 
@@ -92,7 +97,6 @@ summary(spam_model)
 coefs <- coef(spam_model)
 odds_ratios <- exp(coefs)
 print(odds_ratios)
-
 ```
 
 -   **Confusion Matrix**

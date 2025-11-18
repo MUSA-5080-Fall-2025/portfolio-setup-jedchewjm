@@ -1,0 +1,229 @@
+---
+title: "DVRPC Land Use - Sharswood"
+subtitle: "URBS 4000: Urban Studies Thesis"
+author: "Jed Chew"
+date: today
+format: 
+  html:
+    code-fold: false
+    toc: true
+    toc-location: left
+    theme: cosmo
+    embed-resources: true
+execute:
+  warning: false
+  message: false
+editor: 
+  markdown: 
+    wrap: 80
+---
+
+## Project Title: Mixed by Design
+
+### *A Case Study of the Philadelphia Housing Authority's (PHA) Choice Neighborhoods Redevelopment of Sharswood*
+
+For my Urban Studies thesis, I am researching the PHA's Choice Neighborhoods
+redevelopment of the Sharswood neighborhood in North Philadelphia. I have two
+main research questions about the process and outcome of this redevelopment:
+
+\(1\) the **process** by which the PHA aligned the politics, finance, and design
+for the redevelopment of Sharswood; and 
+
+\(2\) the early redevelopment **outcomes** relative to the Choice Neighborhoods
+Initiative (CNI) vision of mixed-partners, mixed-use, and mixed-income
+
+## Part 1: Land-Use Data from DVRPC
+
+**Land-Use Data from DVRPC**
+
+-   Data Source: <https://opendataphilly.org/datasets/land-use/>
+-   Date Downloaded: Nov 13, 2025
+-   Description: DVRPC’s land use files are based on digital orthophotography
+    created from aerial surveillance conducted in the spring of the land use
+    file year.
+    -   These land-use files are consistently updated every five years which is
+        more frequent than those from Philadelphia's Department of Planning and
+        Development.
+    -   However, because these land-use files are based on aerial surveillance,
+        they are less detailed and unable to distinguish between the types of
+        multifamily buildings or identify vacant buildings.
+-   Types of GeoJSON Files: Buildings, Land, and Points
+
+### Step 1: Load Philadelphia Census Tract and Block Group Data
+
+-   Philadelphia census tracts, block groups, and neighborhood boundaries
+
+```{r, echo = FALSE, include = FALSE}
+# Load required packages
+library(tidyverse)
+library(tidycensus)
+library(janitor)
+library(sf)
+library(tigris)
+library(scales)
+library(ggnewscale)
+library(patchwork)
+library(RColorBrewer)
+library(viridisLite)
+library(units)
+library(knitr)
+library(caret)
+
+# Set Census API key
+census_api_key("fe841b7ef0aa73d9579f0517bd1c8f26d33c789b")
+
+# Get working directory
+getwd()
+```
+
+```{r, results = 'hide'}
+# Load spatial data
+census_tracts <- tracts(state = "PA", county = "Philadelphia", year = 2020, class = "sf", cb = TRUE, progress = FALSE)
+block_grps <- block_groups(state = "PA", county = "Philadelphia", year = 2020, class = "sf",cb = TRUE, progress = FALSE)
+
+# Filter Block Groups for Sharswood
+ids <- c("421010138001","421010138002","421010139001",
+         "421010139002","421010139003")
+
+sharswood_bg_sf <- block_grps |>
+ filter(GEOID %in% ids) |> 
+  st_transform(2272) # PA State Plane (in US Survey Feet)
+```
+
+```{r, results = 'hide'}
+# Load Sharswood land parcels
+sharswood_land_parcels <- st_read("data/sharswood_parcels.geojson")
+sharswood_zip <- 19121
+```
+
+--------------------------------------------------------------------------------
+
+### Step 2: Load DVRPC Land-Use Data
+
+```{r}
+# Color Palette from PCPC
+landuse_pal <- c(
+  "Residential"                         = "#f5ff12", # 245,255,18
+  "Commercial"                          = "#e60000", # 230,0,0
+  "Mixed Commercial/Residential"        = "#e89579", # 232,149,121
+  "Industrial"                          = "#8c00ff", # 140,0,255
+  "Institutional"                       = "#0070ff", # 0,112,255
+  "Transportation"                      = "#cccccc", # 204,204,204
+  "Recreation"                          = "#9bccb3", # 155,204,179  
+  "Park/Open Space"                     = "#63cc00", # 99,204,0
+  "Water"                               = "#bfe8ff", # 191,232,255
+  "Undeveloped"                         = "#a87000", # 168,112,0
+  "Other/Unknown"                       = "#d2d2d2"  # 210,210,210 
+)
+```
+
+### 2020 Land-Use Data
+
+```{r, results = 'hide'}
+# Load and Spatially Filter Data
+DVRPC_2020 <- st_read("data/Land_Use_2020.geojson") |> 
+  st_make_valid()
+
+sharswood_lu_2020 <- DVRPC_2020 |> 
+  st_transform(st_crs(sharswood_bg_sf)) |> 
+  st_crop(sharswood_bg_sf) |> 
+  st_filter(sharswood_bg_sf, .predicate = st_within)
+```
+
+```{r, eval = FALSE}
+# Column Headings
+sharswood_df_2020 <- sharswood_lu_2020 |> 
+  st_drop_geometry()
+head(sharswood_df_2020)
+count(sharswood_df_2020, lu20catn)
+count(sharswood_df_2020, lu20subn)
+```
+
+```{r}
+# Visualization
+ggplot(sharswood_lu_2020) +
+  geom_sf(aes(fill = lu20catn), color = NA) +
+  scale_fill_manual(values = landuse_pal, name = "Land Use") +
+  labs(title = "2020 DVRPC Land Use in Sharswood") +
+  theme_void()
+```
+
+```{r}
+ggplot(sharswood_lu_2020) +
+  geom_sf(aes(fill = lu20subn), color = NA) +
+  labs(title = "2020 DVRPC Detailed Land Use in Sharswood") +
+  theme_void()
+```
+
+--------------------------------------------------------------------------------
+
+### 2015 Land-Use Data
+
+```{r}
+# Load and Spatially Filter Data
+DVRPC_2015 <- st_read("data/Land_Use_2015.geojson") |> 
+  st_make_valid()
+
+sharswood_lu_2015 <- DVRPC_2015 |> 
+  st_transform(st_crs(sharswood_bg_sf)) |> 
+  st_crop(sharswood_bg_sf) |> 
+  st_filter(sharswood_bg_sf, .predicate = st_within)
+```
+
+```{r, eval = FALSE}
+# Column Headings
+sharswood_df_2015 <- sharswood_lu_2015 |> 
+  st_drop_geometry()
+head(sharswood_df_2015)
+count(sharswood_df_2015, lu15catn)
+count(sharswood_df_2015, lu15subn)
+```
+
+```{r}
+# Visualization
+ggplot(sharswood_lu_2015) +
+  geom_sf(aes(fill = lu15catn), color = NA) +
+  scale_fill_manual(values = landuse_pal, name = "Land Use") +
+  labs(title = "2015 DVRPC Land Use in Sharswood") +
+  theme_void()
+```
+
+--------------------------------------------------------------------------------
+
+### 2023 Land-Use Data
+
+```{r}
+# Load and Spatially Filter Data
+DVRPC_2023 <- st_read("data/Land_Use_2023.geojson") |> 
+  st_make_valid()
+
+sharswood_lu_2023 <- DVRPC_2023 |> 
+  st_transform(st_crs(sharswood_bg_sf)) |> 
+  st_crop(sharswood_bg_sf) |> 
+  st_filter(sharswood_bg_sf, .predicate = st_within)
+```
+
+```{r}
+# Column Headings
+sharswood_df_2023 <- sharswood_lu_2023 |> 
+  st_drop_geometry()
+head(sharswood_df_2023)
+count(sharswood_df_2023, lu23catn)
+count(sharswood_df_2023, lu23subn)
+```
+
+```{r}
+# Visualization
+ggplot(sharswood_lu_2023) +
+  geom_sf(aes(fill = lu23catn), color = NA) +
+  scale_fill_manual(values = landuse_pal, name = "Land Use") +
+  labs(title = "2023 DVRPC Land Use in Sharswood") +
+  theme_void()
+```
+
+```{r}
+ggplot(sharswood_lu_2023) +
+  geom_sf(aes(fill = lu23subn), color = NA) +
+  labs(title = "2023 DVRPC Detailed Land Use in Sharswood") +
+  theme_void()
+```

@@ -1,0 +1,690 @@
+---
+title: "Data Axle - Businesses in Sharswood"
+subtitle: "URBS 4000: Urban Studies Thesis"
+author: "Jed Chew"
+date: today
+format: 
+  html:
+    code-fold: false
+    toc: true
+    toc-location: left
+    theme: cosmo
+    embed-resources: true
+execute:
+  warning: false
+  message: false
+editor: 
+  markdown: 
+    wrap: 80
+---
+
+## Project Title: Mixed by Design
+
+### *A Case Study of the Philadelphia Housing Authority's (PHA) Choice Neighborhoods Redevelopment of Sharswood*
+
+For my Urban Studies thesis, I am researching the PHA's Choice Neighborhoods
+redevelopment of the Sharswood neighborhood in North Philadelphia. I have two
+main research questions about the process and outcome of this redevelopment:
+
+\(1\) the **process** by which the PHA aligned the politics, finance, and design
+for the redevelopment of Sharswood; and 
+
+\(2\) the early redevelopment **outcomes** relative to the Choice Neighborhoods
+Initiative (CNI) vision of mixed-partners, mixed-use, and mixed-income
+
+## Part 1: Raw Data from Data Axle
+
+**Data Axle Reference Solutions** (formerly ReferenceUSA and Infogroup) is a big
+data, analytics, and marketing services provider that delivers best in class
+data-driven, customer-centric technology solutions. It offers two main types of
+data:
+
+-   **Residential Historic Data:** Analyze community growth and general
+    population differences.
+-   **Historic Business Data:** Analyze market trends, economic growth, or
+    specific industries. Access categories including Company Name, Geocodes,
+    SIC/NAICS codes, Census Tracts.
+
+I retrieved my raw data files from Data Axle through Penn Libraries and Wharton
+Research and Data Services (WRDS) on October 15, 2025. The interface of Data
+Axle is shown below.
+
+![](images/clipboard-3282527950.png){width="887"}
+
+### Record Types
+
+**Verified Records:** have been verified by DataAxle staff through various
+compilation processes including phone validation
+
+**Unverified Records**: separate database from verified records because of one
+of the following reasons:
+
+-   records appear within data sources but have yet to be fully verified
+-   partial information is contained in the record, but not all data elements
+    are present to be considered 'verified' at the point of data retrieval
+-   addresses are unverified (e.g. a business may have moved)
+
+### Step 1: Load Raw Data as csv files
+
+-   DataAxle's U.S. Businesses Data Dictionary
+-   Verified Businesses in Sharswood Neighborhood
+-   Unverified Businesses in Sharswood Neighborhood
+-   Philadelphia census tracts and neighborhood boundaries
+
+```{r, echo = FALSE, include = FALSE}
+# Load required packages
+library(tidyverse)
+library(tidycensus)
+library(janitor)
+library(sf)
+library(tigris)
+library(scales)
+library(patchwork)
+library(RColorBrewer)
+library(units)
+library(knitr)
+library(caret)
+
+# Set Census API key
+census_api_key("fe841b7ef0aa73d9579f0517bd1c8f26d33c789b")
+
+# Get working directory
+getwd()
+```
+
+```{r}
+# Load Data Axle Data
+# data dictionary
+datadict <- read_csv("data/Data_Dict.csv")
+datadict
+
+# verified businesses
+verified <- read_csv("data/Sharswood_Verified_Biz.csv")
+
+# merge unverified businesses due to download limits from DataAxle
+unverified1 <- read_csv("data/Sharswood_Unverified_Biz_Pg1to10.csv")
+unverified2 <- read_csv("data/Sharswood_Unverified_Biz_Pg11to17.csv")
+unverified_combined <- bind_rows(unverified1, unverified2)
+write_csv(unverified_combined, "data/Sharswood_Unverified_Biz_Combined.csv")
+```
+
+```{r}
+# rename column headings
+verified <- verified |> clean_names()
+unverified_combined <- unverified_combined |> clean_names()
+
+# filter out small businesses with irrelevant SIC Codes
+drop_SIC <- c("Atm-Automated Teller Machines", "Schools", "Churches", 
+              "Nonclassified Establishments", "Real Estate Management", 
+              "Townhouses", "Mailing & Shipping Kiosks", 
+              "Offices Of Real Estate Agents And Brokers", "Real Estate")
+
+verified_clean <- verified |>
+  filter(!primary_sic_description %in% drop_SIC) |>
+  select(company_name, address, latitude, longitude, census_block_group, 
+         primary_sic_code, primary_sic_description, primary_naics, 
+         primary_naics_description, years_in_database, 
+         location_type, location_employee_size_range, 
+         square_footage, record_type)
+
+unverified_clean <- unverified_combined |>
+  filter(!primary_sic_description %in% drop_SIC) |>
+  select(company_name, address, latitude, longitude, census_block_group, 
+         primary_sic_code, primary_sic_description, primary_naics, 
+         primary_naics_description, years_in_database, 
+         location_type, location_employee_size_range, 
+         square_footage, record_type)
+```
+
+```{r, results = 'hide'}
+# Load spatial data
+census_tracts <- tracts(state = "PA", county = "Philadelphia", year = 2020, 
+                        class = "sf", cb = TRUE, progress = FALSE)
+block_grps <- block_groups(state = "PA", county = "Philadelphia", year = 2020, 
+                           class = "sf", cb = TRUE, progress = FALSE)
+```
+
+--------------------------------------------------------------------------------
+
+### Step 2: Get Philadelphia Demographic Data using `tidycensus`
+
+```{r, eval = FALSE}
+# Load all available variables for ACS 5-year 2022
+acs_vars_2022 <- load_variables(2022, "acs5", cache = TRUE)
+```
+
+```{r, results = 'hide'}
+# Get tract-level demographic data from 2022 ACS 5-Yr Estimates for Philadelphia
+phl_tract_data <- get_acs(
+  geography = "tract",
+  variables = c(
+    total_pop = "B01003_001",
+    median_income = "B19013_001",
+    poverty = "B17001_001",
+    White     = "B03002_003",
+    Black     = "B03002_004",
+    Hispanic  = "B03002_012"
+  ),
+  state = "PA",
+  county = "Philadelphia",
+  year = 2022,
+  survey = "acs5",
+  output = "wide",
+  geometry = TRUE
+)
+
+# Clean the county names to remove state name and "County" 
+phl_tract_clean <- phl_tract_data |> 
+  separate(
+    NAME, 
+    into = c("tract_name", "county_name", "state_name"), 
+    sep = "; "
+  ) |> 
+  mutate(
+    tract_name = str_remove(tract_name, "Census Tract "),
+    county_name = str_remove(county_name, " County")
+  )
+
+phl_tract_summary <- phl_tract_clean |>
+  select(GEOID, tract_name, county_name, total_popE, median_incomeE)
+```
+
+--------------------------------------------------------------------------------
+
+### Step 3: Make Data Axle dataset Spatial
+
+```{r}
+# Convert Data Axle dataset to sf object
+verified.sf <- verified_clean |> 
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |> # WGS 84 
+  st_transform(2272) # PA State Plane (in US Survey Feet)
+
+unverified.sf <- unverified_clean |> 
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |> 
+  st_transform(2272)
+```
+
+**Join Data Axle Shapefiles to Philadelphia Census Tracts and Block Groups**
+
+```{r}
+# Filter Census Tracts for Sharswood
+sharswood_tract_sf <- phl_tract_summary |> 
+  filter(tract_name == c("138", "139"))
+
+# Filter Block Groups for Sharswood
+ids <- c("421010138001","421010138002","421010139001",
+         "421010139002","421010139003")
+
+sharswood_bg_sf <- block_grps |>
+ filter(GEOID %in% ids)
+```
+
+```{r}
+# Join Shapefiles and Plot Map
+sharswood_bg_sf <- st_transform(sharswood_bg_sf, st_crs(verified.sf))
+
+ggplot() +
+  geom_sf(data = sharswood_parcels, fill = "gray97", 
+          color = "gray50", linewidth = 0.3) +
+  geom_sf(data = verified.sf, aes(fill = primary_sic_description), 
+          shape = 21, size = 2, alpha = 0.9) +
+  labs(
+    title = "Current Businesses in Sharswood",
+    subtitle = "Verified by Data Axle",
+    fill = "SIC Description"
+  ) +
+  theme_void()
+
+ggplot() +
+  geom_sf(data = sharswood_parcels, fill = "gray97", 
+          color = "gray50", linewidth = 0.3) +
+  geom_sf(data = unverified.sf, shape = 21, size = 2, 
+          fill = "black", alpha = 0.9) +
+  labs(
+    title = "Unverified Businesses in Sharswood — Data Axle",
+    subtitle = "PA South State Plane (ftUS)",
+    caption = paste0("CRS: ", 
+                     st_crs(block_grps)$input %||% st_crs(block_grps)$epsg)
+  ) +
+  theme_void()
+```
+
+--------------------------------------------------------------------------------
+
+### Step 4: Map Businesses to Property Parcels and Affordable Housing Projects
+
+-   Data Source: Department of Records Property Parcels
+-   Date Downloaded: Oct 19, 2025
+-   Link:
+    <https://opendataphilly.org/datasets/department-of-records-property-parcels/>
+
+```{r}
+#| message: false
+#| progress: 'hide'
+
+sharswood_parcels <- st_read("data/sharswood_parcels.geojson")
+
+ggplot() +
+  geom_sf(data = sharswood_bg_sf, fill = "gray97", 
+          color = "gray50", linewidth = 0.3) +
+  geom_sf(data = sharswood_parcels, fill = NA, color = "gray50", linewidth = 0.6) +
+  labs(title = "Property Parcels in Sharswood") +
+  theme_void()
+```
+
+-   Data Source: Division of Housing and Community Development (DHCD)
+-   Date Downloaded: Oct 19, 2025
+-   Link: <https://opendataphilly.org/datasets/affordable-housing-production/>
+
+```{r}
+affordable_housing_parcels <- st_read("data/Affordable_housing.geojson") |>
+  st_transform(st_crs(sharswood_bg_sf))
+
+# Spatial Filter for Affordable Housing Units in Sharswood
+sharswood_affordable <- st_filter(affordable_housing_parcels, sharswood_bg_sf, 
+                                  .predicate = st_within)
+
+ggplot() +
+  geom_sf(data = sharswood_bg_sf, fill = "gray97", 
+          color = "gray50", linewidth = 0.3) +
+  geom_sf(data = sharswood_affordable, aes(size = total_units), 
+          fill = NA, color = "firebrick", linewidth = 0.6) +
+  geom_sf_text(data = sharswood_affordable, aes(label = project_name),
+               size = 3, check_overlap = TRUE) +
+  labs(title = "Affordable Housing Projects in Sharswood (1994–2024)") +
+  theme_void()
+```
+
+**Putting it All Together**
+
+```{r}
+ggplot() +
+  geom_sf(data = sharswood_bg_sf, fill = "gray97", 
+          color = "gray50", linewidth = 0.3) +
+  geom_sf(data = sharswood_parcels, fill = NA, color = "gray50", linewidth = 0.6) +
+  geom_sf(data = sharswood_affordable, fill = NA, 
+          color = "firebrick", linewidth = 1) +
+  geom_sf_text(data = sharswood_affordable, aes(label = project_name),
+               size = 3, check_overlap = TRUE) +
+  geom_sf(data = verified.sf, fill = "blue", shape = 21, size = 1.5, alpha = 0.9) +
+  geom_sf(data = unverified.sf, fill = "darkgreen", 
+          shape = 21, size = 1.5, alpha = 0.9) +
+  labs(title = "Businesses and Affordable Housing Projects in Sharswood") +
+  theme_void()
+```
+
+--------------------------------------------------------------------------------
+
+### Step 5: Merge Verified and Unverified Datasets
+
+```{r}
+verified_clean
+unverified_clean
+```
+
+```{r}
+sharswood_curr_biz <- bind_rows(verified_clean, unverified_clean)
+count(sharswood_curr_biz, primary_sic_description)
+count(sharswood_curr_biz, primary_naics_description)
+```
+
+```{r}
+# Make Combined Dataset Spatial
+sharswood_curr_biz.sf <- sharswood_curr_biz |> 
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |> # WGS 84 
+  st_transform(2272) # PA State Plane (in US Survey Feet)
+```
+
+```{r}
+ggplot() +
+  geom_sf(data = sharswood_parcels, fill = NA, color = "gray50", linewidth = 0.6) +
+  geom_sf(data = sharswood_curr_biz.sf, fill = "darkgreen", 
+          shape = 21, size = 1.5, alpha = 0.9) +
+  labs(title = "Current Businesses in Sharswood") +
+  theme_void()
+```
+
+--------------------------------------------------------------------------------
+
+## Part 2: Repeat Steps for 2012, 2017, and 2022
+
+--------------------------------------------------------------------------------
+
+```{r, include = FALSE}
+library(tidygeocoder)
+library(cowplot)
+library(patchwork)
+```
+
+```{r}
+# Further Cleaning
+drop_SIC_2 <- c("Apartments", "Housing Authorities", 
+                "Office Buildings & Parks",
+                "Schools-Universities & Colleges Academic",
+                "Gardens", "Dialysis",
+                "City Government-Housing Programs")
+```
+
+### 2012 Data Axle Business Records
+
+```{r, cache = TRUE}
+# Load in 2012 Data
+dataaxle2012 <- read_csv("data/2012_combined.csv") |> 
+  clean_names()
+
+dataaxle2012_clean <- dataaxle2012 |>
+  filter(!primary_sic_description %in% drop_SIC) |> 
+  mutate(address = str_c(address, "Philadelphia", "PA 19121", sep = ", "))
+
+# Geocode
+dataaxle2012_geo <- dataaxle2012_clean |> 
+  geocode(address, method = 'osm', lat = latitude, long = longitude)
+```
+
+```{r}
+write_csv(dataaxle2012_geo, "data/Sharswood_Biz_2012_geo.csv")
+```
+
+```{r}
+# Convert Data Axle dataset to sf object
+dataaxle2012.sf <- dataaxle2012_geo |> 
+  filter(!primary_sic_description %in% drop_SIC_2) |> 
+  drop_na(longitude, latitude) |>
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326, remove = FALSE) |>
+  st_transform(2272)
+
+dataaxle2012.sf <- dataaxle2012.sf |> 
+  st_transform(st_crs(sharswood_bg_sf)) |> 
+  st_crop(sharswood_bg_sf) |> 
+  st_filter(sharswood_bg_sf, .predicate = st_within)
+```
+
+```{r}
+count(dataaxle2012.sf, primary_sic_description)
+```
+
+```{r}
+# Plot with Formatted Legend
+p_2012 <- ggplot() +
+  geom_sf(data = sharswood_parcels, fill = "gray97",
+          color = "gray60", linewidth = 0.3) +
+  geom_sf(data = dataaxle2012.sf,
+          aes(fill = primary_sic_description),
+          shape = 21, size = 2, alpha = 0.9, color = "gray30") +
+  labs(
+    title = "2012 Businesses in Sharswood",
+    subtitle = "Verified by Data Axle",
+    fill = "SIC Description"
+  ) +
+  theme_void() +
+  theme(
+    legend.position = "bottom",
+    theme(legend.title = element_blank()),
+    legend.text  = element_text(size = 8),
+    legend.key.size = unit(0.5, "lines"),
+    # legend.box.margin = margin(t = 12),     # space above legend
+    plot.margin = margin(12, 16, 50, 16),   # extra bottom margin for legend
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5)
+  ) +
+  guides(fill = guide_legend(title = NULL, ncol = 4, byrow = TRUE,
+                             override.aes = list(size = 3)))
+
+# Make the plotting area “regular size”
+p_2012 + plot_layout(heights = c(1))  # (device size controls final size)
+```
+
+```{r}
+ggsave("sharswood_2012.png", p_2012, width = 10, height = 7, dpi = 300)
+```
+
+```{r}
+ggplot() +
+  geom_sf(data = sharswood_parcels, fill = NA, color = "gray50", linewidth = 0.6) +
+  geom_sf(data = dataaxle2012.sf, fill = "darkgreen", 
+          shape = 21, size = 1, alpha = 0.9) +
+  labs(title = "2012 Verified Businesses in Sharswood",
+       caption = "Data Source: Data Axle U.S. Historical Businesses") +
+  theme_void()
+```
+
+--------------------------------------------------------------------------------
+
+### 2017 Data Axle Business Records
+
+```{r, cache = TRUE}
+# Load in 2017 Data
+dataaxle2017 <- read_csv("data/2017_combined.csv") |> 
+  clean_names()
+
+dataaxle2017_clean <- dataaxle2017 |>
+  filter(!primary_sic_description %in% drop_SIC) |> 
+  mutate(address = str_c(address, "Philadelphia", "PA 19121", sep = ", "))
+
+# Geocode
+dataaxle2017_geo <- dataaxle2017_clean |> 
+  geocode(address, method = 'osm', lat = latitude, long = longitude)
+```
+
+```{r}
+write_csv(dataaxle2017_geo, "data/Sharswood_Biz_2017_geo.csv")
+```
+
+```{r}
+# Convert Data Axle dataset to sf object
+dataaxle2017.sf <- dataaxle2017_geo |> 
+  filter(!primary_sic_description %in% drop_SIC_2) |> 
+  drop_na(longitude, latitude) |>
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326, remove = FALSE) |>
+  st_transform(2272)
+
+# Spatial Filter
+dataaxle2017.sf <- dataaxle2017.sf |> 
+  st_transform(st_crs(sharswood_bg_sf)) |> 
+  st_crop(sharswood_bg_sf) |> 
+  st_filter(sharswood_bg_sf, .predicate = st_within)
+```
+
+```{r}
+count(dataaxle2017.sf, primary_sic_description)
+```
+
+```{r}
+# Map
+ggplot() +
+  geom_sf(data = sharswood_parcels, fill = NA, color = "gray50", linewidth = 0.6) +
+  geom_sf(data = dataaxle2017.sf, fill = "darkgreen", 
+          shape = 21, size = 1, alpha = 0.9) +
+  labs(title = "2017 Verified Businesses in Sharswood",
+       caption = "Data Source: Data Axle U.S. Historical Businesses") +
+  theme_void()
+```
+
+```{r}
+# Plot with Formatted Legend
+p_2017 <- ggplot() +
+  geom_sf(data = sharswood_parcels, fill = "gray97",
+          color = "gray60", linewidth = 0.3) +
+  geom_sf(data = dataaxle2017.sf,
+          aes(fill = primary_sic_description),
+          shape = 21, size = 2, alpha = 0.9, color = "gray30") +
+  labs(
+    title = "2017 Businesses in Sharswood",
+    subtitle = "Verified by Data Axle",
+    fill = "SIC Description"
+  ) +
+  theme_void() +
+  theme(
+    legend.position = "bottom",
+    theme(legend.title = element_blank()),
+    legend.text  = element_text(size = 8),
+    legend.key.size = unit(0.5, "lines"),
+    legend.box.margin = margin(t = 2),     # space above legend
+    plot.margin = margin(12, 16, 50, 16),   # extra bottom margin for legend
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5)
+  ) +
+  guides(fill = guide_legend(title = NULL, ncol = 4, byrow = TRUE,
+                             override.aes = list(size = 3)))
+
+# Make the plotting area “regular size”
+p_2017 + plot_layout(heights = c(1))  # (device size controls final size)
+```
+
+```{r}
+ggsave("sharswood_2017.png", p_2017, width = 10, height = 7, dpi = 300)
+```
+
+```{r}
+ggplot() +
+  geom_sf(data = sharswood_parcels, fill = "gray97", 
+          color = "gray50", linewidth = 0.3) +
+  geom_sf(data = dataaxle2017.sf, aes(fill = primary_sic_description), 
+          shape = 21, size = 2, alpha = 0.9) +
+  labs(
+    title = "2017 Businesses in Sharswood",
+    subtitle = "Verified by Data Axle",
+    fill = "SIC Description"
+  ) +
+  theme_void()
+```
+
+--------------------------------------------------------------------------------
+
+### 2022 Data Axle Business Records
+
+```{r, cache = TRUE}
+# Load in 2022 Data
+dataaxle2022 <- read_csv("data/2022_combined.csv") |> 
+  clean_names()
+
+dataaxle2022_clean <- dataaxle2022 |>
+  filter(!primary_sic_description %in% drop_SIC) |> 
+  mutate(address = str_c(address, "Philadelphia", "PA 19121", sep = ", "))
+
+# Geocode
+dataaxle2022_geo <- dataaxle2022_clean |> 
+  geocode(address, method = 'osm', lat = latitude, long = longitude)
+```
+
+```{r}
+write_csv(dataaxle2022_geo, "data/Sharswood_Biz_2022_geo.csv")
+```
+
+```{r}
+# Convert Data Axle dataset to sf object
+dataaxle2022.sf <- dataaxle2022_geo |> 
+  filter(!primary_sic_description %in% drop_SIC_2) |> 
+  drop_na(longitude, latitude) |>
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326, remove = FALSE) |>
+  st_transform(2272)
+
+# Spatial Filter
+dataaxle2022.sf <- dataaxle2022.sf |> 
+  st_transform(st_crs(sharswood_bg_sf)) |> 
+  st_crop(sharswood_bg_sf) |> 
+  st_filter(sharswood_bg_sf, .predicate = st_within)
+```
+
+```{r}
+count(dataaxle2022.sf, primary_sic_description)
+```
+
+```{r}
+# Map
+ggplot() +
+  geom_sf(data = sharswood_parcels, fill = NA, color = "gray50", linewidth = 0.6) +
+  geom_sf(data = dataaxle2022.sf, fill = "darkgreen", 
+          shape = 21, size = 1, alpha = 0.9) +
+  labs(title = "2022 Verified Businesses in Sharswood",
+       caption = "Data Source: Data Axle U.S. Historical Businesses") +
+  theme_void()
+```
+
+```{r}
+# Plot with Formatted Legend
+p_2022 <- ggplot() +
+  geom_sf(data = sharswood_parcels, fill = "gray97",
+          color = "gray60", linewidth = 0.3) +
+  geom_sf(data = dataaxle2022.sf,
+          aes(fill = primary_sic_description),
+          shape = 21, size = 2, alpha = 0.9, color = "gray30") +
+  labs(
+    title = "2022 Businesses in Sharswood",
+    subtitle = "Verified by Data Axle",
+    fill = "SIC Description"
+  ) +
+  theme_void() +
+  theme(
+    legend.position = "bottom",
+    theme(legend.title = element_blank()),
+    legend.text  = element_text(size = 8),
+    legend.key.size = unit(0.5, "lines"),
+    legend.box.margin = margin(t = 2),     # space above legend
+    plot.margin = margin(12, 16, 50, 16),   # extra bottom margin for legend
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5)
+  ) +
+  guides(fill = guide_legend(title = NULL, ncol = 4, byrow = TRUE,
+                             override.aes = list(size = 3)))
+
+# Make the plotting area “regular size”
+p_2022 + plot_layout(heights = c(1))  # (device size controls final size)
+```
+
+```{r}
+ggsave("sharswood_2022.png", p_2022, width = 10, height = 7, dpi = 300)
+```
+
+```{r}
+ggplot() +
+  geom_sf(data = sharswood_parcels, fill = "gray97", 
+          color = "gray50", linewidth = 0.3) +
+  geom_sf(data = dataaxle2022.sf, aes(fill = primary_sic_description), 
+          shape = 21, size = 2, alpha = 0.9) +
+  labs(
+    title = "2022 Businesses in Sharswood",
+    subtitle = "Verified by Data Axle",
+    fill = "SIC Description"
+  ) +
+  theme_void()
+```
+
+--------------------------------------------------------------------------------
+
+### Current Businesses in Sharswood
+
+```{r}
+# Plot with Formatted Legend
+p_curr <- ggplot() +
+  geom_sf(data = sharswood_parcels, fill = "gray97",
+          color = "gray60", linewidth = 0.3) +
+  geom_sf(data = verified.sf,
+          aes(fill = primary_sic_description),
+          shape = 21, size = 2, alpha = 0.9, color = "gray30") +
+  labs(
+    title = "Current Businesses in Sharswood",
+    subtitle = "Verified by Data Axle",
+    fill = "SIC Description"
+  ) +
+  theme_void() +
+  theme(
+    legend.position = "bottom",
+    theme(legend.title = element_blank()),
+    legend.text  = element_text(size = 8),
+    legend.key.size = unit(0.5, "lines"),
+    legend.box.margin = margin(t = 2),     # space above legend
+    plot.margin = margin(12, 16, 50, 16),   # extra bottom margin for legend
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5)
+  ) +
+  guides(fill = guide_legend(title = NULL, ncol = 4, byrow = TRUE,
+                             override.aes = list(size = 3)))
+
+# Make the plotting area “regular size”
+p_curr + plot_layout(heights = c(1))  # (device size controls final size)
+```
+
+```{r}
+ggsave("sharswood_curr.png", p_curr, width = 10, height = 7, dpi = 300)
+```
