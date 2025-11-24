@@ -10,10 +10,13 @@ date: "2025-11-17"
 -   Panel structure lets us capture BOTH station differences AND time patterns. Each row = station-hour observation with features and outcome
 -   Station-specific baselines:
     -   Station A (downtown): High demand during work hours
-
     -   Station B (residential): High demand mornings/evenings
-
-    -   Station C (tourist area): High demand weekends Time-based patterns: Rush hour peaks Weekend vs. weekday differences Weather effects Holiday impacts
+    -   Station C (tourist area): High demand weekends
+-   Time-based patterns:
+    -   Rush hour peaks
+    -   Weekend vs. weekday differences
+-   Weather effects
+-   Holiday impacts
 
 ![](images/clipboard-2036303385.png)
 
@@ -51,7 +54,7 @@ model5 <- lm(
 **Common Error Patterns**
 
 -   **Underpredicting peaks:** Missing high-demand periods (rush hour)
--   **Weekend vs. weekday differences:** Holiday patterns not fully captured
+-   **Weekend vs. Weekday differences:** Holiday patterns not fully captured
 -   **Spatial clustering:** Errors concentrated in certain neighborhoods
     -   Waterfront (leisure rides?)
     -   Downtown (tourist activity?)
@@ -221,7 +224,7 @@ station_errors %>%
 
 Abstract: "As bike-share systems expand in urban areas, the wealth of publicly available data has drawn researchers to address the novel operational challenges” these systems face. One key challenge is to meet user demand for available bikes and docks by rebalancing the system. This chapter reports on a collaborative effort with Citi Bike to develop and implement real data-driven optimization to guide their rebalancing efforts. In particular, we provide new models to guide truck routing for overnight rebalancing and new optimization problems for other non-motorized rebalancing efforts during the day. Finally, we evaluate how our practical methods have impacted rebalancing in New York City."
 
--   <https://nycdatascience.com/blog/student-works/citi-bike-rebalancing-operations/> \| <https://goutam.io/projects/predicting-citi-bike-trip-demand/> \| \
+-   <https://nycdatascience.com/blog/student-works/citi-bike-rebalancing-operations/> \| <https://goutam.io/projects/predicting-citi-bike-trip-demand/> \|\
     <https://docs.google.com/presentation/d/1hLECuh326kjMFXcSYRieEquXj7Ms78OUbU8vR350Tzs/edit?slide=id.g120f23f450c_0_62#slide=id.g120f23f450c_0_62>
 
 Prediction Timescale: "Weekly resolution is far too sparse to capture meaningful relationships. Therefore, we would like to build models that predict at the Hourly timescale if we can, and if not, then use the Daily timescale. At the sub hourly timescale, the data became too unwieldy and noisy for a years worth, let alone for the many years of data Citi Bike has available. However in future extensions of this project we would like to take a second level resolution for one week for one station and predict the ridership at that level."
