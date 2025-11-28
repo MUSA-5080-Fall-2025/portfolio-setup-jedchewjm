@@ -53,7 +53,7 @@ Initiative (CNI) vision of mixed-partners, mixed-use, and mixed-income
 
 -   Philadelphia census tracts, block groups, and neighborhood boundaries
 
-```{r, echo = FALSE, include = FALSE}
+```{r}
 # Load required packages
 library(tidyverse)
 library(tidycensus)
@@ -68,6 +68,11 @@ library(viridisLite)
 library(units)
 library(knitr)
 library(caret)
+```
+
+```{r}
+#| echo: false
+#| include: false
 
 # Set Census API key
 census_api_key("fe841b7ef0aa73d9579f0517bd1c8f26d33c789b")

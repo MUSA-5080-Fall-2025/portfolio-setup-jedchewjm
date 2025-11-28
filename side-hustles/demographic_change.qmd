@@ -57,7 +57,7 @@ There are two main limitations with this methodology:
 
 ### Step 1: Load Philadelphia Demographic Data using `tidycensus`
 
-```{r, echo = FALSE, include = FALSE}
+```{r}
 # Load required packages
 library(tidyverse)
 library(tidycensus)
@@ -70,6 +70,11 @@ library(RColorBrewer)
 library(units)
 library(knitr)
 library(caret)
+```
+
+```{r}
+#| echo: false
+#| include: false
 
 # Set Census API key
 census_api_key("fe841b7ef0aa73d9579f0517bd1c8f26d33c789b")
@@ -432,7 +437,7 @@ facet_metric <- function(metric_name, title, fill_lab,
     facet_wrap(~ period, nrow = 1) +
     labs(
       title = title, 
-      subtitle = "Panels: 2012, 2017, 2022",
+      subtitle = "Panels: 2008-2012, 2013-2017, 2018-2022",
       fill = fill_lab,
       caption = "ACS 5-year estimates"
     ) +
@@ -471,7 +476,7 @@ facet_metric("median_incomeE", "Sharswood: Median Household Income", "$",
 
 ### Step 3: Change Maps
 
-```{r}
+```{r, fig.width=4.5, fig.height=3.5}
 # helper to make a diverging change map
 change_map <- function(col, title, legend) {
   ggplot(compare_sf) +

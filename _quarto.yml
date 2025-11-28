@@ -42,6 +42,7 @@ website:
         - href: side-hustles/dataaxle.qmd
         - href: side-hustles/demographic_change.qmd
         - href: side-hustles/vacancy_land_use.qmd
+        - href: side-hustles/vacancy_land_use_dvrpc.qmd
         
 format:
   html:
