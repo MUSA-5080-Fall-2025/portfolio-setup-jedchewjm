@@ -73,7 +73,6 @@ library(caret)
 ```{r}
 #| echo: false
 #| include: false
-
 # Set Census API key
 census_api_key("fe841b7ef0aa73d9579f0517bd1c8f26d33c789b")
 
@@ -135,7 +134,9 @@ sharswood_lu_2020 <- DVRPC_2020 |>
   st_filter(sharswood_bg_sf, .predicate = st_within)
 ```
 
-```{r, eval = FALSE}
+```{r}
+#| echo: false
+#| include: false
 # Column Headings
 sharswood_df_2020 <- sharswood_lu_2020 |> 
   st_drop_geometry()
@@ -175,7 +176,9 @@ sharswood_lu_2015 <- DVRPC_2015 |>
   st_filter(sharswood_bg_sf, .predicate = st_within)
 ```
 
-```{r, eval = FALSE}
+```{r}
+#| echo: false
+#| include: false
 # Column Headings
 sharswood_df_2015 <- sharswood_lu_2015 |> 
   st_drop_geometry()
@@ -209,6 +212,8 @@ sharswood_lu_2023 <- DVRPC_2023 |>
 ```
 
 ```{r}
+#| echo: false
+#| include: false
 # Column Headings
 sharswood_df_2023 <- sharswood_lu_2023 |> 
   st_drop_geometry()
