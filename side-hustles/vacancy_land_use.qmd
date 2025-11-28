@@ -319,7 +319,9 @@ ggplot() +
   )
 ```
 
-```{r, eval = FALSE}
+```{r}
+#| echo: false
+#| include: false
 ggplot() +
   geom_sf(data = sharswood_land_parcels, fill = NA, color = "gray50", linewidth = 0.6) +
   geom_sf(data = sharswood_vacant_bldgs, aes(fill = bldg_desc)) +
