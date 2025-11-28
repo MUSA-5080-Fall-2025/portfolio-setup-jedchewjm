@@ -273,7 +273,7 @@ ggplot() +
 
 ### Step 4: Map Businesses to Property Parcels and Affordable Housing Projects
 
--   Data Source: Department of Records Property Parcels
+-   Data Source: Philadelphia Department of Records Property Parcels
 -   Date Downloaded: Oct 19, 2025
 -   Link:
     <https://opendataphilly.org/datasets/department-of-records-property-parcels/>
@@ -290,7 +290,8 @@ ggplot() +
   theme_void()
 ```
 
--   Data Source: Division of Housing and Community Development (DHCD)
+-   Data Source: Philadlephia Division of Housing and Community Development
+    (DHCD)
 -   Date Downloaded: Oct 19, 2025
 -   Link: <https://opendataphilly.org/datasets/affordable-housing-production/>
 

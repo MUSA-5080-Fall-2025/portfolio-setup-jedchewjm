@@ -1,5 +1,5 @@
 ---
-title: "Vacancy, Land Use, and Businesses - Sharswood"
+title: "Vacancy and Land Use - Sharswood"
 subtitle: "URBS 4000: Urban Studies Thesis"
 author: "Jed Chew"
 date: today
@@ -31,6 +31,8 @@ for the redevelopment of Sharswood; and 
 
 \(2\) the early redevelopment **outcomes** relative to the Choice Neighborhoods
 Initiative (CNI) vision of mixed-partners, mixed-use, and mixed-income
+
+--------------------------------------------------------------------------------
 
 ## Part 1: Vacancy Data
 
@@ -344,5 +346,160 @@ ggplot() +
   labs(
     title = "Vacant Points in Sharswood",
     subtitle = "Date Last Updated: March 24, 2025") +
+  theme_void()
+```
+
+--------------------------------------------------------------------------------
+
+## Part 2: Land-Use Data
+
+-   Data Source: Philadelphia Department of Planning and Development
+-   Date Downloaded: Nov 12, 2025
+-   Link: <https://opendataphilly.org/datasets/land-use/>
+-   Metadata Link:
+    <https://metadata.phila.gov/#home/datasetdetails/5543864420583086178c4e74/representationdetails/6679cce2eae40a02d29eb194/>
+
+```{r}
+# Color Palette from PCPC
+landuse_pal <- c(
+  "Residential Low"                     = "#ffffcc", # 255,255,204
+  "Residential Medium"                  = "#f5ff12", # 245,255,18
+  "Residential High"                    = "#ffaa00", # 255,170,0
+  "Commercial Consumer"                 = "#e60000", # 230,0,0
+  "Commercial Business/Professional"    = "#a80000", # 168,0,0
+  "Mixed Commercial/Residential"        = "#e89579", # 232,149,121
+  "Industrial"                          = "#8c00ff", # 140,0,255
+  "Civic/Institution"                   = "#0070ff", # 0,112,255
+  "Transportation"                      = "#cccccc", # 204,204,204
+  "Culture/Recreation"                  = "#00ffe6", # 0,255,230
+  "Active Recreation"                   = "#9bccb3", # 155,204,179  
+  "Park/Open Space"                     = "#63cc00", # 99,204,0
+  "Cemetery"                            = "#6b7e93", # 107,126,147  
+  "Water"                               = "#bfe8ff", # 191,232,255
+  "Vacant"                              = "#a87000", # 168,112,0
+  "Other/Unknown"                       = "#d2d2d2"  # 210,210,210 
+)
+```
+
+### 2023 Sharswood Land Use
+
+```{r, eval = FALSE}
+# Remove the GeoJSON object-size limit
+Sys.setenv(OGR_GEOJSON_MAX_OBJ_SIZE = "0")
+```
+
+```{r, eval = FALSE}
+curr_land_use <- st_read("data/Land_Use.geojson") |> 
+  st_make_valid()
+
+# Spatial Filter for Sharswood
+sharswood_curr_land_use <- curr_land_use |> 
+  st_transform(st_crs(sharswood_bg_sf)) |> 
+  st_crop(sharswood_bg_sf) |> 
+  st_filter(sharswood_bg_sf, .predicate = st_within) |> 
+  select(objectid, c_dig2, year, Shape__Area, Shape__Length)
+
+# Rename Column Headings
+sharswood_curr_land_use_clean <- sharswood_curr_land_use |> 
+  filter(c_dig2 > 0) |> 
+  mutate(
+    land_use = case_when(
+      c_dig2 == 11 ~ "Residential Low",
+      c_dig2 == 12 ~ "Residential Medium",
+      c_dig2 == 13 ~ "Residential High",
+      c_dig2 == 21 ~ "Commercial Consumer",
+      c_dig2 == 22 ~ "Commercial Business/Professional",
+      c_dig2 == 23 ~ "Mixed Commercial/Residential",
+      c_dig2 == 31 ~ "Industrial",
+      c_dig2 == 41 ~ "Civic/Institution",
+      c_dig2 == 51 ~ "Transportation",
+      c_dig2 == 61 ~ "Culture/Recreation",
+      c_dig2 == 62 ~ "Active Recreation",
+      c_dig2 == 71 ~ "Park/Open Space",
+      c_dig2 == 72 ~ "Cemetery",
+      c_dig2 == 81 ~ "Water",
+      c_dig2 == 91 ~ "Vacant",
+      c_dig2 == 92 ~ "Other/Unknown"
+      )
+    )
+```
+
+```{r, eval = FALSE}
+# Create New Geojson File for 2023 Land Use
+st_write(
+  sharswood_curr_land_use_clean, "data/sharswood_land_use_clean.geojson",
+  driver = "GeoJSON",
+  delete_dsn = TRUE,
+  layer_options = c("RFC7946=YES","COORDINATE_PRECISION=6","WRITE_BBOX=NO")
+)
+```
+
+```{r}
+# Map 2023 Sharswood Land-Use
+sharswood_2023_land_use <- st_read("data/sharswood_land_use_clean.geojson")
+
+ggplot(sharswood_2023_land_use) +
+  geom_sf(aes(fill = land_use), color = NA) +
+  scale_fill_manual(values = landuse_pal, name = "Land Use") +
+  labs(title = "2023 Land Use in Sharswood") +
+  theme_void()
+```
+
+### 2013 Sharswood Land Use
+
+```{r, eval = FALSE}
+land_use_2012_18 <- st_read("data/Land_Use_2012_2018.geojson",
+                            wkt_filter = filt_wkt)
+
+# Spatial Filter for Sharswood
+sharswood_historical_land_use <- land_use_2012_18 |> 
+  st_make_valid() |> 
+  st_transform(st_crs(sharswood_bg_sf)) |> 
+  st_crop(sharswood_bg_sf) |> 
+  st_filter(sharswood_bg_sf, .predicate = st_within)
+
+# Rename Column Headings
+sharswood_historical_land_use_clean <- sharswood_historical_land_use |> 
+  filter(C_DIG2 > 0) |> 
+  mutate(
+    land_use = case_when(
+      C_DIG2 == 11 ~ "Residential Low",
+      C_DIG2 == 12 ~ "Residential Medium",
+      C_DIG2 == 13 ~ "Residential High",
+      C_DIG2 == 21 ~ "Commercial Consumer",
+      C_DIG2 == 22 ~ "Commercial Business/Professional",
+      C_DIG2 == 23 ~ "Mixed Commercial/Residential",
+      C_DIG2 == 31 ~ "Industrial",
+      C_DIG2 == 41 ~ "Civic/Institution",
+      C_DIG2 == 51 ~ "Transportation",
+      C_DIG2 == 61 ~ "Culture/Recreation",
+      C_DIG2 == 62 ~ "Active Recreation",
+      C_DIG2 == 71 ~ "Park/Open Space",
+      C_DIG2 == 72 ~ "Cemetery",
+      C_DIG2 == 81 ~ "Water",
+      C_DIG2 == 91 ~ "Vacant",
+      C_DIG2 == 92 ~ "Other/Unknown"
+      )
+    )
+```
+
+```{r, eval = FALSE}
+# Create New Geojson File for 2013 Land Use
+st_write(
+  sharswood_historical_land_use_clean, "data/sharswood_2013_land_use.geojson",
+  driver = "GeoJSON",
+  delete_dsn = TRUE,
+  layer_options = c("RFC7946=YES","COORDINATE_PRECISION=6","WRITE_BBOX=NO")
+)
+```
+
+```{r}
+# Map 2013 Sharswood Land-Use
+sharswood_2013_land_use <- st_read("data/sharswood_2013_land_use.geojson")
+
+ggplot(sharswood_2013_land_use) +
+  geom_sf(aes(fill = land_use), color = NA) +
+  scale_fill_manual(values = landuse_pal, name = "Land Use") +
+  labs(title = "2013 Land Use in Sharswood") +
   theme_void()
 ```
