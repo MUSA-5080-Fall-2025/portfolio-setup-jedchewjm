@@ -35,7 +35,7 @@ website:
         - href: labs/lab_1/assignment1_template.qmd
         - href: labs/lab_2/assignment2_template.qmd
         - href: labs/lab_4/assignment4_template.qmd
-        - href: labs/lab_5/assignment5_template.qmd
+        - href: labs/lab_5/assignment5_MA.qmd
         
       - text: Side Hustles
         menu:
