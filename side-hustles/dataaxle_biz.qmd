@@ -71,7 +71,11 @@ of the following reasons:
 -   Unverified Businesses in Sharswood Neighborhood
 -   Philadelphia census tracts and neighborhood boundaries
 
-```{r, echo = FALSE, include = FALSE}
+```{r}
+#| message: false
+#| progress: 'hide'
+#| results: 'hide'
+
 # Load required packages
 library(tidyverse)
 library(tidycensus)
@@ -84,7 +88,13 @@ library(RColorBrewer)
 library(units)
 library(knitr)
 library(caret)
+library(tidygeocoder)
+library(cowplot)
+```
 
+```{r}
+#| include: false
+#| echo: false
 # Set Census API key
 census_api_key("fe841b7ef0aa73d9579f0517bd1c8f26d33c789b")
 
@@ -153,7 +163,11 @@ block_grps <- block_groups(state = "PA", county = "Philadelphia", year = 2020,
 acs_vars_2022 <- load_variables(2022, "acs5", cache = TRUE)
 ```
 
-```{r, results = 'hide'}
+```{r}
+#| message: false
+#| progress: 'hide'
+#| results: 'hide'
+
 # Get tract-level demographic data from 2022 ACS 5-Yr Estimates for Philadelphia
 phl_tract_data <- get_acs(
   geography = "tract",
@@ -204,7 +218,13 @@ unverified.sf <- unverified_clean |>
   st_transform(2272)
 ```
 
-**Join Data Axle Shapefiles to Philadelphia Census Tracts and Block Groups**
+**Join Data Axle Shapefiles to Philadelphia Cenus Tracts and Block Groups**
+
+```{r}
+#| message: false
+#| progress: 'hide'
+sharswood_parcels <- st_read("data/sharswood_parcels.geojson")
+```
 
 ```{r}
 # Filter Census Tracts for Sharswood
@@ -262,8 +282,6 @@ ggplot() +
 #| message: false
 #| progress: 'hide'
 
-sharswood_parcels <- st_read("data/sharswood_parcels.geojson")
-
 ggplot() +
   geom_sf(data = sharswood_bg_sf, fill = "gray97", 
           color = "gray50", linewidth = 0.3) +
@@ -290,7 +308,7 @@ ggplot() +
   geom_sf(data = sharswood_affordable, aes(size = total_units), 
           fill = NA, color = "firebrick", linewidth = 0.6) +
   geom_sf_text(data = sharswood_affordable, aes(label = project_name),
-               size = 3, check_overlap = TRUE) +
+               size = 2, check_overlap = TRUE) +
   labs(title = "Affordable Housing Projects in Sharswood (1994–2024)") +
   theme_void()
 ```
@@ -318,6 +336,8 @@ ggplot() +
 ### Step 5: Merge Verified and Unverified Datasets
 
 ```{r}
+#| echo: false
+#| include: false
 verified_clean
 unverified_clean
 ```
@@ -350,12 +370,6 @@ ggplot() +
 
 --------------------------------------------------------------------------------
 
-```{r, include = FALSE}
-library(tidygeocoder)
-library(cowplot)
-library(patchwork)
-```
-
 ```{r}
 # Further Cleaning
 drop_SIC_2 <- c("Apartments", "Housing Authorities", 
@@ -367,7 +381,7 @@ drop_SIC_2 <- c("Apartments", "Housing Authorities",
 
 ### 2012 Data Axle Business Records
 
-```{r, cache = TRUE}
+```{r, eval = FALSE}
 # Load in 2012 Data
 dataaxle2012 <- read_csv("data/2012_combined.csv") |> 
   clean_names()
@@ -381,13 +395,13 @@ dataaxle2012_geo <- dataaxle2012_clean |>
   geocode(address, method = 'osm', lat = latitude, long = longitude)
 ```
 
-```{r}
+```{r, eval = FALSE}
 write_csv(dataaxle2012_geo, "data/Sharswood_Biz_2012_geo.csv")
 ```
 
 ```{r}
 # Convert Data Axle dataset to sf object
-dataaxle2012.sf <- dataaxle2012_geo |> 
+dataaxle2012.sf <- read_csv("data/Sharswood_Biz_2012_geo.csv") |> 
   filter(!primary_sic_description %in% drop_SIC_2) |> 
   drop_na(longitude, latitude) |>
   st_as_sf(coords = c("longitude", "latitude"), crs = 4326, remove = FALSE) |>
@@ -434,7 +448,7 @@ p_2012 <- ggplot() +
 p_2012 + plot_layout(heights = c(1))  # (device size controls final size)
 ```
 
-```{r}
+```{r, eval = FALSE}
 ggsave("sharswood_2012.png", p_2012, width = 10, height = 7, dpi = 300)
 ```
 
@@ -452,7 +466,7 @@ ggplot() +
 
 ### 2017 Data Axle Business Records
 
-```{r, cache = TRUE}
+```{r, eval = FALSE}
 # Load in 2017 Data
 dataaxle2017 <- read_csv("data/2017_combined.csv") |> 
   clean_names()
@@ -466,13 +480,13 @@ dataaxle2017_geo <- dataaxle2017_clean |>
   geocode(address, method = 'osm', lat = latitude, long = longitude)
 ```
 
-```{r}
+```{r, eval = FALSE}
 write_csv(dataaxle2017_geo, "data/Sharswood_Biz_2017_geo.csv")
 ```
 
 ```{r}
 # Convert Data Axle dataset to sf object
-dataaxle2017.sf <- dataaxle2017_geo |> 
+dataaxle2017.sf <- read_csv("data/Sharswood_Biz_2017_geo.csv") |> 
   filter(!primary_sic_description %in% drop_SIC_2) |> 
   drop_na(longitude, latitude) |>
   st_as_sf(coords = c("longitude", "latitude"), crs = 4326, remove = FALSE) |>
@@ -531,7 +545,7 @@ p_2017 <- ggplot() +
 p_2017 + plot_layout(heights = c(1))  # (device size controls final size)
 ```
 
-```{r}
+```{r, eval = FALSE}
 ggsave("sharswood_2017.png", p_2017, width = 10, height = 7, dpi = 300)
 ```
 
@@ -553,7 +567,7 @@ ggplot() +
 
 ### 2022 Data Axle Business Records
 
-```{r, cache = TRUE}
+```{r, eval = FALSE}
 # Load in 2022 Data
 dataaxle2022 <- read_csv("data/2022_combined.csv") |> 
   clean_names()
@@ -567,13 +581,13 @@ dataaxle2022_geo <- dataaxle2022_clean |>
   geocode(address, method = 'osm', lat = latitude, long = longitude)
 ```
 
-```{r}
+```{r, eval = FALSE}
 write_csv(dataaxle2022_geo, "data/Sharswood_Biz_2022_geo.csv")
 ```
 
 ```{r}
 # Convert Data Axle dataset to sf object
-dataaxle2022.sf <- dataaxle2022_geo |> 
+dataaxle2022.sf <- read_csv("data/Sharswood_Biz_2022_geo.csv") |> 
   filter(!primary_sic_description %in% drop_SIC_2) |> 
   drop_na(longitude, latitude) |>
   st_as_sf(coords = c("longitude", "latitude"), crs = 4326, remove = FALSE) |>
@@ -632,7 +646,7 @@ p_2022 <- ggplot() +
 p_2022 + plot_layout(heights = c(1))  # (device size controls final size)
 ```
 
-```{r}
+```{r, eval = FALSE}
 ggsave("sharswood_2022.png", p_2022, width = 10, height = 7, dpi = 300)
 ```
 
@@ -685,6 +699,6 @@ p_curr <- ggplot() +
 p_curr + plot_layout(heights = c(1))  # (device size controls final size)
 ```
 
-```{r}
+```{r, eval  = FALSE}
 ggsave("sharswood_curr.png", p_curr, width = 10, height = 7, dpi = 300)
 ```
