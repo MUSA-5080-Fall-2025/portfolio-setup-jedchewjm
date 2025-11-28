@@ -38,20 +38,17 @@ Initiative (CNI) vision of mixed-partners, mixed-use, and mixed-income
 
 -   Data Source:
     <https://opendataphilly.org/datasets/vacant-property-indicators/>
-
 -   Date Downloaded: Oct 20, 2025
-
 -   Description: The location of properties across Philadelphia that are likely
     to be a vacant lot or vacant building based on an assessment of City of
     Philadelphia administrative datasets.
-
 -   Types of GeoJSON Files: Buildings, Land, and Points
 
 ### Step 1: Load Raw Data as csv files
 
 -   Philadelphia census tracts, block groups, and neighborhood boundaries
 
-```{r, echo = FALSE, include = FALSE}
+```{r}
 # Load required packages
 library(tidyverse)
 library(tidycensus)
@@ -66,6 +63,11 @@ library(viridisLite)
 library(units)
 library(knitr)
 library(caret)
+```
+
+```{r}
+#| echo: false
+#| include: false
 
 # Set Census API key
 census_api_key("fe841b7ef0aa73d9579f0517bd1c8f26d33c789b")
@@ -144,7 +146,6 @@ sharswood_2022_tract_sf <- phl_tract_2022_summary |>
 
 sharswood_2022_tract <- sharswood_2022_tract_sf |> 
   st_drop_geometry()
-sharswood_2022_tract
 ```
 
 ```{r, results = 'hide'}
@@ -206,22 +207,28 @@ sharswood_vacant_pts <- vacant_pts |>
 sharswood_vacant_bldgs_df <- sharswood_vacant_bldgs |> 
   st_drop_geometry() |> 
   select(objectid, address, owner1, bldg_desc, bldg_type, zoningbasedistrict)
-sharswood_vacant_bldgs_df
-
-count(sharswood_vacant_bldgs_df, bldg_desc)
-count(sharswood_vacant_bldgs_df, bldg_type)
-count(sharswood_vacant_bldgs_df, owner1)
 
 sharswood_vacant_land_df <- sharswood_vacant_land |> 
   st_drop_geometry() |> 
   select(OBJECTID, ADDRESS, OWNER1, BLDG_DESC, ZONINGBASEDISTRICT)
-sharswood_vacant_land_df
-
-count(sharswood_vacant_land_df, OWNER1)
 
 sharswood_vacant_pts_df <- sharswood_vacant_pts |> 
   st_drop_geometry() |> 
   select(OBJECTID, ADDRESS, OWNER1, BLDG_DESC, ZONINGBASEDISTRICT)
+```
+
+```{r}
+#| echo: false
+#| include: false
+
+# Gut Checks and Column Names
+sharswood_vacant_bldgs_df
+count(sharswood_vacant_bldgs_df, bldg_desc)
+count(sharswood_vacant_bldgs_df, bldg_type)
+count(sharswood_vacant_bldgs_df, owner1)
+
+sharswood_vacant_land_df
+count(sharswood_vacant_land_df, OWNER1)
 sharswood_vacant_pts_df
 ```
 
@@ -242,7 +249,6 @@ sharswood_vacant_land_owner <- sharswood_vacant_land |>
 sharswood_vacant_land_owner_df <- sharswood_vacant_land_owner |> 
   st_drop_geometry() |> 
   select(OBJECTID, ADDRESS, OWNER1, BLDG_DESC, owner_grp, ZONINGBASEDISTRICT)
-head(sharswood_vacant_land_owner_df)
 ```
 
 --------------------------------------------------------------------------------

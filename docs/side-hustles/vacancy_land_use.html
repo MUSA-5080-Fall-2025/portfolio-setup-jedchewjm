@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jed Chew">
-<meta name="dcterms.date" content="2025-11-04">
+<meta name="dcterms.date" content="2025-11-28">
 
 <title>Vacancy, Land Use, and Businesses - Sharswood – Jed Chew - MUSA 5080 Portfolio</title>
 <style>
@@ -3927,6 +3927,14 @@ vertical-align: -.125em;
     <a class="dropdown-item" href="../weekly-notes/week-09-notes.html">
  <span class="dropdown-text">Week 9 Notes - Predictive Policing</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../weekly-notes/week-10-notes.html">
+ <span class="dropdown-text">Week 10 Notes - Logistic Regression for Binary Outcomes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../weekly-notes/week-11-notes.html">
+ <span class="dropdown-text">Week 11 Notes - Space Time Prediction</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -3965,6 +3973,10 @@ vertical-align: -.125em;
     <a class="dropdown-item" href="../labs/lab_4/assignment4_template.html">
  <span class="dropdown-text">Assignment 4: Predictive Policing &amp; Analysis</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab_5/assignment5_template.html">
+ <span class="dropdown-text">Assignment 5: Space-Time Prediction of Indego Bike Share Demand</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -3983,6 +3995,10 @@ vertical-align: -.125em;
         <li>
     <a class="dropdown-item" href="../side-hustles/vacancy_land_use.html">
  <span class="dropdown-text">Vacancy, Land Use, and Businesses - Sharswood</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../side-hustles/vacancy_land_use_dvrpc.html">
+ <span class="dropdown-text">DVRPC Land Use - Sharswood</span></a>
   </li>  
     </ul>
   </li>
@@ -4042,7 +4058,7 @@ vertical-align: -.125em;
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 4, 2025</p>
+      <p class="date">November 28, 2025</p>
     </div>
   </div>
   
@@ -4078,819 +4094,214 @@ vertical-align: -.125em;
 <li>Philadelphia census tracts, block groups, and neighborhood boundaries</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load spatial data</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>census_tracts <span class="ot">&lt;-</span> <span class="fu">tracts</span>(<span class="at">state =</span> <span class="st">&quot;PA&quot;</span>, <span class="at">county =</span> <span class="st">&quot;Philadelphia&quot;</span>, <span class="at">year =</span> <span class="dv">2020</span>, <span class="at">class =</span> <span class="st">&quot;sf&quot;</span>, <span class="at">cb =</span> <span class="cn">TRUE</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>block_grps <span class="ot">&lt;-</span> <span class="fu">block_groups</span>(<span class="at">state =</span> <span class="st">&quot;PA&quot;</span>, <span class="at">county =</span> <span class="st">&quot;Philadelphia&quot;</span>, <span class="at">year =</span> <span class="dv">2020</span>, <span class="at">class =</span> <span class="st">&quot;sf&quot;</span>,<span class="at">cb =</span> <span class="cn">TRUE</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter Block Groups for Sharswood</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>ids <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;421010138001&quot;</span>,<span class="st">&quot;421010138002&quot;</span>,<span class="st">&quot;421010139001&quot;</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;421010139002&quot;</span>,<span class="st">&quot;421010139003&quot;</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>sharswood_bg_sf <span class="ot">&lt;-</span> block_grps <span class="sc">|&gt;</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a> <span class="fu">filter</span>(GEOID <span class="sc">%in%</span> ids) <span class="sc">|&gt;</span> </span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="dv">2272</span>) <span class="co"># PA State Plane (in US Survey Feet)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load required packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidycensus)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tigris)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggnewscale)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridisLite)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(units)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load spatial data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>census_tracts <span class="ot">&lt;-</span> <span class="fu">tracts</span>(<span class="at">state =</span> <span class="st">&quot;PA&quot;</span>, <span class="at">county =</span> <span class="st">&quot;Philadelphia&quot;</span>, <span class="at">year =</span> <span class="dv">2020</span>, <span class="at">class =</span> <span class="st">&quot;sf&quot;</span>, <span class="at">cb =</span> <span class="cn">TRUE</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>block_grps <span class="ot">&lt;-</span> <span class="fu">block_groups</span>(<span class="at">state =</span> <span class="st">&quot;PA&quot;</span>, <span class="at">county =</span> <span class="st">&quot;Philadelphia&quot;</span>, <span class="at">year =</span> <span class="dv">2020</span>, <span class="at">class =</span> <span class="st">&quot;sf&quot;</span>,<span class="at">cb =</span> <span class="cn">TRUE</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter Block Groups for Sharswood</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>ids <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;421010138001&quot;</span>,<span class="st">&quot;421010138002&quot;</span>,<span class="st">&quot;421010139001&quot;</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;421010139002&quot;</span>,<span class="st">&quot;421010139003&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>sharswood_bg_sf <span class="ot">&lt;-</span> block_grps <span class="sc">|&gt;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a> <span class="fu">filter</span>(GEOID <span class="sc">%in%</span> ids) <span class="sc">|&gt;</span> </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="dv">2272</span>) <span class="co"># PA State Plane (in US Survey Feet)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <hr>
 </section>
 <section id="step-2-get-philadelphia-demographic-data-using-tidycensus" class="level3">
 <h3 class="anchored" data-anchor-id="step-2-get-philadelphia-demographic-data-using-tidycensus">Step 2: Get Philadelphia Demographic Data using <code>tidycensus</code></h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load all available variables for ACS 5-year 2022</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>acs_vars_2022 <span class="ot">&lt;-</span> <span class="fu">load_variables</span>(<span class="dv">2022</span>, <span class="st">&quot;acs5&quot;</span>, <span class="at">cache =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load all available variables for ACS 5-year 2022</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>acs_vars_2022 <span class="ot">&lt;-</span> <span class="fu">load_variables</span>(<span class="dv">2022</span>, <span class="st">&quot;acs5&quot;</span>, <span class="at">cache =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get tract-level demographic data from 2022 ACS 5-Yr Estimates for Philadelphia</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>phl_tract_2022_data <span class="ot">&lt;-</span> <span class="fu">get_acs</span>(</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">geography =</span> <span class="st">&quot;tract&quot;</span>,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">variables =</span> <span class="fu">c</span>(</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_pop =</span> <span class="st">&quot;B01003_001&quot;</span>,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">median_income =</span> <span class="st">&quot;B19013_001&quot;</span>,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">poverty =</span> <span class="st">&quot;B17001_001&quot;</span>,</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">White     =</span> <span class="st">&quot;B03002_003&quot;</span>,</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Black     =</span> <span class="st">&quot;B03002_004&quot;</span>,</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Hispanic  =</span> <span class="st">&quot;B03002_012&quot;</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">state =</span> <span class="st">&quot;PA&quot;</span>,</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">county =</span> <span class="st">&quot;Philadelphia&quot;</span>,</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">year =</span> <span class="dv">2022</span>,</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">survey =</span> <span class="st">&quot;acs5&quot;</span>,</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">output =</span> <span class="st">&quot;wide&quot;</span>,</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">geometry =</span> <span class="cn">TRUE</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean the county names to remove state name and &quot;County&quot; </span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>phl_tract_2022_clean <span class="ot">&lt;-</span> phl_tract_2022_data <span class="sc">|&gt;</span> </span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    NAME, </span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">into =</span> <span class="fu">c</span>(<span class="st">&quot;tract_name&quot;</span>, <span class="st">&quot;county_name&quot;</span>, <span class="st">&quot;state_name&quot;</span>), </span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">&quot;; &quot;</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">tract_name =</span> <span class="fu">str_remove</span>(tract_name, <span class="st">&quot;Census Tract &quot;</span>),</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">county_name =</span> <span class="fu">str_remove</span>(county_name, <span class="st">&quot; County&quot;</span>)</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>phl_tract_2022_summary <span class="ot">&lt;-</span> phl_tract_2022_clean <span class="sc">|&gt;</span></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(GEOID, tract_name, county_name, total_popE, median_incomeE)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get tract-level demographic data from 2022 ACS 5-Yr Estimates for Philadelphia</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>phl_tract_2022_data <span class="ot">&lt;-</span> <span class="fu">get_acs</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">geography =</span> <span class="st">&quot;tract&quot;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">variables =</span> <span class="fu">c</span>(</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_pop =</span> <span class="st">&quot;B01003_001&quot;</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">median_income =</span> <span class="st">&quot;B19013_001&quot;</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">poverty =</span> <span class="st">&quot;B17001_001&quot;</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">White     =</span> <span class="st">&quot;B03002_003&quot;</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Black     =</span> <span class="st">&quot;B03002_004&quot;</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Hispanic  =</span> <span class="st">&quot;B03002_012&quot;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">state =</span> <span class="st">&quot;PA&quot;</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">county =</span> <span class="st">&quot;Philadelphia&quot;</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">year =</span> <span class="dv">2022</span>,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">survey =</span> <span class="st">&quot;acs5&quot;</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">output =</span> <span class="st">&quot;wide&quot;</span>,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">geometry =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean the county names to remove state name and &quot;County&quot; </span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>phl_tract_2022_clean <span class="ot">&lt;-</span> phl_tract_2022_data <span class="sc">|&gt;</span> </span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    NAME, </span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">into =</span> <span class="fu">c</span>(<span class="st">&quot;tract_name&quot;</span>, <span class="st">&quot;county_name&quot;</span>, <span class="st">&quot;state_name&quot;</span>), </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">&quot;; &quot;</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">tract_name =</span> <span class="fu">str_remove</span>(tract_name, <span class="st">&quot;Census Tract &quot;</span>),</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">county_name =</span> <span class="fu">str_remove</span>(county_name, <span class="st">&quot; County&quot;</span>)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>phl_tract_2022_summary <span class="ot">&lt;-</span> phl_tract_2022_clean <span class="sc">|&gt;</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(GEOID, tract_name, county_name, total_popE, median_incomeE)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <hr>
 </section>
 <section id="step-3-filter-data-for-sharswood" class="level3">
 <h3 class="anchored" data-anchor-id="step-3-filter-data-for-sharswood">Step 3: Filter Data for Sharswood</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter Census Tracts for Sharswood</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sharswood_2022_tract_sf <span class="ot">&lt;-</span> phl_tract_2022_summary <span class="sc">|&gt;</span> </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tract_name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;138&quot;</span>, <span class="st">&quot;139&quot;</span>))</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>sharswood_2022_tract <span class="ot">&lt;-</span> sharswood_2022_tract_sf <span class="sc">|&gt;</span> </span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>()</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>sharswood_2022_tract</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter Census Tracts for Sharswood</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sharswood_2022_tract_sf <span class="ot">&lt;-</span> phl_tract_2022_summary <span class="sc">|&gt;</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tract_name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;138&quot;</span>, <span class="st">&quot;139&quot;</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>sharswood_2022_tract <span class="ot">&lt;-</span> sharswood_2022_tract_sf <span class="sc">|&gt;</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Spatially Filter Vacancy Data for Sharswood</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>vacant_bldgs <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/Vacant_Indicators_Bldg.geojson&quot;</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>vacant_land <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/Vacant_Indicators_Land.geojson&quot;</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>vacant_pts <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/Vacant_Indicators_Points.geojson&quot;</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>sharswood_land_parcels <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/sharswood_parcels.geojson&quot;</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>sharswood_zip <span class="ot">&lt;-</span> <span class="dv">19121</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_bldgs <span class="ot">&lt;-</span> vacant_bldgs <span class="sc">|&gt;</span> </span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(sharswood_bg_sf)) <span class="sc">|&gt;</span> </span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(zipcode <span class="sc">==</span> sharswood_zip) <span class="sc">|&gt;</span> </span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">bldg_desc =</span> <span class="fu">str_squish</span>(bldg_desc)) <span class="sc">|&gt;</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(bldg_desc), <span class="co"># filter out NAs</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">str_detect</span>(bldg_desc, <span class="fu">regex</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">bschool</span><span class="sc">\\</span><span class="st">b&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)), <span class="co"># filter out Girard College</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">str_detect</span>(bldg_desc, <span class="fu">regex</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">bland</span><span class="sc">\\</span><span class="st">b&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="co"># filter out Land</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove &quot;MASONRY&quot; and tidy up</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">bldg_desc_clean =</span> <span class="fu">str_squish</span>(<span class="fu">str_remove</span>(bldg_desc, </span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>                                            <span class="fu">regex</span>(<span class="st">&quot;MASONRY&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))),</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create broader categories</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">bldg_type =</span> <span class="fu">case_when</span>(</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(bldg_desc_clean, </span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">regex</span>(<span class="st">&quot;APT</span><span class="sc">\\</span><span class="st">s*2-4&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;Apt 2-4 units&quot;</span>,</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(bldg_desc_clean, </span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">regex</span>(<span class="st">&quot;ROW</span><span class="sc">\\</span><span class="st">s*</span><span class="sc">\\</span><span class="st">d&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;Rowhouse&quot;</span>,</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(bldg_desc_clean, </span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">regex</span>(<span class="st">&quot;ROW</span><span class="sc">\\</span><span class="st">s*CONV&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;Rowhouse Convert/Apt&quot;</span>,</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(bldg_desc_clean, </span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">regex</span>(<span class="st">&quot;SEMI&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;Semi-Detached&quot;</span>,</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(bldg_desc_clean, </span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">regex</span>(<span class="st">&quot;STORE&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;Store&quot;</span>,</span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(bldg_desc_clean, </span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">regex</span>(<span class="st">&quot;STR/OFF</span><span class="sc">\\</span><span class="st">+APTS&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;Store/Office + Apts&quot;</span>,</span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(bldg_desc_clean, </span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">regex</span>(<span class="st">&quot;HSE</span><span class="sc">\\</span><span class="st">s+WORSHIP&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;Hse of Worship&quot;</span>,</span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;Other&quot;</span>)</span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_filter</span>(sharswood_bg_sf, <span class="at">.predicate =</span> st_intersects)</span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_land <span class="ot">&lt;-</span> vacant_land <span class="sc">|&gt;</span> </span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(sharswood_bg_sf)) <span class="sc">|&gt;</span> </span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ZIPCODE <span class="sc">==</span> sharswood_zip,</span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>         BLDG_DESC <span class="sc">==</span> <span class="st">&quot;VAC LAND RES &lt; ACRE&quot;</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_filter</span>(sharswood_bg_sf, <span class="at">.predicate =</span> st_intersects)</span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_pts <span class="ot">&lt;-</span> vacant_pts <span class="sc">|&gt;</span> </span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(sharswood_bg_sf)) <span class="sc">|&gt;</span> </span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ZIPCODE <span class="sc">==</span> sharswood_zip) <span class="sc">|&gt;</span> </span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_filter</span>(sharswood_bg_sf, <span class="at">.predicate =</span> st_within)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Spatially Filter Vacancy Data for Sharswood</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>vacant_bldgs <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/Vacant_Indicators_Bldg.geojson&quot;</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>vacant_land <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/Vacant_Indicators_Land.geojson&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>vacant_pts <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/Vacant_Indicators_Points.geojson&quot;</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>sharswood_land_parcels <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/sharswood_parcels.geojson&quot;</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>sharswood_zip <span class="ot">&lt;-</span> <span class="dv">19121</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_bldgs <span class="ot">&lt;-</span> vacant_bldgs <span class="sc">|&gt;</span> </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(sharswood_bg_sf)) <span class="sc">|&gt;</span> </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(zipcode <span class="sc">==</span> sharswood_zip) <span class="sc">|&gt;</span> </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">bldg_desc =</span> <span class="fu">str_squish</span>(bldg_desc)) <span class="sc">|&gt;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(bldg_desc), <span class="co"># filter out NAs</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">str_detect</span>(bldg_desc, <span class="fu">regex</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">bschool</span><span class="sc">\\</span><span class="st">b&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)), <span class="co"># filter out Girard College</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">str_detect</span>(bldg_desc, <span class="fu">regex</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">bland</span><span class="sc">\\</span><span class="st">b&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="co"># filter out Land</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove &quot;MASONRY&quot; and tidy up</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">bldg_desc_clean =</span> <span class="fu">str_squish</span>(<span class="fu">str_remove</span>(bldg_desc, </span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>                                            <span class="fu">regex</span>(<span class="st">&quot;MASONRY&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))),</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create broader categories</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">bldg_type =</span> <span class="fu">case_when</span>(</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(bldg_desc_clean, </span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">regex</span>(<span class="st">&quot;APT</span><span class="sc">\\</span><span class="st">s*2-4&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;Apt 2-4 units&quot;</span>,</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(bldg_desc_clean, </span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">regex</span>(<span class="st">&quot;ROW</span><span class="sc">\\</span><span class="st">s*</span><span class="sc">\\</span><span class="st">d&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;Rowhouse&quot;</span>,</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(bldg_desc_clean, </span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">regex</span>(<span class="st">&quot;ROW</span><span class="sc">\\</span><span class="st">s*CONV&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;Rowhouse Convert/Apt&quot;</span>,</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(bldg_desc_clean, </span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">regex</span>(<span class="st">&quot;SEMI&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;Semi-Detached&quot;</span>,</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(bldg_desc_clean, </span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">regex</span>(<span class="st">&quot;STORE&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;Store&quot;</span>,</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(bldg_desc_clean, </span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">regex</span>(<span class="st">&quot;STR/OFF</span><span class="sc">\\</span><span class="st">+APTS&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;Store/Office + Apts&quot;</span>,</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(bldg_desc_clean, </span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">regex</span>(<span class="st">&quot;HSE</span><span class="sc">\\</span><span class="st">s+WORSHIP&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;Hse of Worship&quot;</span>,</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;Other&quot;</span>)</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_filter</span>(sharswood_bg_sf, <span class="at">.predicate =</span> st_intersects)</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_land <span class="ot">&lt;-</span> vacant_land <span class="sc">|&gt;</span> </span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(sharswood_bg_sf)) <span class="sc">|&gt;</span> </span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ZIPCODE <span class="sc">==</span> sharswood_zip,</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>         BLDG_DESC <span class="sc">==</span> <span class="st">&quot;VAC LAND RES &lt; ACRE&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_filter</span>(sharswood_bg_sf, <span class="at">.predicate =</span> st_intersects)</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_pts <span class="ot">&lt;-</span> vacant_pts <span class="sc">|&gt;</span> </span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(sharswood_bg_sf)) <span class="sc">|&gt;</span> </span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ZIPCODE <span class="sc">==</span> sharswood_zip) <span class="sc">|&gt;</span> </span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_filter</span>(sharswood_bg_sf, <span class="at">.predicate =</span> st_within)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vacancy in Table Format</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_bldgs_df <span class="ot">&lt;-</span> sharswood_vacant_bldgs <span class="sc">|&gt;</span> </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(objectid, address, owner1, bldg_desc, bldg_type, zoningbasedistrict)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_bldgs_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   objectid            address                                   owner1
-1       117     1314 N 19TH ST                TENTH MEMORIAL BAPTIST CH
-2       397   2136 W OXFORD ST                PHILADELPHIA HOUSING AUTH
-3       992    2115 SEYBERT ST                             MITA KLODIAN
-4      1104 2424 W THOMPSON ST                  BMJ PHILLY HOLDINGS LLC
-5      1288     1536 N 25TH ST                              YE JIN TANG
-6      1291  2200 JEFFERSON ST                PHILADELPHIA HOUSING AUTH
-7      1341     1302 N 25TH ST                        BEN-MOYAL ABRAHAM
-8      1646    2210 SEYBERT ST                PHILADELPHIA HOUSING AUTH
-9      1774  2416 JEFFERSON ST                      EARL FOOKS &amp; VIOLET
-10     2181     2433 MASTER ST                            FORD ALBERTIS
-11     2797  1254-64 N 25TH ST                    UNITED BAPTIST CHURCH
-12     3036   1518 N BAILEY ST                     1518 N BAILEY ST LLC
-13     3332     2236 MASTER ST                           MCCALL ENOCH S
-14     3382  2430 JEFFERSON ST                  EAST COAST EQUITIES LLC
-15     3596     2616 MASTER ST             JOINT FORCES DEVELOPMENT LLC
-16     3620     1265 N 26TH ST                     SATERTHWAITE DANTE M
-17     3665     2210 MASTER ST       JULIAN K &amp; ADRIAN C PROPERTIES LLC
-18     3732    2426 SEYBERT ST                           ELEANOR THOMAS
-19     3967     1254 N 19TH ST                            NVEST 365 LLC
-20     4082     1441 N 20TH ST                           SMITH JOSEPH N
-21     4505  2611 INGERSOLL ST                      MILO SMITH JR &amp; EVA
-22     4942     2501 MASTER ST                JEHOVAH-JIREH BAPTIST MIN
-23     5326 2414 W THOMPSON ST                         CLOVER CROFT LLC
-24     5578     2507 MASTER ST FRAZIER PROPERTY INVESTMENT AND REHABILI
-25     5838     2526 MASTER ST                     RUSSELL A RICHARDSON
-26     5843  2400 JEFFERSON ST                    TIOGA INVESTMENTS INC
-27     5932     1320 N 19TH ST                COMMUNITY HOMES PHILADELP
-28     6672     1263 N 26TH ST                           RHODES SHANITA
-29     6758     1529 N 27TH ST                                 DMSP LLC
-30     7376     1537 N 27TH ST                           JACKSON DARRYL
-31     7382 2221 N COLLEGE AVE                         KIGLER GROUP LLC
-32     7454     1252 N 19TH ST                      LINDSAY PATRICK S G
-33     7849  1304 N LECOUNT ST                    HILL INVESTEMENTS LLC
-34     7850     1323 N 27TH ST                   SEQUEL INVESTMENTS INC
-                   bldg_desc            bldg_type zoningbasedistrict
-1          ROW 3 STY MASONRY             Rowhouse               RM-1
-2  STR/OFF+APTS 3STY MASONRY  Store/Office + Apts              CMX-2
-3          ROW 2 STY MASONRY             Rowhouse               RM-1
-4          ROW 3 STY MASONRY             Rowhouse              CMX-2
-5          ROW 3 STY MASONRY             Rowhouse              RSA-5
-6        STORE 1 STY MASONRY                Store               RM-1
-7          ROW 2 STY MASONRY             Rowhouse              RSA-5
-8  ROW CONV/APT 2STY MASONRY Rowhouse Convert/Apt               RM-1
-9          ROW 2 STY MASONRY             Rowhouse              RSA-5
-10  APT 2-4 UNTS 2STY MASONR        Apt 2-4 units              RSA-5
-11 HSE WORSHIP ALL 1 STY MAS       Hse of Worship              RSA-5
-12         ROW 2 STY MASONRY             Rowhouse              RSA-5
-13         ROW 3 STY MASONRY             Rowhouse               RM-1
-14         ROW 2 STY MASONRY             Rowhouse              RSA-5
-15         ROW 2 STY MASONRY             Rowhouse              RSA-5
-16    SEMI/DET 3 STY MASONRY        Semi-Detached              RSA-5
-17         ROW 3 STY MASONRY             Rowhouse               RM-1
-18         ROW 2 STY MASONRY             Rowhouse              RSA-5
-19         ROW 3 STY MASONRY             Rowhouse               RM-1
-20 ROW CONV/APT 3STY MASONRY Rowhouse Convert/Apt              RSA-3
-21         ROW 2 STY MASONRY             Rowhouse              RSA-5
-22         ROW 3 STY MASONRY             Rowhouse              RSA-5
-23 STR/OFF+APTS 3STY MASONRY  Store/Office + Apts              CMX-2
-24         ROW 2 STY MASONRY             Rowhouse              RSA-5
-25         ROW 2 STY MASONRY             Rowhouse              RSA-5
-26 STR/OFF+APTS 3STY MASONRY  Store/Office + Apts              RSA-5
-27 ROW CONV/APT 3STY MASONRY Rowhouse Convert/Apt               RM-1
-28    SEMI/DET 3 STY MASONRY        Semi-Detached              RSA-5
-29         ROW 2 STY MASONRY             Rowhouse              RSA-5
-30    SEMI DET 2 STY MASONRY        Semi-Detached              RSA-5
-31         ROW 2 STY MASONRY             Rowhouse               RM-1
-32         ROW 3 STY MASONRY             Rowhouse               RM-1
-33         ROW 2 STY MASONRY             Rowhouse              RSA-5
-34         ROW 3 STY MASONRY             Rowhouse              RSA-5</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(sharswood_vacant_bldgs_df, bldg_desc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                   bldg_desc  n
-1   APT 2-4 UNTS 2STY MASONR  1
-2  HSE WORSHIP ALL 1 STY MAS  1
-3          ROW 2 STY MASONRY 13
-4          ROW 3 STY MASONRY  9
-5  ROW CONV/APT 2STY MASONRY  1
-6  ROW CONV/APT 3STY MASONRY  2
-7     SEMI DET 2 STY MASONRY  1
-8     SEMI/DET 3 STY MASONRY  2
-9        STORE 1 STY MASONRY  1
-10 STR/OFF+APTS 3STY MASONRY  3</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(sharswood_vacant_bldgs_df, bldg_type)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>             bldg_type  n
-1        Apt 2-4 units  1
-2       Hse of Worship  1
-3             Rowhouse 22
-4 Rowhouse Convert/Apt  3
-5        Semi-Detached  3
-6                Store  1
-7  Store/Office + Apts  3</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(sharswood_vacant_bldgs_df, owner1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                                     owner1 n
-1                      1518 N BAILEY ST LLC 1
-2                         BEN-MOYAL ABRAHAM 1
-3                   BMJ PHILLY HOLDINGS LLC 1
-4                          CLOVER CROFT LLC 1
-5                 COMMUNITY HOMES PHILADELP 1
-6                                  DMSP LLC 1
-7                       EARL FOOKS &amp; VIOLET 1
-8                   EAST COAST EQUITIES LLC 1
-9                            ELEANOR THOMAS 1
-10                            FORD ALBERTIS 1
-11 FRAZIER PROPERTY INVESTMENT AND REHABILI 1
-12                    HILL INVESTEMENTS LLC 1
-13                           JACKSON DARRYL 1
-14                JEHOVAH-JIREH BAPTIST MIN 1
-15             JOINT FORCES DEVELOPMENT LLC 1
-16       JULIAN K &amp; ADRIAN C PROPERTIES LLC 1
-17                         KIGLER GROUP LLC 1
-18                      LINDSAY PATRICK S G 1
-19                           MCCALL ENOCH S 1
-20                      MILO SMITH JR &amp; EVA 1
-21                             MITA KLODIAN 1
-22                            NVEST 365 LLC 1
-23                PHILADELPHIA HOUSING AUTH 3
-24                           RHODES SHANITA 1
-25                     RUSSELL A RICHARDSON 1
-26                     SATERTHWAITE DANTE M 1
-27                   SEQUEL INVESTMENTS INC 1
-28                           SMITH JOSEPH N 1
-29                TENTH MEMORIAL BAPTIST CH 1
-30                    TIOGA INVESTMENTS INC 1
-31                    UNITED BAPTIST CHURCH 1
-32                              YE JIN TANG 1</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_land_df <span class="ot">&lt;-</span> sharswood_vacant_land <span class="sc">|&gt;</span> </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(OBJECTID, ADDRESS, OWNER1, BLDG_DESC, ZONINGBASEDISTRICT)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_land_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   OBJECTID             ADDRESS                    OWNER1           BLDG_DESC
-1       251      2507 HARLAN ST             CITY OF PHILA VAC LAND RES &lt; ACRE
-2       277      2100 MASTER ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-3       352   2253 INGERSOLL ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-4       357   2219 INGERSOLL ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-5       464      2023 MASTER ST               WATTS CARLA VAC LAND RES &lt; ACRE
-6       487      1248 N 19TH ST          RIDGE POINTE LLC VAC LAND RES &lt; ACRE
-7       610   2501 JEFFERSON ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-8       705      1310 N 24TH ST             STERN MICHAEL VAC LAND RES &lt; ACRE
-9       717   2449 INGERSOLL ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-10      920      2102 MASTER ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-11     1087      1337 N 21ST ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-12     1094    1203 N TAYLOR ST            MBWF HOMES LLC VAC LAND RES &lt; ACRE
-13     1115  2241 W THOMPSON ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-14     1146      1503 N 27TH ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-15     1149     2205 SEYBERT ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-16     1153      1331 N 21ST ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-17     1199      2401 HARLAN ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-18     1322   2506 SHARSWOOD ST             CITY OF PHILA VAC LAND RES &lt; ACRE
-19     1455      1318 N 23RD ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-20     1578     2449 SEYBERT ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-21     1701   2516 SHARSWOOD ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-22     1739     2501 SEYBERT ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-23     1795    2018 W OXFORD ST         KONE HOLDINGS LLC VAC LAND RES &lt; ACRE
-24     1825   2519 INGERSOLL ST    PHILADELPHIA LAND BANK VAC LAND RES &lt; ACRE
-25     1931      1525 N 22ND ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-26     1941   2237 INGERSOLL ST    PHILADELPHIA LAND BANK VAC LAND RES &lt; ACRE
-27     2135   2500 INGERSOLL ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-28     2165   2227 INGERSOLL ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-29     2281      2112 RIDGE AVE PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-30     2406      1410 N 25TH ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-31     2545  2427 W THOMPSON ST   HARRISON PROPERTIES INC VAC LAND RES &lt; ACRE
-32     2554      2104 MASTER ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-33     2614      1308 N 24TH ST    BSK PH DEVELOPMENT LLC VAC LAND RES &lt; ACRE
-34     2656  2235 W THOMPSON ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-35     2701    1201 N TAYLOR ST    PHILLY RESTORATION LLC VAC LAND RES &lt; ACRE
-36     2710  2233 W THOMPSON ST      JOHNSON CHARLES ERIC VAC LAND RES &lt; ACRE
-37     2727  2423 W THOMPSON ST   HARRISON PROPERTIES INC VAC LAND RES &lt; ACRE
-38     2798      1919 RIDGE AVE          RIDGE POINTE LLC VAC LAND RES &lt; ACRE
-39     2808  2201 W THOMPSON ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-40     2822     2414 SEYBERT ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-41     2883      1921 RIDGE AVE          RIDGE POINTE LLC VAC LAND RES &lt; ACRE
-42     2914      2106 MASTER ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-43     2953      1901 RIDGE AVE          RIDGE POINTE LLC VAC LAND RES &lt; ACRE
-44     3352     2401 STEWART ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-45     3599  2237 W THOMPSON ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-46     3618      2509 HARLAN ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-47     3645      1409 N 21ST ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-48     3724     2422 SEYBERT ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-49     3731   2617 JEFFERSON ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-50     4007      2448 MASTER ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-51     4109      2122 MASTER ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-52     4170 1537 N BEECHWOOD ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-53     4307      1310 N 23RD ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-54     4349      1252 N 25TH ST    PHILADELPHIA LAND BANK VAC LAND RES &lt; ACRE
-55     4486   1907-15 RIDGE AVE           TARKEN REI, LLC VAC LAND RES &lt; ACRE
-56     4511      1917 RIDGE AVE          RIDGE POINTE LLC VAC LAND RES &lt; ACRE
-57     4661     2457 SEYBERT ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-58     4687      1423 N 21ST ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-59     4865    1224 N TAYLOR ST          SIDDIQUE ANTHONY VAC LAND RES &lt; ACRE
-60     4944      2116 RIDGE AVE PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-61     4984    2510 W OXFORD ST             ENLOW GAYLE J VAC LAND RES &lt; ACRE
-62     5095     2443 SEYBERT ST    PHILADELPHIA LAND BANK VAC LAND RES &lt; ACRE
-63     5104      1516 N 25TH ST    PHILADELPHIA LAND BANK VAC LAND RES &lt; ACRE
-64     5153      1319 N 25TH ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-65     5225      1312 N 24TH ST              SASS,SHANTEE VAC LAND RES &lt; ACRE
-66     5243     2326 SEYBERT ST    PHILADELPHIA LAND BANK VAC LAND RES &lt; ACRE
-67     5311  2431 W THOMPSON ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-68     5456  2425 W THOMPSON ST   HARRISON PROPERTIES INC VAC LAND RES &lt; ACRE
-69     5466  2239 W THOMPSON ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-70     5641   2211 INGERSOLL ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-71     5699      2031 MASTER ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-72     5719     2447 SEYBERT ST    PHILADELPHIA LAND BANK VAC LAND RES &lt; ACRE
-73     5720   2501 INGERSOLL ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-74     5870     2429 SEYBERT ST    PHILADELPHIA LAND BANK VAC LAND RES &lt; ACRE
-75     5911   2100 SHARSWOOD ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-76     6060      2125 MASTER ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-77     6061      1407 N 22ND ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-78     6254  2243 W THOMPSON ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-79     6273      2117 MASTER ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-80     6274      1333 N 27TH ST    PHILADELPHIA LAND BANK VAC LAND RES &lt; ACRE
-81     6313      1255 N 23RD ST          GLF QOZ FUND LLC VAC LAND RES &lt; ACRE
-82     6363      2411 MASTER ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-83     6364      1315 N 22ND ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-84     6365      2138 MASTER ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-85     6366      1317 N 22ND ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-86     6367      1319 N 22ND ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-87     6368      1323 N 22ND ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-88     6369      2148 MASTER ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-89     6370      2140 MASTER ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-   ZONINGBASEDISTRICT
-1               RSA-5
-2               CMX-2
-3               CMX-2
-4                RM-1
-5                RM-1
-6                RM-1
-7                RM-1
-8               RSA-5
-9               RSA-5
-10               RM-1
-11               RM-1
-12               RM-1
-13               RM-1
-14              RSA-5
-15               RM-1
-16               RM-1
-17              RSA-5
-18              RSA-5
-19              CMX-2
-20              RSA-5
-21              RSA-5
-22              RSA-5
-23              RSA-5
-24              RSA-5
-25              CMX-2
-26               RM-1
-27              RSA-5
-28               RM-1
-29              CMX-2
-30              RSA-5
-31               RM-1
-32               RM-1
-33              RSA-5
-34               RM-1
-35               RM-1
-36               RM-1
-37               RM-1
-38               RM-1
-39               RM-1
-40              RSA-5
-41               RM-1
-42               RM-1
-43               RM-1
-44              RSA-5
-45               RM-1
-46              RSA-5
-47               RM-1
-48              RSA-5
-49               RM-1
-50              RSA-5
-51               RM-1
-52              CMX-2
-53               RM-1
-54              RSA-5
-55               RM-1
-56               RM-1
-57              RSA-5
-58              CMX-2
-59               RM-1
-60              CMX-2
-61              RSA-5
-62              RSA-5
-63              RSA-5
-64              RSA-5
-65              RSA-5
-66               RM-1
-67               RM-1
-68               RM-1
-69               RM-1
-70               RM-1
-71               RM-1
-72              RSA-5
-73              RSA-5
-74              RSA-5
-75               RM-1
-76               RM-1
-77               RM-1
-78               RM-1
-79               RM-1
-80              RSA-5
-81               RM-1
-82              RSA-5
-83               RM-1
-84               RM-1
-85               RM-1
-86               RM-1
-87               RM-1
-88              CMX-2
-89               RM-1</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(sharswood_vacant_land_df, OWNER1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                      OWNER1  n
-1     BSK PH DEVELOPMENT LLC  1
-2              CITY OF PHILA  2
-3              ENLOW GAYLE J  1
-4           GLF QOZ FUND LLC  1
-5    HARRISON PROPERTIES INC  3
-6       JOHNSON CHARLES ERIC  1
-7          KONE HOLDINGS LLC  1
-8             MBWF HOMES LLC  1
-9  PHILADELPHIA HOUSING AUTH 58
-10    PHILADELPHIA LAND BANK  9
-11    PHILLY RESTORATION LLC  1
-12          RIDGE POINTE LLC  5
-13              SASS,SHANTEE  1
-14          SIDDIQUE ANTHONY  1
-15             STERN MICHAEL  1
-16           TARKEN REI, LLC  1
-17               WATTS CARLA  1</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_pts_df <span class="ot">&lt;-</span> sharswood_vacant_pts <span class="sc">|&gt;</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(OBJECTID, ADDRESS, OWNER1, BLDG_DESC, ZONINGBASEDISTRICT)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_pts_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>    OBJECTID               ADDRESS                         OWNER1
-1        202        1314 N 19TH ST      TENTH MEMORIAL BAPTIST CH
-2        552        2507 HARLAN ST                  CITY OF PHILA
-3        611        2100 MASTER ST      PHILADELPHIA HOUSING AUTH
-4        685      2136 W OXFORD ST      PHILADELPHIA HOUSING AUTH
-5        774     2253 INGERSOLL ST      PHILADELPHIA HOUSING AUTH
-6        791     2219 INGERSOLL ST      PHILADELPHIA HOUSING AUTH
-7        834      2514 W OXFORD ST                  WELCH YOLANDA
-8       1026        2023 MASTER ST                    WATTS CARLA
-9       1071        1248 N 19TH ST               RIDGE POINTE LLC
-10      1361     2501 JEFFERSON ST      PHILADELPHIA HOUSING AUTH
-11      1554        1310 N 24TH ST                  STERN MICHAEL
-12      1566        2144 MASTER ST      PHILADELPHIA HOUSING AUTH
-13      1576     2449 INGERSOLL ST      PHILADELPHIA HOUSING AUTH
-14      1710       2115 SEYBERT ST                   MITA KLODIAN
-15      1908    2424 W THOMPSON ST        BMJ PHILLY HOLDINGS LLC
-16      2030        2102 MASTER ST      PHILADELPHIA HOUSING AUTH
-17      2273        1536 N 25TH ST                    YE JIN TANG
-18      2277     2200 JEFFERSON ST      PHILADELPHIA HOUSING AUTH
-19      2356        1337 N 21ST ST      PHILADELPHIA HOUSING AUTH
-20      2365        1302 N 25TH ST              BEN-MOYAL ABRAHAM
-21      2378      1203 N TAYLOR ST                 MBWF HOMES LLC
-22      2424    2241 W THOMPSON ST      PHILADELPHIA HOUSING AUTH
-23      2490        1503 N 27TH ST      PHILADELPHIA HOUSING AUTH
-24      2495       2205 SEYBERT ST      PHILADELPHIA HOUSING AUTH
-25      2501        1331 N 21ST ST      PHILADELPHIA HOUSING AUTH
-26      2593        2401 HARLAN ST      PHILADELPHIA HOUSING AUTH
-27      2859       2210 SEYBERT ST      PHILADELPHIA HOUSING AUTH
-28      2881     2506 SHARSWOOD ST                  CITY OF PHILA
-29      3083     2416 JEFFERSON ST            EARL FOOKS &amp; VIOLET
-30      3165        1318 N 23RD ST      PHILADELPHIA HOUSING AUTH
-31      3234      2508 W OXFORD ST             BLACKWELL BRITTANY
-32      3442       2449 SEYBERT ST      PHILADELPHIA HOUSING AUTH
-33      3504        1515 N 25TH ST      PHILADELPHIA HOUSING AUTH
-34      3708     2516 SHARSWOOD ST      PHILADELPHIA HOUSING AUTH
-35      3759        2433 MASTER ST                  FORD ALBERTIS
-36      3808       2501 SEYBERT ST      PHILADELPHIA HOUSING AUTH
-37      3941      2018 W OXFORD ST              KONE HOLDINGS LLC
-38      4004     2519 INGERSOLL ST         PHILADELPHIA LAND BANK
-39      4228        1525 N 22ND ST      PHILADELPHIA HOUSING AUTH
-40      4249     2237 INGERSOLL ST         PHILADELPHIA LAND BANK
-41      4700     2500 INGERSOLL ST      PHILADELPHIA HOUSING AUTH
-42      4771     2227 INGERSOLL ST      PHILADELPHIA HOUSING AUTH
-43      4842     1254-64 N 25TH ST          UNITED BAPTIST CHURCH
-44      5033        2112 RIDGE AVE      PHILADELPHIA HOUSING AUTH
-45      5113        1219 N 25TH ST          MUHAMMAD ISA ABDULLAH
-46      5229      1518 N BAILEY ST           1518 N BAILEY ST LLC
-47      5299        1410 N 25TH ST      PHILADELPHIA HOUSING AUTH
-48      5578    2427 W THOMPSON ST        HARRISON PROPERTIES INC
-49      5602        2104 MASTER ST      PHILADELPHIA HOUSING AUTH
-50      5722        1308 N 24TH ST         BSK PH DEVELOPMENT LLC
-51      5764        2236 MASTER ST                 MCCALL ENOCH S
-52      5808    2235 W THOMPSON ST      PHILADELPHIA HOUSING AUTH
-53      5893      1201 N TAYLOR ST         PHILLY RESTORATION LLC
-54      5917    2233 W THOMPSON ST           JOHNSON CHARLES ERIC
-55      5954    2423 W THOMPSON ST        HARRISON PROPERTIES INC
-56      6109        1919 RIDGE AVE               RIDGE POINTE LLC
-57      6127    2201 W THOMPSON ST      PHILADELPHIA HOUSING AUTH
-58      6154       2414 SEYBERT ST      PHILADELPHIA HOUSING AUTH
-59      6200        2616 MASTER ST   JOINT FORCES DEVELOPMENT LLC
-60      6228        1265 N 26TH ST           SATERTHWAITE DANTE M
-61      6317        1921 RIDGE AVE               RIDGE POINTE LLC
-62      6368        2106 MASTER ST      PHILADELPHIA HOUSING AUTH
-63      6423       2426 SEYBERT ST                 ELEANOR THOMAS
-64      6460        1901 RIDGE AVE               RIDGE POINTE LLC
-65      6811        1254 N 19TH ST           PINE HOLDINGS II LLC
-66      7044        1441 N 20TH ST                 SMITH JOSEPH N
-67      7328       2401 STEWART ST      PHILADELPHIA HOUSING AUTH
-68      7780     2611 INGERSOLL ST            MILO SMITH JR &amp; EVA
-69      7846    2237 W THOMPSON ST      PHILADELPHIA HOUSING AUTH
-70      7898        2509 HARLAN ST      PHILADELPHIA HOUSING AUTH
-71      7954        1409 N 21ST ST      PHILADELPHIA HOUSING AUTH
-72      8125       2422 SEYBERT ST      PHILADELPHIA HOUSING AUTH
-73      8136     2617 JEFFERSON ST      PHILADELPHIA HOUSING AUTH
-74      8729        2448 MASTER ST      PHILADELPHIA HOUSING AUTH
-75      8982        2122 MASTER ST      PHILADELPHIA HOUSING AUTH
-76      9101   1537 N BEECHWOOD ST      PHILADELPHIA HOUSING AUTH
-77      9218    2414 W THOMPSON ST               CLOVER CROFT LLC
-78      9397        1310 N 23RD ST      PHILADELPHIA HOUSING AUTH
-79      9493        1252 N 25TH ST         PHILADELPHIA LAND BANK
-80      9640        2507 MASTER ST        LREG 2507 MASTER ST LLC
-81      9831     1907-15 RIDGE AVE                TARKEN REI, LLC
-82      9899        1917 RIDGE AVE               RIDGE POINTE LLC
-83     10058        2526 MASTER ST           RUSSELL A RICHARDSON
-84     10064     2400 JEFFERSON ST          TIOGA INVESTMENTS INC
-85     10198        1320 N 19TH ST      COMMUNITY HOMES PHILADELP
-86     10234       2457 SEYBERT ST      PHILADELPHIA HOUSING AUTH
-87     10267        2114 RIDGE AVE PHILADELPHIA HOUSING AUTHORITY
-88     10291        1423 N 21ST ST      PHILADELPHIA HOUSING AUTH
-89     10708      1224 N TAYLOR ST               SIDDIQUE ANTHONY
-90     10881        2116 RIDGE AVE      PHILADELPHIA HOUSING AUTH
-91     10964      2510 W OXFORD ST                  ENLOW GAYLE J
-92     11121        2035 MASTER ST      PHILADELPHIA HOUSING AUTH
-93     11195       2443 SEYBERT ST         PHILADELPHIA LAND BANK
-94     11210        1516 N 25TH ST         PHILADELPHIA LAND BANK
-95     11235        1528 N 24TH ST      PHILADELPHIA HOUSING AUTH
-96     11315        1319 N 25TH ST      PHILADELPHIA HOUSING AUTH
-97     11466        1263 N 26TH ST                 RHODES SHANITA
-98     11471        1312 N 24TH ST                   SASS,SHANTEE
-99     11496       2326 SEYBERT ST         PHILADELPHIA LAND BANK
-100    11535        2406 HARLAN ST      PHILADELPHIA HOUSING AUTH
-101    11548        2128 RIDGE AVE                     KIKMAC LLC
-102    11622    2431 W THOMPSON ST      PHILADELPHIA HOUSING AUTH
-103    11634        1529 N 27TH ST                       DMSP LLC
-104    11913    2425 W THOMPSON ST        HARRISON PROPERTIES INC
-105    11928    2239 W THOMPSON ST      PHILADELPHIA HOUSING AUTH
-106    12283     2211 INGERSOLL ST      PHILADELPHIA HOUSING AUTH
-107    12398        2031 MASTER ST      PHILADELPHIA HOUSING AUTH
-108    12437       2447 SEYBERT ST         PHILADELPHIA LAND BANK
-109    12438     2501 INGERSOLL ST      PHILADELPHIA HOUSING AUTH
-110    12768       2429 SEYBERT ST         PHILADELPHIA LAND BANK
-111    12777    2221 N COLLEGE AVE               KIGLER GROUP LLC
-112    12868     2100 SHARSWOOD ST      PHILADELPHIA HOUSING AUTH
-113    12890        1252 N 19TH ST            LINDSAY PATRICK S G
-114    13125        2125 MASTER ST      PHILADELPHIA HOUSING AUTH
-115    13126        1407 N 22ND ST      PHILADELPHIA HOUSING AUTH
-116    13278        2214 MASTER ST              BULLOCK GERALDINE
-117    13367 1234-36 W COLLEGE AVE                   HARRISON INC
-118    13567    2243 W THOMPSON ST      PHILADELPHIA HOUSING AUTH
-119    13614        2117 MASTER ST      PHILADELPHIA HOUSING AUTH
-120    13615     1304 N LECOUNT ST          HILL INVESTEMENTS LLC
-121    13616        1323 N 27TH ST         SEQUEL INVESTMENTS INC
-122    13617        1333 N 27TH ST         PHILADELPHIA LAND BANK
-123    13691        1255 N 23RD ST               GLF QOZ FUND LLC
-124    13805        2411 MASTER ST      PHILADELPHIA HOUSING AUTH
-125    13806        1315 N 22ND ST      PHILADELPHIA HOUSING AUTH
-126    13807        2138 MASTER ST      PHILADELPHIA HOUSING AUTH
-127    13808        1317 N 22ND ST      PHILADELPHIA HOUSING AUTH
-128    13809        1319 N 22ND ST      PHILADELPHIA HOUSING AUTH
-129    13810        1323 N 22ND ST      PHILADELPHIA HOUSING AUTH
-130    13811        2148 MASTER ST      PHILADELPHIA HOUSING AUTH
-131    13812        2140 MASTER ST      PHILADELPHIA HOUSING AUTH
-                    BLDG_DESC ZONINGBASEDISTRICT
-1           ROW 3 STY MASONRY               RM-1
-2         VAC LAND RES &lt; ACRE              RSA-5
-3         VAC LAND RES &lt; ACRE              CMX-2
-4   STR/OFF+APTS 3STY MASONRY              CMX-2
-5         VAC LAND RES &lt; ACRE              CMX-2
-6         VAC LAND RES &lt; ACRE               RM-1
-7           ROW 3 STY MASONRY              RSA-5
-8         VAC LAND RES &lt; ACRE               RM-1
-9         VAC LAND RES &lt; ACRE               RM-1
-10        VAC LAND RES &lt; ACRE               RM-1
-11        VAC LAND RES &lt; ACRE              RSA-5
-12                       &lt;NA&gt;               RM-1
-13        VAC LAND RES &lt; ACRE              RSA-5
-14          ROW 2 STY MASONRY               RM-1
-15          ROW 3 STY MASONRY              CMX-2
-16        VAC LAND RES &lt; ACRE               RM-1
-17          ROW 3 STY MASONRY              RSA-5
-18        STORE 1 STY MASONRY               RM-1
-19        VAC LAND RES &lt; ACRE               RM-1
-20          ROW 2 STY MASONRY              RSA-5
-21        VAC LAND RES &lt; ACRE               RM-1
-22        VAC LAND RES &lt; ACRE               RM-1
-23        VAC LAND RES &lt; ACRE              RSA-5
-24        VAC LAND RES &lt; ACRE               RM-1
-25        VAC LAND RES &lt; ACRE               RM-1
-26        VAC LAND RES &lt; ACRE              RSA-5
-27  ROW CONV/APT 2STY MASONRY               RM-1
-28        VAC LAND RES &lt; ACRE              RSA-5
-29          ROW 2 STY MASONRY              RSA-5
-30        VAC LAND RES &lt; ACRE              CMX-2
-31          ROW 3 STY MASONRY              RSA-5
-32        VAC LAND RES &lt; ACRE              RSA-5
-33        VAC LAND RES &lt; ACRE               RM-1
-34        VAC LAND RES &lt; ACRE              RSA-5
-35  APT 2-4  UNTS 2STY MASONR              RSA-5
-36        VAC LAND RES &lt; ACRE              RSA-5
-37        VAC LAND RES &lt; ACRE              RSA-5
-38        VAC LAND RES &lt; ACRE              RSA-5
-39        VAC LAND RES &lt; ACRE              CMX-2
-40        VAC LAND RES &lt; ACRE               RM-1
-41        VAC LAND RES &lt; ACRE              RSA-5
-42        VAC LAND RES &lt; ACRE               RM-1
-43  HSE WORSHIP ALL 1 STY MAS              RSA-5
-44        VAC LAND RES &lt; ACRE              CMX-2
-45          ROW 3 STY MASONRY               RM-1
-46          ROW 2 STY MASONRY              RSA-5
-47        VAC LAND RES &lt; ACRE              RSA-5
-48        VAC LAND RES &lt; ACRE               RM-1
-49        VAC LAND RES &lt; ACRE               RM-1
-50        VAC LAND RES &lt; ACRE              RSA-5
-51          ROW 3 STY MASONRY               RM-1
-52        VAC LAND RES &lt; ACRE               RM-1
-53        VAC LAND RES &lt; ACRE               RM-1
-54        VAC LAND RES &lt; ACRE               RM-1
-55        VAC LAND RES &lt; ACRE               RM-1
-56        VAC LAND RES &lt; ACRE               RM-1
-57        VAC LAND RES &lt; ACRE               RM-1
-58        VAC LAND RES &lt; ACRE              RSA-5
-59          ROW 2 STY MASONRY              RSA-5
-60     SEMI/DET 3 STY MASONRY              RSA-5
-61        VAC LAND RES &lt; ACRE               RM-1
-62        VAC LAND RES &lt; ACRE               RM-1
-63          ROW 2 STY MASONRY              RSA-5
-64        VAC LAND RES &lt; ACRE               RM-1
-65          ROW 3 STY MASONRY               RM-1
-66  ROW CONV/APT 3STY MASONRY              RSA-3
-67        VAC LAND RES &lt; ACRE              RSA-5
-68          ROW 2 STY MASONRY              RSA-5
-69        VAC LAND RES &lt; ACRE               RM-1
-70        VAC LAND RES &lt; ACRE              RSA-5
-71        VAC LAND RES &lt; ACRE               RM-1
-72        VAC LAND RES &lt; ACRE              RSA-5
-73        VAC LAND RES &lt; ACRE               RM-1
-74        VAC LAND RES &lt; ACRE              RSA-5
-75        VAC LAND RES &lt; ACRE               RM-1
-76        VAC LAND RES &lt; ACRE              CMX-2
-77  STR/OFF+APTS 3STY MASONRY              CMX-2
-78        VAC LAND RES &lt; ACRE               RM-1
-79        VAC LAND RES &lt; ACRE              RSA-5
-80          ROW 2 STY MASONRY              RSA-5
-81        VAC LAND RES &lt; ACRE               RM-1
-82        VAC LAND RES &lt; ACRE               RM-1
-83          ROW 2 STY MASONRY              RSA-5
-84  STR/OFF+APTS 3STY MASONRY              RSA-5
-85  ROW CONV/APT 3STY MASONRY               RM-1
-86        VAC LAND RES &lt; ACRE              RSA-5
-87          ROW 3 STY MASONRY              CMX-2
-88        VAC LAND RES &lt; ACRE              CMX-2
-89        VAC LAND RES &lt; ACRE               RM-1
-90        VAC LAND RES &lt; ACRE              CMX-2
-91        VAC LAND RES &lt; ACRE              RSA-5
-92                       &lt;NA&gt;               RM-1
-93        VAC LAND RES &lt; ACRE              RSA-5
-94        VAC LAND RES &lt; ACRE              RSA-5
-95      VAC LAND COMM. &lt; ACRE               RM-1
-96        VAC LAND RES &lt; ACRE              RSA-5
-97     SEMI/DET 3 STY MASONRY              RSA-5
-98        VAC LAND RES &lt; ACRE              RSA-5
-99        VAC LAND RES &lt; ACRE               RM-1
-100                      &lt;NA&gt;              RSA-5
-101 STR/OFF+APTS 3STY MASONRY              CMX-2
-102       VAC LAND RES &lt; ACRE               RM-1
-103         ROW 2 STY MASONRY              RSA-5
-104       VAC LAND RES &lt; ACRE               RM-1
-105       VAC LAND RES &lt; ACRE               RM-1
-106       VAC LAND RES &lt; ACRE               RM-1
-107       VAC LAND RES &lt; ACRE               RM-1
-108       VAC LAND RES &lt; ACRE              RSA-5
-109       VAC LAND RES &lt; ACRE              RSA-5
-110       VAC LAND RES &lt; ACRE              RSA-5
-111         ROW 2 STY MASONRY               RM-1
-112       VAC LAND RES &lt; ACRE               RM-1
-113         ROW 3 STY MASONRY               RM-1
-114       VAC LAND RES &lt; ACRE               RM-1
-115       VAC LAND RES &lt; ACRE               RM-1
-116         ROW 3 STY MASONRY               RM-1
-117       VAC LAND RES &lt; ACRE              RSA-5
-118       VAC LAND RES &lt; ACRE               RM-1
-119       VAC LAND RES &lt; ACRE               RM-1
-120         ROW 2 STY MASONRY              RSA-5
-121         ROW 3 STY MASONRY              RSA-5
-122       VAC LAND RES &lt; ACRE              RSA-5
-123       VAC LAND RES &lt; ACRE               RM-1
-124       VAC LAND RES &lt; ACRE              RSA-5
-125       VAC LAND RES &lt; ACRE               RM-1
-126       VAC LAND RES &lt; ACRE               RM-1
-127       VAC LAND RES &lt; ACRE               RM-1
-128       VAC LAND RES &lt; ACRE               RM-1
-129       VAC LAND RES &lt; ACRE               RM-1
-130       VAC LAND RES &lt; ACRE              CMX-2
-131       VAC LAND RES &lt; ACRE               RM-1</code></pre>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vacancy in Table Format</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_bldgs_df <span class="ot">&lt;-</span> sharswood_vacant_bldgs <span class="sc">|&gt;</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(objectid, address, owner1, bldg_desc, bldg_type, zoningbasedistrict)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_land_df <span class="ot">&lt;-</span> sharswood_vacant_land <span class="sc">|&gt;</span> </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(OBJECTID, ADDRESS, OWNER1, BLDG_DESC, ZONINGBASEDISTRICT)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_pts_df <span class="ot">&lt;-</span> sharswood_vacant_pts <span class="sc">|&gt;</span> </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(OBJECTID, ADDRESS, OWNER1, BLDG_DESC, ZONINGBASEDISTRICT)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count Vacant Land by Owner</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_land_owner <span class="ot">&lt;-</span> sharswood_vacant_land <span class="sc">|&gt;</span> </span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">owner_std =</span> <span class="fu">str_to_title</span>(<span class="fu">str_squish</span>(OWNER1))) <span class="sc">|&gt;</span> </span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_count</span>(owner_std, <span class="at">name =</span> <span class="st">&quot;owner_n&quot;</span>)  <span class="sc">|&gt;</span> </span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">owner_grp =</span> <span class="fu">case_when</span>(</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">is.na</span>(owner_std) <span class="sc">|</span> owner_std <span class="sc">==</span> <span class="st">&quot;&quot;</span> <span class="sc">~</span> <span class="st">&quot;Unknown&quot;</span>,</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>      owner_n <span class="sc">==</span> <span class="dv">1</span>                       <span class="sc">~</span> <span class="st">&quot;Individual Owners&quot;</span>,</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span>                               <span class="sc">~</span> owner_std</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>owner_n)</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_land_owner_df <span class="ot">&lt;-</span> sharswood_vacant_land_owner <span class="sc">|&gt;</span> </span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(OBJECTID, ADDRESS, OWNER1, BLDG_DESC, owner_grp, ZONINGBASEDISTRICT)</span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sharswood_vacant_land_owner_df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  OBJECTID           ADDRESS                    OWNER1           BLDG_DESC
-1      251    2507 HARLAN ST             CITY OF PHILA VAC LAND RES &lt; ACRE
-2      277    2100 MASTER ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-3      352 2253 INGERSOLL ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-4      357 2219 INGERSOLL ST PHILADELPHIA HOUSING AUTH VAC LAND RES &lt; ACRE
-5      464    2023 MASTER ST               WATTS CARLA VAC LAND RES &lt; ACRE
-6      487    1248 N 19TH ST          RIDGE POINTE LLC VAC LAND RES &lt; ACRE
-                  owner_grp ZONINGBASEDISTRICT
-1             City Of Phila              RSA-5
-2 Philadelphia Housing Auth              CMX-2
-3 Philadelphia Housing Auth              CMX-2
-4 Philadelphia Housing Auth               RM-1
-5         Individual Owners               RM-1
-6          Ridge Pointe Llc               RM-1</code></pre>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count Vacant Land by Owner</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_land_owner <span class="ot">&lt;-</span> sharswood_vacant_land <span class="sc">|&gt;</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">owner_std =</span> <span class="fu">str_to_title</span>(<span class="fu">str_squish</span>(OWNER1))) <span class="sc">|&gt;</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_count</span>(owner_std, <span class="at">name =</span> <span class="st">&quot;owner_n&quot;</span>)  <span class="sc">|&gt;</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">owner_grp =</span> <span class="fu">case_when</span>(</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">is.na</span>(owner_std) <span class="sc">|</span> owner_std <span class="sc">==</span> <span class="st">&quot;&quot;</span> <span class="sc">~</span> <span class="st">&quot;Unknown&quot;</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>      owner_n <span class="sc">==</span> <span class="dv">1</span>                       <span class="sc">~</span> <span class="st">&quot;Individual Owners&quot;</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span>                               <span class="sc">~</span> owner_std</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>owner_n)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>sharswood_vacant_land_owner_df <span class="ot">&lt;-</span> sharswood_vacant_land_owner <span class="sc">|&gt;</span> </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(OBJECTID, ADDRESS, OWNER1, BLDG_DESC, owner_grp, ZONINGBASEDISTRICT)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <hr>
 </section>
 <section id="step-4-plot-maps-of-vacant-buildings-land-and-points-in-sharswood" class="level3">
 <h3 class="anchored" data-anchor-id="step-4-plot-maps-of-vacant-buildings-land-and-points-in-sharswood">Step 4: Plot Maps of Vacant Buildings, Land, and Points in Sharswood</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build palettes that expand to any number of categories</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>n_bldg <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">n_distinct</span>(sharswood_vacant_bldgs<span class="sc">$</span>bldg_type)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Blue → teal → green</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>bldg_cols <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;#084081&quot;</span>, <span class="st">&quot;#2b8cbe&quot;</span>, <span class="st">&quot;#4eb3d3&quot;</span>, <span class="st">&quot;#7bccc4&quot;</span>, <span class="st">&quot;#43a2ca&quot;</span>, <span class="st">&quot;#2ca25f&quot;</span>, <span class="st">&quot;#238b45&quot;</span>, <span class="st">&quot;#006d2c&quot;</span>)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>)(n_bldg)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>n_land <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">n_distinct</span>(sharswood_vacant_land<span class="sc">$</span>ZONINGBASEDISTRICT)</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>land_cols <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">3</span>, <span class="st">&quot;Reds&quot;</span>))(n_land)</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_land_parcels, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;gray60&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_vacant_bldgs, </span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">fill =</span> bldg_type), </span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="st">&quot;grey10&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.08</span>) <span class="sc">+</span></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> bldg_cols, <span class="at">name =</span> <span class="st">&quot;Vacant Buildings - Type&quot;</span>) <span class="sc">+</span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">order =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">new_scale_fill</span>() <span class="sc">+</span></span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_vacant_land,</span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">fill =</span> ZONINGBASEDISTRICT),</span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="st">&quot;grey30&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.2</span>, <span class="at">alpha =</span> <span class="fl">0.65</span>) <span class="sc">+</span></span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> land_cols, <span class="at">name =</span> <span class="st">&quot;Vacant Land - Zoning&quot;</span>) <span class="sc">+</span></span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">order =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Vacant Land and Buildings in Sharswood&quot;</span>,</span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Vacant Land updated 3/24/25; Vacant Buildings updated 7/7/25&quot;</span>,</span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>,</span>
-<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
-<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text  =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>),</span>
-<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title   =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
-<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">9</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">6</span>))</span>
-<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build palettes that expand to any number of categories</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>n_bldg <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">n_distinct</span>(sharswood_vacant_bldgs<span class="sc">$</span>bldg_type)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Blue → teal → green</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>bldg_cols <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;#084081&quot;</span>, <span class="st">&quot;#2b8cbe&quot;</span>, <span class="st">&quot;#4eb3d3&quot;</span>, <span class="st">&quot;#7bccc4&quot;</span>, <span class="st">&quot;#43a2ca&quot;</span>, <span class="st">&quot;#2ca25f&quot;</span>, <span class="st">&quot;#238b45&quot;</span>, <span class="st">&quot;#006d2c&quot;</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>)(n_bldg)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>n_land <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">n_distinct</span>(sharswood_vacant_land<span class="sc">$</span>ZONINGBASEDISTRICT)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>land_cols <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">3</span>, <span class="st">&quot;Reds&quot;</span>))(n_land)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_land_parcels, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;gray60&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_vacant_bldgs, </span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">fill =</span> bldg_type), </span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="st">&quot;grey10&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.08</span>) <span class="sc">+</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> bldg_cols, <span class="at">name =</span> <span class="st">&quot;Vacant Buildings - Type&quot;</span>) <span class="sc">+</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">order =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">new_scale_fill</span>() <span class="sc">+</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_vacant_land,</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">fill =</span> ZONINGBASEDISTRICT),</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="st">&quot;grey30&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.2</span>, <span class="at">alpha =</span> <span class="fl">0.65</span>) <span class="sc">+</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> land_cols, <span class="at">name =</span> <span class="st">&quot;Vacant Land - Zoning&quot;</span>) <span class="sc">+</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">order =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Vacant Land and Buildings in Sharswood&quot;</span>,</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Vacant Land updated 3/24/25; Vacant Buildings updated 7/7/25&quot;</span>,</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>,</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text  =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>),</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title   =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">9</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">6</span>))</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -4900,29 +4311,29 @@ vertical-align: -.125em;
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vacant Land by Ownership</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>n_land_owner <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">n_distinct</span>(sharswood_vacant_land_owner<span class="sc">$</span>owner_grp)</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>land_owner_cols <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">8</span>, <span class="st">&quot;Set1&quot;</span>))(n_land_owner)</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_land_parcels, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;gray60&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_vacant_land_owner,</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">fill =</span> owner_grp),</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="st">&quot;grey30&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.2</span>, <span class="at">alpha =</span> <span class="fl">0.65</span>) <span class="sc">+</span></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> land_owner_cols, <span class="at">name =</span> <span class="st">&quot;Vacant Land - Ownership&quot;</span>) <span class="sc">+</span></span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">order =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Vacant Land in Sharswood by Ownership&quot;</span>,</span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Vacant Land updated 3/24/25&quot;</span></span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>,</span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text  =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>),</span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title   =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">9</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">6</span>))</span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vacant Land by Ownership</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>n_land_owner <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">n_distinct</span>(sharswood_vacant_land_owner<span class="sc">$</span>owner_grp)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>land_owner_cols <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">8</span>, <span class="st">&quot;Set1&quot;</span>))(n_land_owner)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_land_parcels, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;gray60&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_vacant_land_owner,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">fill =</span> owner_grp),</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="st">&quot;grey30&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.2</span>, <span class="at">alpha =</span> <span class="fl">0.65</span>) <span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> land_owner_cols, <span class="at">name =</span> <span class="st">&quot;Vacant Land - Ownership&quot;</span>) <span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">order =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Vacant Land in Sharswood by Ownership&quot;</span>,</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Vacant Land updated 3/24/25&quot;</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>,</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text  =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>),</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title   =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">9</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">6</span>))</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -4932,29 +4343,29 @@ vertical-align: -.125em;
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_land_parcels, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_vacant_bldgs, <span class="fu">aes</span>(<span class="at">fill =</span> bldg_desc)) <span class="sc">+</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Vacant Buildings in Sharswood&quot;</span>,</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Date Last Updated: July 7, 2025&quot;</span>) <span class="sc">+</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_land_parcels, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_vacant_land, <span class="fu">aes</span>(<span class="at">fill =</span> ZONINGBASEDISTRICT)) <span class="sc">+</span></span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Vacant Land in Sharswood&quot;</span>,</span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Date Last Updated: March 24, 2025&quot;</span>) <span class="sc">+</span></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_land_parcels, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_vacant_pts, <span class="fu">aes</span>(<span class="at">color =</span> VACANT_FLAG)) <span class="sc">+</span></span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Vacant Points in Sharswood&quot;</span>,</span>
-<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Date Last Updated: March 24, 2025&quot;</span>) <span class="sc">+</span></span>
-<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_land_parcels, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_vacant_bldgs, <span class="fu">aes</span>(<span class="at">fill =</span> bldg_desc)) <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Vacant Buildings in Sharswood&quot;</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Date Last Updated: July 7, 2025&quot;</span>) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_land_parcels, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_vacant_land, <span class="fu">aes</span>(<span class="at">fill =</span> ZONINGBASEDISTRICT)) <span class="sc">+</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Vacant Land in Sharswood&quot;</span>,</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Date Last Updated: March 24, 2025&quot;</span>) <span class="sc">+</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_land_parcels, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sharswood_vacant_pts, <span class="fu">aes</span>(<span class="at">color =</span> VACANT_FLAG)) <span class="sc">+</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Vacant Points in Sharswood&quot;</span>,</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Date Last Updated: March 24, 2025&quot;</span>) <span class="sc">+</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
