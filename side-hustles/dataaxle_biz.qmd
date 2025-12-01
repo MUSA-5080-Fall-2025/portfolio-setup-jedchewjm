@@ -46,8 +46,15 @@ data:
     SIC/NAICS codes, Census Tracts.
 
 I retrieved my raw data files from Data Axle through Penn Libraries and Wharton
-Research and Data Services (WRDS) on October 15, 2025. The interface of Data
-Axle is shown below.
+Research and Data Services (WRDS) on October 15, 2025.
+
+After you log in with your PennKey at this website
+(<http://www.referenceusa.com.proxy.library.upenn.edu/Home/Home>), click on U.S.
+Businesses or U.S. Historical Businesses and you will see the Data Axle
+interface shown below.
+
+Filter by Neighborhood (Pennsylvania \> PHL \> Sharswood) and then click on
+"View Results" to download the CSV file of businesses located in Sharswood.
 
 ![](images/clipboard-3282527950.png){width="887"}
 
@@ -218,7 +225,32 @@ unverified.sf <- unverified_clean |>
   st_transform(2272)
 ```
 
-**Join Data Axle Shapefiles to Philadelphia Cenus Tracts and Block Groups**
+**Join Data Axle Shapefiles to Philadelphia Census Tracts and Block Groups**
+
+**\[Sharswood Property Parcels\]**
+
+-   Data Source:
+    <https://opendataphilly.org/datasets/department-of-records-property-parcels/>
+-   Date Downloaded: Oct 19, 2025
+-   Department: Department of Records
+-   File Type: GeoJSON
+-   Description: Department of Records (DOR) boundaries of real estate property
+    parcels derived from legal recorded deed documents
+
+```{r, eval = FALSE}
+# Filter Property Parcels for Sharswood
+prop_parcels <- st_read("data/DOR_Parcel.geojson") |>
+  st_transform(st_crs(sharswood_bg_sf))
+
+sharswood_parcels <- st_filter(prop_parcels, sharswood_bg_sf, .predicate = st_intersects)
+
+st_write(
+  sharswood_parcels, "data/sharswood_parcels.geojson",
+  driver = "GeoJSON",
+  delete_dsn = TRUE,
+  layer_options = c("RFC7946=YES","COORDINATE_PRECISION=6","WRITE_BBOX=NO")
+)
+```
 
 ```{r}
 #| message: false
@@ -273,27 +305,16 @@ ggplot() +
 
 ### Step 4: Map Businesses to Property Parcels and Affordable Housing Projects
 
--   Data Source: Philadelphia Department of Records Property Parcels
+**\[Affordable Housing Projects\]**
+
+-   Data Source:
+    <https://opendataphilly.org/datasets/affordable-housing-production/>
 -   Date Downloaded: Oct 19, 2025
--   Link:
-    <https://opendataphilly.org/datasets/department-of-records-property-parcels/>
-
-```{r}
-#| message: false
-#| progress: 'hide'
-
-ggplot() +
-  geom_sf(data = sharswood_bg_sf, fill = "gray97", 
-          color = "gray50", linewidth = 0.3) +
-  geom_sf(data = sharswood_parcels, fill = NA, color = "gray50", linewidth = 0.6) +
-  labs(title = "Property Parcels in Sharswood") +
-  theme_void()
-```
-
--   Data Source: Philadlephia Division of Housing and Community Development
+-   Department: Philadelphia Division of Housing and Community Development
     (DHCD)
--   Date Downloaded: Oct 19, 2025
--   Link: <https://opendataphilly.org/datasets/affordable-housing-production/>
+-   File Type: GeoJSON
+-   Description: dataset includes all DHCD-funded housing projects completed
+    since 1994 for which data is available
 
 ```{r}
 affordable_housing_parcels <- st_read("data/Affordable_housing.geojson") |>
@@ -318,8 +339,6 @@ ggplot() +
 
 ```{r}
 ggplot() +
-  geom_sf(data = sharswood_bg_sf, fill = "gray97", 
-          color = "gray50", linewidth = 0.3) +
   geom_sf(data = sharswood_parcels, fill = NA, color = "gray50", linewidth = 0.6) +
   geom_sf(data = sharswood_affordable, fill = NA, 
           color = "firebrick", linewidth = 1) +

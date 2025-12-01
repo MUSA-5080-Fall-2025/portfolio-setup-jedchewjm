@@ -41,6 +41,9 @@ Initiative (CNI) vision of mixed-partners, mixed-use, and mixed-income
 -   Data Source:
     <https://opendataphilly.org/datasets/vacant-property-indicators/>
 -   Date Downloaded: Oct 20, 2025
+-   Department: Office of Innovation and Technology in cooperation with
+    Department of Licenses and Inspections, Office of Property Assessment,
+    Philadelphia Land Bank, and Philadelphia Water Department.
 -   Description: The location of properties across Philadelphia that are likely
     to be a vacant lot or vacant building based on an assessment of City of
     Philadelphia administrative datasets.
@@ -149,6 +152,33 @@ sharswood_2022_tract_sf <- phl_tract_2022_summary |>
 sharswood_2022_tract <- sharswood_2022_tract_sf |> 
   st_drop_geometry()
 ```
+
+**Sharswood Land Parcels**
+
+-   Data Source:
+    <https://opendataphilly.org/datasets/department-of-records-property-parcels/>
+-   Date Downloaded: Oct 19, 2025
+-   Department: Department of Records
+-   File Type: GeoJSON
+-   Description: Department of Records (DOR) boundaries of real estate property
+    parcels derived from legal recorded deed documents
+
+```{r, eval = FALSE}
+# Filter Property Parcels for Sharswood
+prop_parcels <- st_read("data/DOR_Parcel.geojson") |>
+  st_transform(st_crs(sharswood_bg_sf))
+
+sharswood_parcels <- st_filter(prop_parcels, sharswood_bg_sf, .predicate = st_intersects)
+
+st_write(
+  sharswood_parcels, "data/sharswood_parcels.geojson",
+  driver = "GeoJSON",
+  delete_dsn = TRUE,
+  layer_options = c("RFC7946=YES","COORDINATE_PRECISION=6","WRITE_BBOX=NO")
+)
+```
+
+**Vacancy Data for Sharswood**
 
 ```{r, results = 'hide'}
 # Spatially Filter Vacancy Data for Sharswood
@@ -353,9 +383,10 @@ ggplot() +
 
 ## Part 2: Land-Use Data
 
--   Data Source: Philadelphia Department of Planning and Development
+-   Data Source: <https://opendataphilly.org/datasets/land-use/>
 -   Date Downloaded: Nov 12, 2025
--   Link: <https://opendataphilly.org/datasets/land-use/>
+-   Department: Philadelphia Department of Planning and Development
+-   File Type: GeoJSON
 -   Metadata Link:
     <https://metadata.phila.gov/#home/datasetdetails/5543864420583086178c4e74/representationdetails/6679cce2eae40a02d29eb194/>
 

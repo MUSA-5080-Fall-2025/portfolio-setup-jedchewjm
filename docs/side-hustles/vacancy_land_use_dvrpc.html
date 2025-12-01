@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jed Chew">
-<meta name="dcterms.date" content="2025-11-28">
+<meta name="dcterms.date" content="2025-12-01">
 
 <title>DVRPC Land Use - Sharswood – Jed Chew - MUSA 5080 Portfolio</title>
 <style>
@@ -3974,7 +3974,7 @@ vertical-align: -.125em;
  <span class="dropdown-text">Assignment 4: Predictive Policing &amp; Analysis</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../labs/lab_5/assignment5_template.html">
+    <a class="dropdown-item" href="../labs/lab_5/assignment5_MA.html">
  <span class="dropdown-text">Assignment 5: Space-Time Prediction of Indego Bike Share Demand</span></a>
   </li>  
     </ul>
@@ -3994,7 +3994,7 @@ vertical-align: -.125em;
   </li>  
         <li>
     <a class="dropdown-item" href="../side-hustles/vacancy_land_use.html">
- <span class="dropdown-text">Vacancy, Land Use, and Businesses - Sharswood</span></a>
+ <span class="dropdown-text">Vacancy and Land Use - Sharswood</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../side-hustles/vacancy_land_use_dvrpc.html">
@@ -4059,7 +4059,7 @@ vertical-align: -.125em;
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 28, 2025</p>
+      <p class="date">December 1, 2025</p>
     </div>
   </div>
   
@@ -4082,16 +4082,21 @@ vertical-align: -.125em;
 </section>
 <section id="part-1-land-use-data-from-dvrpc" class="level2">
 <h2 class="anchored" data-anchor-id="part-1-land-use-data-from-dvrpc">Part 1: Land-Use Data from DVRPC</h2>
-<p><strong>Land-Use Data from DVRPC</strong></p>
+<p><strong>Land-Use Data from Delaware Valley Regional Planning Commission (DVRPC)</strong></p>
 <ul>
-<li>Data Source: <a href="https://opendataphilly.org/datasets/land-use/" class="uri">https://opendataphilly.org/datasets/land-use/</a></li>
+<li>Data Source: <a href="https://catalog.dvrpc.org/dataset/?q=Land+Use" class="uri">https://catalog.dvrpc.org/dataset/?q=Land+Use</a>
+<ul>
+<li>2023 Land-Use Data: <a href="https://dvrpc-dvrpcgis.opendata.arcgis.com/datasets/dd956104ece64920b242131bf4b6e4ce/explore" class="uri">https://dvrpc-dvrpcgis.opendata.arcgis.com/datasets/dd956104ece64920b242131bf4b6e4ce/explore</a></li>
+<li>2020 Land-Use Data: <a href="https://dvrpc-dvrpcgis.opendata.arcgis.com/datasets/dd956104ece64920b242131bf4b6e4ce/explore" class="uri">https://dvrpc-dvrpcgis.opendata.arcgis.com/datasets/dd956104ece64920b242131bf4b6e4ce/explore</a></li>
+<li>2015 Land-Use Data: <a href="https://dvrpc-dvrpcgis.opendata.arcgis.com/datasets/e207c88797a14c5d9350d083b9c823e4/explore" class="uri">https://dvrpc-dvrpcgis.opendata.arcgis.com/datasets/e207c88797a14c5d9350d083b9c823e4/explore</a></li>
+</ul></li>
 <li>Date Downloaded: Nov 13, 2025</li>
+<li>File Type: GeoJSON</li>
 <li>Description: DVRPC’s land use files are based on digital orthophotography created from aerial surveillance conducted in the spring of the land use file year.
 <ul>
-<li>These land-use files are consistently updated every five years which is more frequent than those from Philadelphia’s Department of Planning and Development.</li>
-<li>However, because these land-use files are based on aerial surveillance, they are less detailed and unable to distinguish between the types of multifamily buildings or identify vacant buildings.</li>
+<li><p>These land-use files are consistently updated every five years which is more frequent than those from Philadelphia’s Department of Planning and Development.</p></li>
+<li><p>However, because these land-use files are based on aerial surveillance, they are less detailed and unable to distinguish between the types of multifamily buildings or identify vacant buildings.</p></li>
 </ul></li>
-<li>Types of GeoJSON Files: Buildings, Land, and Points</li>
 </ul>
 <section id="step-1-load-philadelphia-census-tract-and-block-group-data" class="level3">
 <h3 class="anchored" data-anchor-id="step-1-load-philadelphia-census-tract-and-block-group-data">Step 1: Load Philadelphia Census Tract and Block Group Data</h3>
@@ -4127,51 +4132,73 @@ vertical-align: -.125em;
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a> <span class="fu">filter</span>(GEOID <span class="sc">%in%</span> ids) <span class="sc">|&gt;</span> </span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="dv">2272</span>) <span class="co"># PA State Plane (in US Survey Feet)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p><strong>Sharswood Land Parcels</strong></p>
+<ul>
+<li>Data Source: <a href="https://opendataphilly.org/datasets/department-of-records-property-parcels/" class="uri">https://opendataphilly.org/datasets/department-of-records-property-parcels/</a></li>
+<li>Date Downloaded: Oct 19, 2025</li>
+<li>Department: Department of Records</li>
+<li>File Type: GeoJSON</li>
+<li>Description: Department of Records (DOR) boundaries of real estate property parcels derived from legal recorded deed documents</li>
+</ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load Sharswood land parcels</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sharswood_land_parcels <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/sharswood_parcels.geojson&quot;</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>sharswood_zip <span class="ot">&lt;-</span> <span class="dv">19121</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter Property Parcels for Sharswood</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>prop_parcels <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/DOR_Parcel.geojson&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(sharswood_bg_sf))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>sharswood_parcels <span class="ot">&lt;-</span> <span class="fu">st_filter</span>(prop_parcels, sharswood_bg_sf, <span class="at">.predicate =</span> st_intersects)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">st_write</span>(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  sharswood_parcels, <span class="st">&quot;data/sharswood_parcels.geojson&quot;</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">driver =</span> <span class="st">&quot;GeoJSON&quot;</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">delete_dsn =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">layer_options =</span> <span class="fu">c</span>(<span class="st">&quot;RFC7946=YES&quot;</span>,<span class="st">&quot;COORDINATE_PRECISION=6&quot;</span>,<span class="st">&quot;WRITE_BBOX=NO&quot;</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load Sharswood land parcels</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sharswood_land_parcels <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/sharswood_parcels.geojson&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>sharswood_zip <span class="ot">&lt;-</span> <span class="dv">19121</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <hr>
 </section>
 <section id="step-2-load-dvrpc-land-use-data" class="level3">
 <h3 class="anchored" data-anchor-id="step-2-load-dvrpc-land-use-data">Step 2: Load DVRPC Land-Use Data</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Color Palette from PCPC</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>landuse_pal <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Residential&quot;</span>                         <span class="ot">=</span> <span class="st">&quot;#f5ff12&quot;</span>, <span class="co"># 245,255,18</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Commercial&quot;</span>                          <span class="ot">=</span> <span class="st">&quot;#e60000&quot;</span>, <span class="co"># 230,0,0</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Mixed Commercial/Residential&quot;</span>        <span class="ot">=</span> <span class="st">&quot;#e89579&quot;</span>, <span class="co"># 232,149,121</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Industrial&quot;</span>                          <span class="ot">=</span> <span class="st">&quot;#8c00ff&quot;</span>, <span class="co"># 140,0,255</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Institutional&quot;</span>                       <span class="ot">=</span> <span class="st">&quot;#0070ff&quot;</span>, <span class="co"># 0,112,255</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Transportation&quot;</span>                      <span class="ot">=</span> <span class="st">&quot;#cccccc&quot;</span>, <span class="co"># 204,204,204</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Recreation&quot;</span>                          <span class="ot">=</span> <span class="st">&quot;#9bccb3&quot;</span>, <span class="co"># 155,204,179  </span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Park/Open Space&quot;</span>                     <span class="ot">=</span> <span class="st">&quot;#63cc00&quot;</span>, <span class="co"># 99,204,0</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Water&quot;</span>                               <span class="ot">=</span> <span class="st">&quot;#bfe8ff&quot;</span>, <span class="co"># 191,232,255</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Undeveloped&quot;</span>                         <span class="ot">=</span> <span class="st">&quot;#a87000&quot;</span>, <span class="co"># 168,112,0</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Other/Unknown&quot;</span>                       <span class="ot">=</span> <span class="st">&quot;#d2d2d2&quot;</span>  <span class="co"># 210,210,210 </span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Color Palette from PCPC</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>landuse_pal <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Residential&quot;</span>                         <span class="ot">=</span> <span class="st">&quot;#f5ff12&quot;</span>, <span class="co"># 245,255,18</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Commercial&quot;</span>                          <span class="ot">=</span> <span class="st">&quot;#e60000&quot;</span>, <span class="co"># 230,0,0</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Mixed Commercial/Residential&quot;</span>        <span class="ot">=</span> <span class="st">&quot;#e89579&quot;</span>, <span class="co"># 232,149,121</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Industrial&quot;</span>                          <span class="ot">=</span> <span class="st">&quot;#8c00ff&quot;</span>, <span class="co"># 140,0,255</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Institutional&quot;</span>                       <span class="ot">=</span> <span class="st">&quot;#0070ff&quot;</span>, <span class="co"># 0,112,255</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Transportation&quot;</span>                      <span class="ot">=</span> <span class="st">&quot;#cccccc&quot;</span>, <span class="co"># 204,204,204</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Recreation&quot;</span>                          <span class="ot">=</span> <span class="st">&quot;#9bccb3&quot;</span>, <span class="co"># 155,204,179  </span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Park/Open Space&quot;</span>                     <span class="ot">=</span> <span class="st">&quot;#63cc00&quot;</span>, <span class="co"># 99,204,0</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Water&quot;</span>                               <span class="ot">=</span> <span class="st">&quot;#bfe8ff&quot;</span>, <span class="co"># 191,232,255</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Undeveloped&quot;</span>                         <span class="ot">=</span> <span class="st">&quot;#a87000&quot;</span>, <span class="co"># 168,112,0</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Other/Unknown&quot;</span>                       <span class="ot">=</span> <span class="st">&quot;#d2d2d2&quot;</span>  <span class="co"># 210,210,210 </span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="land-use-data" class="level3">
 <h3 class="anchored" data-anchor-id="land-use-data">2020 Land-Use Data</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and Spatially Filter Data</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>DVRPC_2020 <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/Land_Use_2020.geojson&quot;</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_make_valid</span>()</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>sharswood_lu_2020 <span class="ot">&lt;-</span> DVRPC_2020 <span class="sc">|&gt;</span> </span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(sharswood_bg_sf)) <span class="sc">|&gt;</span> </span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(sharswood_bg_sf) <span class="sc">|&gt;</span> </span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_filter</span>(sharswood_bg_sf, <span class="at">.predicate =</span> st_within)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and Spatially Filter Data</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>DVRPC_2020 <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/Land_Use_2020.geojson&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_make_valid</span>()</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>sharswood_lu_2020 <span class="ot">&lt;-</span> DVRPC_2020 <span class="sc">|&gt;</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(sharswood_bg_sf)) <span class="sc">|&gt;</span> </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(sharswood_bg_sf) <span class="sc">|&gt;</span> </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_filter</span>(sharswood_bg_sf, <span class="at">.predicate =</span> st_within)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sharswood_lu_2020) <span class="sc">+</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> lu20catn), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> landuse_pal, <span class="at">name =</span> <span class="st">&quot;Land Use&quot;</span>) <span class="sc">+</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;2020 DVRPC Land Use in Sharswood&quot;</span>) <span class="sc">+</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sharswood_lu_2020) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> lu20catn), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> landuse_pal, <span class="at">name =</span> <span class="st">&quot;Land Use&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;2020 DVRPC Land Use in Sharswood&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -4181,10 +4208,10 @@ vertical-align: -.125em;
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sharswood_lu_2020) <span class="sc">+</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> lu20subn), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;2020 DVRPC Detailed Land Use in Sharswood&quot;</span>) <span class="sc">+</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sharswood_lu_2020) <span class="sc">+</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> lu20subn), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;2020 DVRPC Detailed Land Use in Sharswood&quot;</span>) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -4198,9 +4225,9 @@ vertical-align: -.125em;
 <section id="land-use-data-1" class="level3">
 <h3 class="anchored" data-anchor-id="land-use-data-1">2015 Land-Use Data</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and Spatially Filter Data</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>DVRPC_2015 <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/Land_Use_2015.geojson&quot;</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_make_valid</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and Spatially Filter Data</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>DVRPC_2015 <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/Land_Use_2015.geojson&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_make_valid</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Reading layer `Land_Use_2015&#39; from data source 
   `C:\Users\chewj\Documents\MUSA\Github\portfolio-setup-jedchewjm\side-hustles\data\Land_Use_2015.geojson&#39; 
@@ -4211,18 +4238,18 @@ Dimension:     XY
 Bounding box:  xmin: -75.20409 ymin: 39.96713 xmax: -75.12549 ymax: 40.00042
 Geodetic CRS:  WGS 84</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sharswood_lu_2015 <span class="ot">&lt;-</span> DVRPC_2015 <span class="sc">|&gt;</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(sharswood_bg_sf)) <span class="sc">|&gt;</span> </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(sharswood_bg_sf) <span class="sc">|&gt;</span> </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_filter</span>(sharswood_bg_sf, <span class="at">.predicate =</span> st_within)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sharswood_lu_2015 <span class="ot">&lt;-</span> DVRPC_2015 <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(sharswood_bg_sf)) <span class="sc">|&gt;</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(sharswood_bg_sf) <span class="sc">|&gt;</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_filter</span>(sharswood_bg_sf, <span class="at">.predicate =</span> st_within)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sharswood_lu_2015) <span class="sc">+</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> lu15catn), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> landuse_pal, <span class="at">name =</span> <span class="st">&quot;Land Use&quot;</span>) <span class="sc">+</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;2015 DVRPC Land Use in Sharswood&quot;</span>) <span class="sc">+</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sharswood_lu_2015) <span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> lu15catn), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> landuse_pal, <span class="at">name =</span> <span class="st">&quot;Land Use&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;2015 DVRPC Land Use in Sharswood&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -4236,9 +4263,9 @@ Geodetic CRS:  WGS 84</code></pre>
 <section id="land-use-data-2" class="level3">
 <h3 class="anchored" data-anchor-id="land-use-data-2">2023 Land-Use Data</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and Spatially Filter Data</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>DVRPC_2023 <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/Land_Use_2023.geojson&quot;</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_make_valid</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and Spatially Filter Data</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>DVRPC_2023 <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/Land_Use_2023.geojson&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_make_valid</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Reading layer `Land_Use_2023&#39; from data source 
   `C:\Users\chewj\Documents\MUSA\Github\portfolio-setup-jedchewjm\side-hustles\data\Land_Use_2023.geojson&#39; 
@@ -4250,18 +4277,18 @@ Bounding box:  xmin: -75.20436 ymin: 39.96714 xmax: -75.12549 ymax: 40.00042
 z_range:       zmin: 0 zmax: 0
 Geodetic CRS:  WGS 84</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sharswood_lu_2023 <span class="ot">&lt;-</span> DVRPC_2023 <span class="sc">|&gt;</span> </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(sharswood_bg_sf)) <span class="sc">|&gt;</span> </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(sharswood_bg_sf) <span class="sc">|&gt;</span> </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_filter</span>(sharswood_bg_sf, <span class="at">.predicate =</span> st_within)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sharswood_lu_2023 <span class="ot">&lt;-</span> DVRPC_2023 <span class="sc">|&gt;</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(sharswood_bg_sf)) <span class="sc">|&gt;</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(sharswood_bg_sf) <span class="sc">|&gt;</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_filter</span>(sharswood_bg_sf, <span class="at">.predicate =</span> st_within)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sharswood_lu_2023) <span class="sc">+</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> lu23catn), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> landuse_pal, <span class="at">name =</span> <span class="st">&quot;Land Use&quot;</span>) <span class="sc">+</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;2023 DVRPC Land Use in Sharswood&quot;</span>) <span class="sc">+</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sharswood_lu_2023) <span class="sc">+</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> lu23catn), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> landuse_pal, <span class="at">name =</span> <span class="st">&quot;Land Use&quot;</span>) <span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;2023 DVRPC Land Use in Sharswood&quot;</span>) <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -4271,10 +4298,10 @@ Geodetic CRS:  WGS 84</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sharswood_lu_2023) <span class="sc">+</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> lu23subn), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;2023 DVRPC Detailed Land Use in Sharswood&quot;</span>) <span class="sc">+</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sharswood_lu_2023) <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> lu23subn), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;2023 DVRPC Detailed Land Use in Sharswood&quot;</span>) <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">

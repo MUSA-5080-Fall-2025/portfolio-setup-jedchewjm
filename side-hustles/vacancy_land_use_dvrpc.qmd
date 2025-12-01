@@ -34,20 +34,27 @@ Initiative (CNI) vision of mixed-partners, mixed-use, and mixed-income
 
 ## Part 1: Land-Use Data from DVRPC
 
-**Land-Use Data from DVRPC**
+**Land-Use Data from Delaware Valley Regional Planning Commission (DVRPC)**
 
--   Data Source: <https://opendataphilly.org/datasets/land-use/>
+-   Data Source: <https://catalog.dvrpc.org/dataset/?q=Land+Use>
+    -   2023 Land-Use Data:
+        <https://dvrpc-dvrpcgis.opendata.arcgis.com/datasets/dd956104ece64920b242131bf4b6e4ce/explore>
+    -   2020 Land-Use Data:
+        <https://dvrpc-dvrpcgis.opendata.arcgis.com/datasets/dd956104ece64920b242131bf4b6e4ce/explore>
+    -   2015 Land-Use Data:
+        <https://dvrpc-dvrpcgis.opendata.arcgis.com/datasets/e207c88797a14c5d9350d083b9c823e4/explore>
 -   Date Downloaded: Nov 13, 2025
+-   File Type: GeoJSON
 -   Description: DVRPC’s land use files are based on digital orthophotography
     created from aerial surveillance conducted in the spring of the land use
     file year.
     -   These land-use files are consistently updated every five years which is
         more frequent than those from Philadelphia's Department of Planning and
         Development.
+
     -   However, because these land-use files are based on aerial surveillance,
         they are less detailed and unable to distinguish between the types of
         multifamily buildings or identify vacant buildings.
--   Types of GeoJSON Files: Buildings, Land, and Points
 
 ### Step 1: Load Philadelphia Census Tract and Block Group Data
 
@@ -92,6 +99,31 @@ ids <- c("421010138001","421010138002","421010139001",
 sharswood_bg_sf <- block_grps |>
  filter(GEOID %in% ids) |> 
   st_transform(2272) # PA State Plane (in US Survey Feet)
+```
+
+**Sharswood Land Parcels**
+
+-   Data Source:
+    <https://opendataphilly.org/datasets/department-of-records-property-parcels/>
+-   Date Downloaded: Oct 19, 2025
+-   Department: Department of Records
+-   File Type: GeoJSON
+-   Description: Department of Records (DOR) boundaries of real estate property
+    parcels derived from legal recorded deed documents
+
+```{r, eval = FALSE}
+# Filter Property Parcels for Sharswood
+prop_parcels <- st_read("data/DOR_Parcel.geojson") |>
+  st_transform(st_crs(sharswood_bg_sf))
+
+sharswood_parcels <- st_filter(prop_parcels, sharswood_bg_sf, .predicate = st_intersects)
+
+st_write(
+  sharswood_parcels, "data/sharswood_parcels.geojson",
+  driver = "GeoJSON",
+  delete_dsn = TRUE,
+  layer_options = c("RFC7946=YES","COORDINATE_PRECISION=6","WRITE_BBOX=NO")
+)
 ```
 
 ```{r, results = 'hide'}

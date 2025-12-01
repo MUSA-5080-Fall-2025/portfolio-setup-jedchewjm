@@ -263,11 +263,7 @@ sharswood_2012_tract <- sharswood_2012_tract_sf |>
 sharswood_2012_tract
 ```
 
---------------------------------------------------------------------------------
-
 ## Part 2: Comprehensive Visualization and Analysis
-
---------------------------------------------------------------------------------
 
 ### Step 1: Rename Columns for ACS Year
 
