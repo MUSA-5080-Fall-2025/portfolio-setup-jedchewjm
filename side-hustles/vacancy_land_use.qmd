@@ -312,7 +312,8 @@ ggplot() +
   scale_fill_manual(values = land_cols, name = "Vacant Land - Zoning") +
   guides(fill = guide_legend(order = 2)) +
   labs(
-    title = "Vacant Land and Buildings in Sharswood",
+    title = "Vacant Land and Buildings in Sharswood (2025)",
+    subtitle = "Data Source: Philadelphia Office of Innovation and Technology",
     caption = "Vacant Land updated 3/24/25; Vacant Buildings updated 7/7/25",
   ) +
   theme_void() +
@@ -338,7 +339,8 @@ ggplot() +
   scale_fill_manual(values = land_owner_cols, name = "Vacant Land - Ownership") +
   guides(fill = guide_legend(order = 2)) +
   labs(
-    title = "Vacant Land in Sharswood by Ownership",
+    title = "Vacant Land in Sharswood by Ownership (2025)",
+    subtitle = "Data Source: Philadelphia Office of Innovation and Technology",
     caption = "Vacant Land updated 3/24/25"
   ) +
   theme_void() +
@@ -359,7 +361,7 @@ ggplot() +
   geom_sf(data = sharswood_vacant_bldgs, aes(fill = bldg_desc)) +
   labs(
     title = "Vacant Buildings in Sharswood",
-    subtitle = "Date Last Updated: July 7, 2025") +
+    caption = "Date Last Updated: July 7, 2025") +
   theme_void()
 
 ggplot() +
@@ -367,7 +369,7 @@ ggplot() +
   geom_sf(data = sharswood_vacant_land, aes(fill = ZONINGBASEDISTRICT)) +
   labs(
     title = "Vacant Land in Sharswood",
-    subtitle = "Date Last Updated: March 24, 2025") +
+    caption = "Date Last Updated: March 24, 2025") +
   theme_void()
 
 ggplot() +
@@ -375,7 +377,7 @@ ggplot() +
   geom_sf(data = sharswood_vacant_pts, aes(color = VACANT_FLAG)) +
   labs(
     title = "Vacant Points in Sharswood",
-    subtitle = "Date Last Updated: March 24, 2025") +
+    caption = "Date Last Updated: March 24, 2025") +
   theme_void()
 ```
 
@@ -472,7 +474,8 @@ sharswood_2023_land_use <- st_read("data/sharswood_land_use_clean.geojson")
 ggplot(sharswood_2023_land_use) +
   geom_sf(aes(fill = land_use), color = NA) +
   scale_fill_manual(values = landuse_pal, name = "Land Use") +
-  labs(title = "2023 Land Use in Sharswood") +
+  labs(title = "2023 Land Use in Sharswood",
+       subtitle = "Data Source: Philadelphia Dept of Planning and Devt") +
   theme_void()
 ```
 
@@ -531,6 +534,7 @@ sharswood_2013_land_use <- st_read("data/sharswood_2013_land_use.geojson")
 ggplot(sharswood_2013_land_use) +
   geom_sf(aes(fill = land_use), color = NA) +
   scale_fill_manual(values = landuse_pal, name = "Land Use") +
-  labs(title = "2013 Land Use in Sharswood") +
+  labs(title = "2013 Land Use in Sharswood",
+       subtitle = "Data Source: Philadelphia Dept of Planning and Devt") +
   theme_void()
 ```

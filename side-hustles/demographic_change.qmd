@@ -435,7 +435,7 @@ facet_metric <- function(metric_name, title, fill_lab,
       title = title, 
       subtitle = "Panels: 2008-2012, 2013-2017, 2018-2022",
       fill = fill_lab,
-      caption = "ACS 5-year estimates"
+      caption = "Data Source: ACS 5-year estimates"
     ) +
     theme_void() +
     theme(legend.position = "right") +
@@ -473,6 +473,8 @@ facet_metric("median_incomeE", "Sharswood: Median Household Income", "$",
 ### Step 3: Change Maps
 
 ```{r, fig.width=4.5, fig.height=3.5}
+#| echo: false
+#| include: false
 # helper to make a diverging change map
 change_map <- function(col, title, legend) {
   ggplot(compare_sf) +
@@ -493,29 +495,36 @@ change_map("d_income_12_22",       "Change in Median Income (2012→2022) — pe
 ```
 
 ```{r}
+# Aesthetic Formatting
+period_lab <- c("2012" = "2008–12", "2017" = "2013–17", "2022" = "2018–22")
+period_pal <- c("2008–12" = "#8DA0CB", "2013–17" = "#66C2A5", "2018–22" = "#FC8D62")
+```
+
+```{r}
 # Demographic Change
 bars <- long_panel |>
   filter(metric %in% c("pct_child","pct_elderly")) |>
-  mutate(metric = recode(metric, pct_child = "% Children (5–19)", pct_elderly = "% Elderly (65+)"))
+  mutate(metric = recode(metric, pct_child = "% Children (5–19)", pct_elderly = "% Elderly (65+)"),
+         period = recode(period, !!!period_lab),
+         tract_name = paste("Tract", tract_name))
 
 ggplot(bars, aes(x = period, y = value, fill = period)) +
   geom_col(width = 0.7) +
   facet_grid(metric ~ tract_name, scales = "free_y") +
+  scale_fill_manual(values = period_pal, guide = "none") +
   scale_y_continuous(labels = label_number(accuracy = 0.1)) +
   labs(title = "Before–After Comparison by Tract and Period",
+       subtitle = "Data Source: ACS 5-Year Estimates",
        x = NULL, y = "Percent") +
   theme_minimal() + theme(legend.position = "none")
 ```
 
 ```{r}
-# Income and Poverty Change
-period_lab <- c("2012" = "2008–12", "2017" = "2013–17", "2022" = "2018–22")
-period_pal <- c("2008–12" = "#8DA0CB", "2013–17" = "#66C2A5", "2018–22" = "#FC8D62")
-
 # Plot Median Income
 bars_income <- long_panel |>
   filter(metric == "median_incomeE") |>
-  mutate(period = recode(period, !!!period_lab))
+  mutate(period = recode(period, !!!period_lab),
+         tract_name = paste("Tract", tract_name))
 
 ggplot(bars_income, aes(x = period, y = value, fill = period)) +
   geom_col(width = 0.7) +
@@ -524,6 +533,7 @@ ggplot(bars_income, aes(x = period, y = value, fill = period)) +
   scale_y_continuous(labels = label_dollar(accuracy = 1)) +
   labs(
     title = "Before–After: Median Household Income by Tract",
+    subtitle = "Data Source: ACS 5-Year Estimates",
     x = NULL, y = "Dollars"
   ) +
   theme_minimal()
@@ -531,7 +541,8 @@ ggplot(bars_income, aes(x = period, y = value, fill = period)) +
 # Plot Poverty Rate
 bars_poverty <- long_panel |>
   filter(metric == "pct_poverty") |>
-  mutate(period = recode(period, !!!period_lab))
+  mutate(period = recode(period, !!!period_lab),
+         tract_name = paste("Tract", tract_name))
 
 ggplot(bars_poverty, aes(x = period, y = value, fill = period)) +
   geom_col(width = 0.7) +
@@ -590,7 +601,8 @@ ggplot() +
   guides(fill = guide_colorbar(title.position = "top", ticks = TRUE, 
                                barheight = unit(80, "pt"),
                                bardwidth = unit(5, "pt"))) +
-  labs(title = "Sharswood: ACS 5-Yr Estimates by Census Tract") +
+  labs(title = "Sharswood: ACS 5-Yr Estimates by Census Tract",
+       subtitle = "Tract 138 is the left polygon and Tract 139 is the right polygon") +
   theme_void() + 
   theme(legend.position = "right",
         plot.title = element_text(face = "bold", size = 12))
@@ -624,6 +636,7 @@ compare_bivar <- compare_sf %>% left_join(bivar, by = "GEOID")
 ggplot(compare_bivar) +
   geom_sf(aes(fill = bivar_class), color = "grey25", linewidth = 0.25) +
   scale_fill_manual(values = pal, na.value = "grey85", name = "Δ Poverty vs Δ Income\n(2012→2022)") +
-  labs(title = "Bivariate Change Map: Poverty (pct-pts) vs Income ($)") +
+  labs(title = "Bivariate Change Map: Poverty (pct-pts) vs Income ($)",
+       subtitle = "Data Source: ACS 5-Year Estimates") +
   theme_void()
 ```
