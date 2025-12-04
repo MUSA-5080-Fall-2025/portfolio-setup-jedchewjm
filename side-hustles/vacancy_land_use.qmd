@@ -326,6 +326,15 @@ ggplot() +
   )
 ```
 
+**Zoning Codes:**
+
+Source: Philadelphia Zoning Code Quick Guide (Dec 2022),
+<https://www.phila.gov/media/20220909084529/ZONING-QUICK-GUIDE_PCPC_9_9_22.pdf>
+
+-   CMX-2: Commercial Mixed-Use (small-scale)
+-   RM-1: Residential Multifamily (low-rise)
+-   RSA-5: Residential Single-Family Attached (rowhomes)
+
 ```{r}
 # Vacant Land by Ownership
 n_land_owner <- dplyr::n_distinct(sharswood_vacant_land_owner$owner_grp)
