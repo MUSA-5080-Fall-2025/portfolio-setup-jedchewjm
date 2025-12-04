@@ -486,7 +486,14 @@ ggplot(sharswood_2023_land_use) +
   labs(title = "2023 Land Use in Sharswood",
        subtitle = "Data Source: Philadelphia Dept of Planning and Devt",
        caption = "Residential High/Low/Medium refers to Density") +
-  theme_void()
+  theme_void() +
+  theme(
+    legend.position = "right",
+    legend.title = element_text(size = 11, face = "bold"),
+    legend.text  = element_text(size = 9),
+    plot.title   = element_text(face = "bold"),
+    plot.caption = element_text(hjust = 0, size = 9, margin = margin(t = 6))
+  )
 ```
 
 ### 2013 Sharswood Land Use
@@ -547,5 +554,12 @@ ggplot(sharswood_2013_land_use) +
   labs(title = "2013 Land Use in Sharswood",
        subtitle = "Data Source: Philadelphia Dept of Planning and Devt",
        caption = "Residential High/Low/Medium refers to Density") +
-  theme_void()
+  theme_void() +
+  theme(
+    legend.position = "right",
+    legend.title = element_text(size = 11, face = "bold"),
+    legend.text  = element_text(size = 9),
+    plot.title   = element_text(face = "bold"),
+    plot.caption = element_text(hjust = 0, size = 9, margin = margin(t = 6))
+  )
 ```

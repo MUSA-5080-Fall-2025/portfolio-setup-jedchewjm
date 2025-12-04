@@ -45,6 +45,8 @@ data:
     specific industries. Access categories including Company Name, Geocodes,
     SIC/NAICS codes, Census Tracts.
 
+**Steps to Download Data Axle U.S. Businesses Dataset as CSV Files**
+
 I retrieved my raw data files from Data Axle through Penn Libraries and Wharton
 Research and Data Services (WRDS) on October 15, 2025.
 
@@ -53,10 +55,19 @@ After you log in with your PennKey at this website
 Businesses or U.S. Historical Businesses and you will see the Data Axle
 interface shown below.
 
-Filter by Neighborhood (Pennsylvania \> PHL \> Sharswood) and then click on
-"View Results" to download the CSV file of businesses located in Sharswood.
+-   Filter by Neighborhood (Pennsylvania \> PHL \> Sharswood) or Zip
+    Code (19122) and check "Omit: ATM and Kiosk"
+-   Click on "View Results" in the top right-hand corner of the screen
 
 ![](images/clipboard-3282527950.png){width="887"}
+
+-   On the results page, select each page (25 records per page) and click on
+    "Download"
+-   On the downloads page, select the CSV file format as well as the custom
+    fields shown below and click on "Download Records" at the bottom of the
+    screen
+
+![](images/clipboard-3998417965.png)
 
 ### Record Types
 
@@ -380,7 +391,8 @@ ggplot() +
   geom_sf(data = sharswood_parcels, fill = NA, color = "gray50", linewidth = 0.6) +
   geom_sf(data = sharswood_curr_biz.sf, fill = "darkgreen", 
           shape = 21, size = 1.5, alpha = 0.9) +
-  labs(title = "Current Businesses in Sharswood") +
+  labs(title = "Location of Current Businesses in Sharswood",
+       caption = "Data Source: Data Axle U.S. Businesses") +
   theme_void()
 ```
 
