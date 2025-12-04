@@ -38,7 +38,7 @@ Initiative (CNI) vision of mixed-partners, mixed-use, and mixed-income
 
 -   Data Source: <https://catalog.dvrpc.org/dataset/?q=Land+Use>
     -   2023 Land-Use Data:
-        <https://dvrpc-dvrpcgis.opendata.arcgis.com/datasets/dd956104ece64920b242131bf4b6e4ce/explore>
+        <https://dvrpc-dvrpcgis.opendata.arcgis.com/datasets/65bf5c69517342e088c61452f390d774_0/explore?>
     -   2020 Land-Use Data:
         <https://dvrpc-dvrpcgis.opendata.arcgis.com/datasets/dd956104ece64920b242131bf4b6e4ce/explore>
     -   2015 Land-Use Data:

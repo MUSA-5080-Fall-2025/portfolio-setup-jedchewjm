@@ -475,7 +475,8 @@ ggplot(sharswood_2023_land_use) +
   geom_sf(aes(fill = land_use), color = NA) +
   scale_fill_manual(values = landuse_pal, name = "Land Use") +
   labs(title = "2023 Land Use in Sharswood",
-       subtitle = "Data Source: Philadelphia Dept of Planning and Devt") +
+       subtitle = "Data Source: Philadelphia Dept of Planning and Devt",
+       caption = "Residential High/Low/Medium refers to Density") +
   theme_void()
 ```
 
@@ -535,6 +536,7 @@ ggplot(sharswood_2013_land_use) +
   geom_sf(aes(fill = land_use), color = NA) +
   scale_fill_manual(values = landuse_pal, name = "Land Use") +
   labs(title = "2013 Land Use in Sharswood",
-       subtitle = "Data Source: Philadelphia Dept of Planning and Devt") +
+       subtitle = "Data Source: Philadelphia Dept of Planning and Devt",
+       caption = "Residential High/Low/Medium refers to Density") +
   theme_void()
 ```
