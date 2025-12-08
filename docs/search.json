@@ -1649,14 +1649,14 @@
     "href": "final/Final_Slides.html#the-eviction-crisis-in-philadelphia",
     "title": "Predicting Eviction Risk in Philadelphia",
     "section": "The Eviction Crisis in Philadelphia",
-    "text": "The Eviction Crisis in Philadelphia\n\n\n\nSource: LSC Evictions Law Database (Last updated: 11/01/2025"
+    "text": "The Eviction Crisis in Philadelphia\n\nSource: LSC Evictions Law Database (Last updated: 11/01/2025"
   },
   {
     "objectID": "final/Final_Slides.html#policy-context",
     "href": "final/Final_Slides.html#policy-context",
     "title": "Predicting Eviction Risk in Philadelphia",
     "section": "Policy Context",
-    "text": "Policy Context\n\n\n\nSource: City of Philadelphia Website\n\n\n\nEviction filings are down approximately 40%.\nLandlords and tenants reach agreements in approximately 70% of the cases where they participate in mediation."
+    "text": "Policy Context\n\nSource: City of Philadelphia Website\nEviction filings are down approximately 40%.\nLandlords and tenants reach agreements in approximately 70% of the cases where they participate in mediation."
   },
   {
     "objectID": "final/Final_Slides.html#data-source",
@@ -1677,7 +1677,7 @@
     "href": "final/Final_Slides.html#bivariate-maps-of-eviction-and-crime-types",
     "title": "Predicting Eviction Risk in Philadelphia",
     "section": "Bivariate Maps of Eviction and Crime Types",
-    "text": "Bivariate Maps of Eviction and Crime Types\n\n\n\n\n\n\n\n\nNorth & West Philadelphia show both high evictions and high crime.\nLow evictions + low crime in South, Northwest & Northeast.\nThe High-Low and Low-High tracts are areas that evictions can hardly be explained by violent."
+    "text": "Bivariate Maps of Eviction and Crime Types\n\n\n\n\n\n\n\nNorth & West Philadelphia show both high evictions and high crime.\nLow evictions + low crime in South, Northwest & Northeast.\nThe High-Low and Low-High tracts are areas that evictions can hardly be explained by violent."
   },
   {
     "objectID": "final/Final_Slides.html#spatial-dependence-lisa-map",
