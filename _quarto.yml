@@ -29,6 +29,13 @@ website:
           - href: midterm/slides/Midterm_slides_v3.qmd
             text: "Slides - Improving Property Tax Assessments in Philadelphia"  
       
+      - text: Final
+        menu: 
+          - href: final/final_challenge.qmd
+            text: "Report - Eviction Prediction in Philadelphia by Census Tract"
+          - href: final/Final_Slides.qmd
+            text: "Slides - Predicting Evictions in Philadelphia"
+      
       - text: Labs
         menu:
         - href: labs/lab_0/scripts/lab0_template.qmd

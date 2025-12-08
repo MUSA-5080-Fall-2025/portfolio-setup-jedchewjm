@@ -46,7 +46,7 @@
     "href": "index.html",
     "title": "MUSA 5080 Portfolio",
     "section": "",
-    "text": "This portfolio documents my learning journey in the Master of Urban Spatial Analytics course, MUSA 5080: Public Policy Analytics.\n\n\nAdvanced spatial analysis and data science for urban planning and public policy.\n\n\n\n\nWeekly Notes: My learning reflections and key concepts\nLabs: Completed assignments and analyses\nMidterm: Predicting single-family home prices in Philadelphia\nFinal Project: Capstone modeling challenge\nSide Hustles: My personal and undergraduate thesis projects\n\n\n\n\nSenior at the University of Pennsylvania concentrating in Urban Studies and Real Estate. Interested in housing markets, transport infrastructure, and public-private partnerships. Taking MUSA 5080 to inform my senior thesis research and to build up a toolbox of useful skills.\n\n\n\n\nEmail: jedchew@sas.upenn.edu\nGitHub: @jedchewjm\nLinkedIn: linkedin.com/in/jed-chew"
+    "text": "This portfolio documents my learning journey in the Master of Urban Spatial Analytics course, MUSA 5080: Public Policy Analytics.\n\n\nAdvanced spatial analysis and data science for urban planning and public policy.\n\n\n\n\nWeekly Notes: My learning reflections and key concepts\nLabs: Completed assignments and analyses\nMidterm Project: Predicting single-family home prices in Philadelphia\nFinal Project: Capstone modeling challenge on evictions in Philadelphia\nSide Hustles: My personal and undergraduate thesis projects\n\n\n\n\nSenior at the University of Pennsylvania concentrating in Urban Studies and Real Estate. Interested in housing markets, transport infrastructure, and public-private partnerships. Taking MUSA 5080 to inform my senior thesis research and to build up a toolbox of useful skills.\n\n\n\n\nEmail: jedchew@sas.upenn.edu\nGitHub: @jedchewjm\nLinkedIn: linkedin.com/in/jed-chew"
   },
   {
     "objectID": "index.html#about-this-course",
@@ -60,7 +60,7 @@
     "href": "index.html#portfolio-structure",
     "title": "MUSA 5080 Portfolio",
     "section": "",
-    "text": "Weekly Notes: My learning reflections and key concepts\nLabs: Completed assignments and analyses\nMidterm: Predicting single-family home prices in Philadelphia\nFinal Project: Capstone modeling challenge\nSide Hustles: My personal and undergraduate thesis projects"
+    "text": "Weekly Notes: My learning reflections and key concepts\nLabs: Completed assignments and analyses\nMidterm Project: Predicting single-family home prices in Philadelphia\nFinal Project: Capstone modeling challenge on evictions in Philadelphia\nSide Hustles: My personal and undergraduate thesis projects"
   },
   {
     "objectID": "index.html#about-me",
@@ -1643,5 +1643,103 @@
     "title": "Assignment 5: Space-Time Prediction of Indego Bike Share Demand",
     "section": "Conclusion: Critical Reflection",
     "text": "Conclusion: Critical Reflection\n\nOperational implications: Operationally, our best-performing approach remains the original OLS Model 2 (time-of-day + day-of-week + weather + temporal lags), with MAE around 0.53 in Q1 and 0.69 in Q2; the quadratic-weather + 1-week lag tweak helps only marginally, and neither calendar features nor Poisson improves MAE. That level of error is “good enough” only in a decision-support sense: it’s useful for ranking and flagging stations that are likely to be problematic, not for exact trip counts. The temporal diagnostics make clear that errors spike during high-stakes windows—especially the PM rush (and other peak periods), when demand changes quickly and rebalancing lead time is short—so that’s exactly when prediction misses can translate into stockouts/dockouts and service failures. We would recommend deploying the system under conditions that acknowledge this: (i) as a screening tool that prioritizes stations for human review and truck routing, (ii) with conservative thresholds in Q2 (since overall error is higher), and (iii) paired with operations rules like “act earlier for commute peaks” and “treat high-variance periods as higher risk even if point forecasts look moderate.”\nEquity considerations: On equity, the spatial error maps suggest the largest absolute errors cluster in the core network (Center City / University City) where volume and variance are high—this is not inherently evidence of inequity, but it does matter because operational resources tend to be concentrated where the model is already most uncertain. If Indego uses the model strictly to optimize efficiency, it could unintentionally pull attention away from lower-demand neighborhoods, worsening existing disparities in bike availability and reliability. The safeguard is to make equity explicit in deployment: enforce minimum service/rebalancing floors by neighborhood, monitor stockout/dockout rates and forecast errors geographically over time, and use a two-tier strategy where the model ranks risk within operational zones but decisions are constrained by coverage targets (so lower-demand areas are not systematically deprioritized).\nModel limitations: Finally, the limitations are pretty clear from what didn’t help: the model is missing event-driven spikes, operational feedback (rebalancing itself changes counts), station constraints (capacity, dock availability), and localized context (parks, venues, connectivity, campus-specific effects at the station level). With more time/data, we’d improve by adding station capacity and availability states, special event calendars, and simple spatial features (distance to Center City/universities/parks), and we’d consider a model designed for peak volatility (e.g., regime/peak indicators, or a hierarchical model with station-level random effects) while still evaluating on the metric that matches Indego’s operational goal (MAE or, even better, directly predicting stockout/dockout risk)."
+  },
+  {
+    "objectID": "final/Final_Slides.html#the-eviction-crisis-in-philadelphia",
+    "href": "final/Final_Slides.html#the-eviction-crisis-in-philadelphia",
+    "title": "Predicting Eviction Risk in Philadelphia",
+    "section": "The Eviction Crisis in Philadelphia",
+    "text": "The Eviction Crisis in Philadelphia\n\nSource: LSC Evictions Law Database (Last updated: 11/01/2025"
+  },
+  {
+    "objectID": "final/Final_Slides.html#policy-context",
+    "href": "final/Final_Slides.html#policy-context",
+    "title": "Predicting Eviction Risk in Philadelphia",
+    "section": "Policy Context",
+    "text": "Policy Context\n\nSource: City of Philadelphia Website\nEviction filings are down approximately 40%.\nLandlords and tenants reach agreements in approximately 70% of the cases where they participate in mediation."
+  },
+  {
+    "objectID": "final/Final_Slides.html#data-source",
+    "href": "final/Final_Slides.html#data-source",
+    "title": "Predicting Eviction Risk in Philadelphia",
+    "section": "Data Source",
+    "text": "Data Source\n\nPhiladelphia Eviction Data Source: Eviction Lab Philadelphia tracking data, 2020-2025, monthly\nSocioeconomic Data (ACS data): 2023 5-Year American Community Survey (ACS) from the United States Census Bureau\nPhiladelphia Crime Data: Philadelphia crime data for 2020-2025 from Open Data Philly\n311 Calls Data (Eviction-relevant): Philadelphia 311 Service and Information Requests from 2020-2015\nTax Data: Philadelphia real estate tax balances data by Census Tract from Open Data Philly"
+  },
+  {
+    "objectID": "final/Final_Slides.html#data-cleaning-filtering",
+    "href": "final/Final_Slides.html#data-cleaning-filtering",
+    "title": "Predicting Eviction Risk in Philadelphia",
+    "section": "Data Cleaning & Filtering",
+    "text": "Data Cleaning & Filtering\n\n311 Data Filtering:\n\nClean 311 data and create a small set of “eviction-relevant” 311 indicators (e.g., Sanitation / neighborhood disorder; Housing condition / disrepair; Safety hazards).\n\nCrime Data Filtering:\n\nClassify crime data into violent and non-violent crimes based on violent type.\n\nACS Data Filtering:\n\nFilter the tract level ACS data and computes six key socioeconomic variables: poverty rate, unemployment rate, renter share, vacancy rate, rent burden (30%), and nonwhite population share."
+  },
+  {
+    "objectID": "final/Final_Slides.html#bivariate-maps-of-eviction-and-crime-types",
+    "href": "final/Final_Slides.html#bivariate-maps-of-eviction-and-crime-types",
+    "title": "Predicting Eviction Risk in Philadelphia",
+    "section": "Bivariate Maps of Eviction and Crime Types",
+    "text": "Bivariate Maps of Eviction and Crime Types\n\n\n\n\n\n\n\nNorth & West Philadelphia show both high evictions and high crime.\nLow evictions + low crime in South, Northwest & Northeast.\nThe High-Low and Low-High tracts are areas that evictions can hardly be explained by violent."
+  },
+  {
+    "objectID": "final/Final_Slides.html#spatial-dependence-lisa-map",
+    "href": "final/Final_Slides.html#spatial-dependence-lisa-map",
+    "title": "Predicting Eviction Risk in Philadelphia",
+    "section": "Spatial Dependence & LISA Map",
+    "text": "Spatial Dependence & LISA Map\nThe result from global Moran’s I test indicated that there is a significant spatial autocorrelation exist in evictions data"
+  },
+  {
+    "objectID": "final/Final_Slides.html#flag-for-vulnerabe-tract",
+    "href": "final/Final_Slides.html#flag-for-vulnerabe-tract",
+    "title": "Predicting Eviction Risk in Philadelphia",
+    "section": "Flag for Vulnerabe Tract",
+    "text": "Flag for Vulnerabe Tract"
+  },
+  {
+    "objectID": "final/Final_Slides.html#spatial-and-temporal-features",
+    "href": "final/Final_Slides.html#spatial-and-temporal-features",
+    "title": "Predicting Eviction Risk in Philadelphia",
+    "section": "Spatial and temporal features",
+    "text": "Spatial and temporal features\n\nSpatial features:\n\nDistance to Hotspots (High–High) and Coldspots (Low-Low) from LISA map\nSpatially lagged temporal lags (Spatio-Temporal Lag)\n\nTemporal features: \n\nTemporal Lags for 1 month, 3 months, 6 months, and 12 months"
+  },
+  {
+    "objectID": "final/Final_Slides.html#model-specification",
+    "href": "final/Final_Slides.html#model-specification",
+    "title": "Predicting Eviction Risk in Philadelphia",
+    "section": "Model Specification",
+    "text": "Model Specification\n\n\n\nComponent\n\n\nDescription\n\n\n\n\nModels\n\n\nPoisson and Negative Binomial models (handle over-dispersion)\n\n\n\n\nTarget Variable\n\n\nEvictions (monthly eviction counts at the tract level)\n\n\n\n\nCandidate Predictors\n\n\nViolent and non-violent crime incidents; 311 service calls; Poverty rate, unemployment rate, renter share, vacancy rate, rent burden (30%), nonwhite population share, vulnerability flag; Distance to the nearest hot spot and cold spot; median gross rent, median home value; Number of tax-delinquent properties, average tax balance, total tax penalties.\n\n\n\n\nTemporal Lags\n\n\n1-, 3-, 6-, and 12-month lags of the target variable\n\n\n\n\nSpatio-Temporal Lags\n\n\nSpatio-temporal lags (spatially lagged temporal lags, W × past values) capturing spatial dependence"
+  },
+  {
+    "objectID": "final/Final_Slides.html#training-and-validation",
+    "href": "final/Final_Slides.html#training-and-validation",
+    "title": "Predicting Eviction Risk in Philadelphia",
+    "section": "Training and validation",
+    "text": "Training and validation\n\nTrain–test split:\n\nWe use a forward-chaining temporal split to respect the time ordering of the data and avoid information leakage.\nAll observations from 2020 to 2024 are used for model training and all observations from 2025 are held out for testing.\n\nSpatial Cross-validation:\n\nWe use spatial cross-validation to ensure that model performance generalizes across geographic areas.\nEach census tract is randomly assigned to one of K = 10 spatial folds and all months for a tract are placed in the same fold to avoid leakage across time.\n\nBaseline comparison:\n\nBaseline models: Poisson and NegBin models using only contemporaneous predictors.\nAdd temporal lags: Add 1-, 3-, 6-, and 12-month lags.\nAdd spatio-temporal lags"
+  },
+  {
+    "objectID": "final/Final_Slides.html#how-well-does-the-model-predict",
+    "href": "final/Final_Slides.html#how-well-does-the-model-predict",
+    "title": "Predicting Eviction Risk in Philadelphia",
+    "section": "How well does the model predict?",
+    "text": "How well does the model predict?\n\n\n\n\nModel\nMAE\nRMSE\n\n\n\n\nPoisson (baseline)\n1.943\n2.827\n\n\nNegBin (baseline)\n1.961\n2.856\n\n\nPoisson (+ temporal lags)\n1.752\n2.522\n\n\nNegBin (+ temporal lags)\n1.822\n2.961\n\n\nPoisson (+ temporal + spatio-temporal lags)\n1.756\n2.527\n\n\nNegBin (+ temporal + spatio-temporal lags)\n1.817\n2.892"
+  },
+  {
+    "objectID": "final/Final_Slides.html#performance-across-the-city",
+    "href": "final/Final_Slides.html#performance-across-the-city",
+    "title": "Predicting Eviction Risk in Philadelphia",
+    "section": "Performance across the city",
+    "text": "Performance across the city\nWhere the Model Struggles?"
+  },
+  {
+    "objectID": "final/Final_Slides.html#key-limitations",
+    "href": "final/Final_Slides.html#key-limitations",
+    "title": "Predicting Eviction Risk in Philadelphia",
+    "section": "Key Limitations",
+    "text": "Key Limitations\n\nPandemic artifacts: Model trained on 2020-2025 (moratoriums, emergency programs). Patterns may not reflect baseline behavior.\nSpatial mismatch: We predict at census tract level, but RTC program operates by zip code.\nMissing detailed-data: We have filing counts, not record-level data on tenants, landlords, or outcomes.\nHistorical bias risk: Model learns from past patterns—which reflect decades of discrimination. Could automate inequality if not careful."
+  },
+  {
+    "objectID": "final/Final_Slides.html#how-the-city-can-use-this",
+    "href": "final/Final_Slides.html#how-the-city-can-use-this",
+    "title": "Predicting Eviction Risk in Philadelphia",
+    "section": "How the City Can Use This",
+    "text": "How the City Can Use This\nMonthly Predictions Department of Planning and Development generates tract-level eviction risk forecasts. Which areas will see elevated filings in the next 30-90 days?\nConcentrate Resources Target outreach, mediation capacity, and rental assistance to high-risk tracts. Use risk maps to design where to pilot new rental assistance or mediation programs. Amplify where need is highest—don’t abandon low-risk areas.\nBottom line: Eviction risk is predictable, concentrated, and actionable with oversight."
   }
 ]
