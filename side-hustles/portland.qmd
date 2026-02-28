@@ -100,11 +100,12 @@ vars <- c(
   Black     = "B03002_004",
   Hispanic  = "B03002_012",
   
-  # --- Rent Burden (30%+) ---
-  rent_30_34          = "B25070_007",
-  rent_35_39          = "B25070_008",
-  rent_40_49          = "B25070_009",
-  rent_50_plus        = "B25070_010",
+  # Number of Renters at Rent Burden %
+  renter_total    = "B25070_001",
+  rentb_30_34    = "B25070_007",
+  rentb_35_39    = "B25070_008",
+  rentb_40_49    = "B25070_009",
+  rentb_50_plus  = "B25070_010",
   
   # Housing Indicators
   median_rent = "B25064_001",
@@ -126,6 +127,8 @@ summarize_acs <- function(df) {
       mutate(
       elderly_popE = rowSums(across(matches("^elderly_pop\\d+E$")), na.rm = TRUE),
       child_popE   = rowSums(across(matches("^child_pop\\d+E$")),   na.rm = TRUE),
+      
+      income_75_125k = income_75_100kE + income_100_125kE,
 
       # percentages
       pct_elderly  = round((elderly_popE / total_popE) * 100, 2),
@@ -134,18 +137,23 @@ summarize_acs <- function(df) {
       pct_black    = round((BlackE       / total_popE) * 100, 2),
       pct_hispanic = round((HispanicE    / total_popE) * 100, 2),
       pct_poverty  = round((poverty_levelE / poverty_totalE) * 100, 2),
-      pct_renter = 100 * renter_occupiedE / total_unitsE,
-      vacancy_rate = 100 * vacant_unitsE /
-                     (vacant_unitsE + total_unitsE),
-      pct_rent_burden = 100 * (
-        rent_30_34E + rent_35_39E + rent_40_49E + rent_50_plusE) / renter_occupiedE) |>
+      pct_renter   = 100 * renter_occupiedE / total_unitsE,
+      vacancy_rate = 100 * vacant_unitsE / total_unitsE,
+      pct_income_75_125k = 100 * income_75_125k / total_popE,
+      pct_rent_burden = 100 * (rentb_30_34E + rentb_35_39E + rentb_40_49E + rentb_50_plusE) / renter_totalE,
+      pct_built_after_2010 = 100 * (built_2020_plusE + built_2010_plusE) / total_unitsE
+      ) |>
     select(any_of(c(
       "GEOID", "tract_name", "county_name", "total_popE", "median_incomeE",
       "elderly_popE", "pct_elderly",
       "child_popE", "pct_child",
       "pct_poverty", "pct_white", "pct_black", "pct_hispanic",
       "pct_renter", "median_rentE", "pct_rent_burden",
-      "vacancy_rate","geometry")))
+      "vacant_units", "total_units", "vacancy_rate",
+      "built_2020_plus", "built_2010_plus",
+      "pct_built_after_2010",
+      "income_75_100k","income_100_125k", "pct_income_75_125k",
+      "geometry")))
 }
 ```
 
@@ -334,7 +342,7 @@ ggplot(hillsboro_2024) +
   geom_sf_text(
     data = hillsboro_2024,
     aes(label = GEOID),       
-    size = 3,
+    size = 2,
     color = "black",
     check_overlap = TRUE
   ) +
@@ -361,7 +369,7 @@ ggplot(hillsboro_2019) +
   geom_sf_text(
     data = hillsboro_2019,
     aes(label = GEOID),       
-    size = 3,
+    size = 2,
     color = "black",
     check_overlap = TRUE
   ) +
@@ -388,7 +396,7 @@ ggplot(hillsboro_2014) +
   geom_sf_text(
     data = hillsboro_2014,
     aes(label = GEOID),       
-    size = 3,
+    size = 2,
     color = "black",
     check_overlap = TRUE
   ) +
@@ -424,8 +432,14 @@ cols_to_suffix <- c(
   "elderly_popE","pct_elderly",
   "child_popE","pct_child",
   "pct_poverty",
-  "pct_white","pct_black","pct_hispanic"
+  "pct_white","pct_black","pct_hispanic",
+  "median_rentE",
+  "pct_renter", "pct_rent_burden",
+  "vacancy_rate",
+  "pct_built_after_2010", 
+  "pct_income_75_125k"
 )
+
 ```
 
 ```{r}
@@ -472,7 +486,6 @@ d_income_19_24         = median_incomeE_2024 - median_incomeE_2019
 d_income_14_24         = median_incomeE_2024 - median_incomeE_2014
 ```
 
-
 ## Normalizing Census Tract Boundaries
 
 ```{r}
@@ -514,7 +527,7 @@ long_panel_pts <- long_panel |>
 # ---- Facet Helper ----
 facet_metric <- function(metric_name, title, fill_lab,
                          fill_lab_fmt = NULL, text_fmt = NULL,
-                         text_size = 3,
+                         text_size = 2,
                          box_fill = alpha("white", 0.60)) {
 
   dat <- long_panel     |> filter(metric == metric_name)
@@ -567,10 +580,15 @@ facet_metric("pct_poverty",    "Hillsboro: % in Poverty", "%", fill_lab_fmt = pc
 facet_metric("pct_white",      "Hillsboro: % White (race alone)", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
 facet_metric("pct_black",      "Hillsboro: % Black (race alone)", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
 facet_metric("pct_hispanic",   "Hillsboro: % Hispanic (any race)", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("total_popE", "Hillsboro: Total Population", "Population", text_fmt = pop_fmt)
 facet_metric("pct_child",      "Hillsboro: % Children (Under 18)", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
 facet_metric("pct_elderly",    "Hillsboro: % Elderly (65+)", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
 facet_metric("median_incomeE", "Hillsboro: Median Household Income", "$", fill_lab_fmt = dol_fmt, text_fmt = dol_fmt)
-facet_metric("total_popE", "Hillsboro: Total Population", "Population", text_fmt = pop_fmt)
+facet_metric("pct_renter", "Hillsboro: % Renter Households", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("pct_rent_burden","Hillsboro: % Renters Cost Burdened", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("pct_income_75_125k", "Hillsboro: % Households $75k–$125k", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("median_rentE",   "Hillsboro: Median Gross Rent", "$", fill_lab_fmt = dol_fmt, text_fmt = dol_fmt)
+facet_metric("vacancy_rate",   "Hillsboro: Housing Vacancy Rate", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
 ```
 
 ## Maps for Portland Metropolitan Area
