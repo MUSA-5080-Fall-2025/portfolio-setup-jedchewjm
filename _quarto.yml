@@ -51,6 +51,7 @@ website:
         - href: side-hustles/vacancy_land_use.qmd
         - href: side-hustles/vacancy_land_use_dvrpc.qmd
         - href: side-hustles/portland.qmd
+        - href: side-hustles/jersey.qmd
         
 format:
   html:
