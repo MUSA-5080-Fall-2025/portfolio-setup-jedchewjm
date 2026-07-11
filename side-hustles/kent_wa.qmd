@@ -117,6 +117,8 @@ vars <- c(
   built_2010_plus = "B25034_003", # Built 2010 to 2019
   
   # Median Income Distribution
+  income_50_60k = "B19001_011",
+  income_60_75k = "B19001_012",
   income_75_100k = "B19001_013", 
   income_100_125k = "B19001_014"
 )
@@ -127,8 +129,7 @@ summarize_acs <- function(df) {
       mutate(
       elderly_popE = rowSums(across(matches("^elderly_pop\\d+E$")), na.rm = TRUE),
       child_popE   = rowSums(across(matches("^child_pop\\d+E$")),   na.rm = TRUE),
-      
-      income_75_125k = income_75_100kE + income_100_125kE,
+      income_50_100k = income_50_60kE + income_60_75kE + income_75_100kE,
 
       # percentages
       pct_elderly  = round((elderly_popE / total_popE) * 100, 2),
@@ -139,7 +140,7 @@ summarize_acs <- function(df) {
       pct_poverty  = round((poverty_levelE / poverty_totalE) * 100, 2),
       pct_renter   = 100 * renter_occupiedE / total_unitsE,
       vacancy_rate = 100 * vacant_unitsE / total_unitsE,
-      pct_income_75_125k = 100 * income_75_125k / total_popE,
+      pct_income_50_100k = 100 * income_50_100k / total_popE,
       pct_rent_burden = 100 * (rentb_30_34E + rentb_35_39E + rentb_40_49E + rentb_50_plusE) / renter_totalE,
       pct_built_after_2010 = 100 * (built_2020_plusE + built_2010_plusE) / total_unitsE
       ) |>
@@ -152,7 +153,7 @@ summarize_acs <- function(df) {
       "vacant_units", "total_units", "vacancy_rate",
       "built_2020_plus", "built_2010_plus",
       "pct_built_after_2010",
-      "income_75_100k","income_100_125k", "pct_income_75_125k",
+      "income_50_60k", "income_60_75k", "income_75_100k", "pct_income_50_100k",
       "geometry")))
 }
 ```
@@ -283,7 +284,7 @@ cols_to_suffix <- c(
   "pct_renter", "pct_rent_burden",
   "vacancy_rate",
   "pct_built_after_2010", 
-  "pct_income_75_125k"
+  "pct_income_50_100k"
 )
 ```
 
@@ -407,7 +408,7 @@ facet_metric("pct_elderly",    "Kent: % Elderly (65+)", "%", fill_lab_fmt = pct_
 facet_metric("median_incomeE", "Kent: Median Household Income", "$", fill_lab_fmt = dol_fmt, text_fmt = dol_fmt)
 facet_metric("pct_renter", "Kent: % Renter Households", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
 facet_metric("pct_rent_burden","Kent: % Renters Cost Burdened", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
-facet_metric("pct_income_75_125k", "Kent: % Households $75k–$125k", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("pct_income_50_100k", "Kent: % Households $50k–$100k", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
 facet_metric("median_rentE",   "Kent: Median Gross Rent", "$", fill_lab_fmt = dol_fmt, text_fmt = dol_fmt)
 facet_metric("vacancy_rate",   "Kent: Housing Vacancy Rate", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
 ```
@@ -452,3 +453,9 @@ tm_shape(old) +
 
 - Census Reporter (based on ACS 2024 5-Year):
   <https://censusreporter.org/profiles/14000US53033029206-census-tract-29206-king-wa/>
+
+- Washington State Housing Finance Commission (WSHFC) 2025 Income and Rent
+  Limits:
+  <https://www.wshfc.org/managers/AMCLimits/Others/BoxInfo/2025%20Income%20and%20Rent%20Limit%20Charts.pdf>
+
+![](images/clipboard-998324499.png)
