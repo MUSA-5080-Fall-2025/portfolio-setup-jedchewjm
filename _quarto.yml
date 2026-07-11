@@ -52,6 +52,7 @@ website:
         - href: side-hustles/vacancy_land_use_dvrpc.qmd
         - href: side-hustles/portland.qmd
         - href: side-hustles/jersey.qmd
+        - href: side-hustles/kent_wa.qmd
         
 format:
   html:
