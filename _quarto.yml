@@ -53,6 +53,7 @@ website:
         - href: side-hustles/portland.qmd
         - href: side-hustles/jersey.qmd
         - href: side-hustles/kent_wa.qmd
+        - href: side-hustles/seattle_wa.qmd
         
 format:
   html:
