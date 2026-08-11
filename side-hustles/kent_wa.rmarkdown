@@ -1,6 +1,6 @@
 ---
-title: "Demographic Changes - South Seattle, Washington"
-subtitle: "Aug 2026"
+title: "Demographic Changes - Kent, Washington"
+subtitle: "July 2026"
 author: "Jed Chew"
 date: today
 format: 
@@ -18,7 +18,7 @@ editor:
     wrap: 80
 ---
 
-## Housing Markets in South Seattle, Washington
+## Housing Markets in Kent, Washington
 
 ## Part 1: ACS Data
 
@@ -87,19 +87,12 @@ elderly_pop = c("B01001_020", "B01001_021", "B01001_022", "B01001_023",
                 "B01001_044", "B01001_045", "B01001_046", 
                 "B01001_047", "B01001_048", "B01001_049")
 
-# Helper Variables for Summing Families with Children
-fam_with_child = c("B11003_003", "B11003_010","B11003_016")
-
 # Helper Function for Variables
 vars <- c(
   # Demographic Indicators
   total_pop = "B01003_001",
   child_pop = child_pop,
   elderly_pop = elderly_pop,
-  total_households = "B11001_001",
-  family_households = "B11001_002",
-  total_fam = "B11003_001",
-  fam_with_child = fam_with_child,
   median_income = "B19013_001",
   poverty_total = "B17001_001",
   poverty_level = "B17001_002",
@@ -136,15 +129,11 @@ summarize_acs <- function(df) {
       mutate(
       elderly_popE = rowSums(across(matches("^elderly_pop\\d+E$")), na.rm = TRUE),
       child_popE   = rowSums(across(matches("^child_pop\\d+E$")),   na.rm = TRUE),
-      fam_with_childE   = rowSums(across(matches("^fam_with_child\\d+E$")),   
-                                  na.rm = TRUE),
       income_50_100k = income_50_60kE + income_60_75kE + income_75_100kE,
 
       # percentages
       pct_elderly  = round((elderly_popE / total_popE) * 100, 2),
       pct_child    = round((child_popE   / total_popE) * 100, 2),
-      pct_family   = round((family_householdsE / total_householdsE) * 100, 2),
-      pct_fam_child= round((fam_with_childE / total_famE) * 100, 2),
       pct_white    = round((WhiteE       / total_popE) * 100, 2),
       pct_black    = round((BlackE       / total_popE) * 100, 2),
       pct_hispanic = round((HispanicE    / total_popE) * 100, 2),
@@ -159,7 +148,6 @@ summarize_acs <- function(df) {
       "GEOID", "tract_name", "county_name", "total_popE", "median_incomeE",
       "elderly_popE", "pct_elderly",
       "child_popE", "pct_child",
-      "pct_family", "pct_fam_child",
       "pct_poverty", "pct_white", "pct_black", "pct_hispanic",
       "pct_renter", "median_rentE", "pct_rent_burden",
       "vacant_units", "total_units", "vacancy_rate",
@@ -190,14 +178,14 @@ get_data <- function(year){
 #| message: false
 #| warning: false
 #| results: 'hide'
-south_seattle_2014 <- get_data(2014)
-south_seattle_2019 <- get_data(2019)
-south_seattle_2024 <- get_data(2024)
+kent_2014 <- get_data(2014)
+kent_2019 <- get_data(2019)
+kent_2024 <- get_data(2024)
 ```
 
 ```{r}
 # Clean the county names to remove state name and "County" 
-south_seattle_2024_clean <- south_seattle_2024 |> 
+kent_2024_clean <- kent_2024 |> 
   separate(
     NAME, 
     into = c("tract_name", "county_name", "state_name"), 
@@ -207,11 +195,11 @@ south_seattle_2024_clean <- south_seattle_2024 |>
     tract_name = str_remove(tract_name, "Census Tract "),
     county_name = str_remove(county_name, " County")
   )
-south_seattle_2024_summary <- summarize_acs(south_seattle_2024_clean)
+kent_2024_summary <- summarize_acs(kent_2024_clean)
 ```
 
 ```{r}
-south_seattle_2019_clean <- south_seattle_2019 |> 
+kent_2019_clean <- kent_2019 |> 
   separate(
     NAME, 
     into = c("tract_name", "county_name", "state_name"), 
@@ -221,11 +209,11 @@ south_seattle_2019_clean <- south_seattle_2019 |>
     tract_name = str_remove(tract_name, "Census Tract "),
     county_name = str_remove(county_name, " County")
   )
-south_seattle_2019_summary <- summarize_acs(south_seattle_2019_clean)
+kent_2019_summary <- summarize_acs(kent_2019_clean)
 ```
 
 ```{r}
-south_seattle_2014_clean <- south_seattle_2014 |> 
+kent_2014_clean <- kent_2014 |> 
   separate(
     NAME, 
     into = c("tract_name", "county_name", "state_name"), 
@@ -235,7 +223,7 @@ south_seattle_2014_clean <- south_seattle_2014 |>
     tract_name = str_remove(tract_name, "Census Tract "),
     county_name = str_remove(county_name, " County")
   )
-south_seattle_2014_summary <- summarize_acs(south_seattle_2014_clean)
+kent_2014_summary <- summarize_acs(kent_2014_clean)
 ```
 
 --------------------------------------------------------------------------------
@@ -243,37 +231,37 @@ south_seattle_2014_summary <- summarize_acs(south_seattle_2014_clean)
 ### Step 2: Filter Data
 
 ```{r}
-# List of GeoIDs near Othello, South Seattle
-# Focus is on Census Tract 111.01
+# List of GeoIDs near Downtown Kent
+# Focus is on Census Tract 292.03
 
-tracts_curr <- c(110.01, 111.01, 103.01, 104.01, 101, 102, 103, 111.02, 118.01, 118.92, 117, 110.01, 103.02, 101.01, 101.02, 100.01, 100.02, 118)
+tracts_curr <- c(292.06, 292.03, 292.04, 292.08, 292.07, 293.05, 295.03, 295.05, 297.01, 297.02, 298.03, 292.05, 292.01, 283, 294.07, 295.04, 294.03, 294.08, 297, 298.01, 294.06, 295.08, 295.07, 295.06, 294.06, 296.03, 295.02, 296.01)
 ```
 
 ```{r}
-south_seattle_2024 <- south_seattle_2024_summary |>
+kent_2024 <- kent_2024_summary |>
   filter(tract_name %in% tracts_curr)
 
-south_seattle_2024_tract <- south_seattle_2024 |> 
+kent_2024_tract <- kent_2024 |> 
   st_drop_geometry()
-head(south_seattle_2024_tract)
+head(kent_2024_tract)
 ```
 
 ```{r}
-south_seattle_2019 <- south_seattle_2019_summary |>
+kent_2019 <- kent_2019_summary |>
   filter(tract_name %in% tracts_curr)
 
-south_seattle_2019_tract <- south_seattle_2019 |> 
+kent_2019_tract <- kent_2019 |> 
   st_drop_geometry()
-head(south_seattle_2019_tract)
+head(kent_2019_tract)
 ```
 
 ```{r}
-south_seattle_2014 <- south_seattle_2014_summary |>
+kent_2014 <- kent_2014_summary |>
   filter(tract_name %in% tracts_curr)
 
-south_seattle_2014_tract <- south_seattle_2014 |> 
+kent_2014_tract <- kent_2014 |> 
   st_drop_geometry()
-head(south_seattle_2014_tract)
+head(kent_2014_tract)
 ```
 
 --------------------------------------------------------------------------------
@@ -282,7 +270,7 @@ head(south_seattle_2014_tract)
 
 ```{r}
 # Check Projections
-st_crs(south_seattle_2014) == st_crs(south_seattle_2024)
+st_crs(kent_2014) == st_crs(kent_2024)
 ```
 
 ```{r}
@@ -290,7 +278,6 @@ cols_to_suffix <- c(
   "total_popE","median_incomeE",
   "elderly_popE","pct_elderly",
   "child_popE","pct_child",
-  "pct_family", "pct_fam_child",
   "pct_poverty",
   "pct_white","pct_black","pct_hispanic",
   "median_rentE",
@@ -302,22 +289,22 @@ cols_to_suffix <- c(
 ```
 
 ```{r}
-h14_sf <- south_seattle_2014 |>
+h14_sf <- kent_2014 |>
   rename_with(~ paste0(.x, "_2014"), any_of(cols_to_suffix))
 
-h14 <- south_seattle_2014_tract |>
+h14 <- kent_2014_tract |>
   rename_with(~ paste0(.x, "_2014"), any_of(cols_to_suffix))
 
-h19_sf <- south_seattle_2019 |>
+h19_sf <- kent_2019 |>
   rename_with(~ paste0(.x, "_2019"), any_of(cols_to_suffix))
 
-h19 <- south_seattle_2019_tract |>
+h19 <- kent_2019_tract |>
   rename_with(~ paste0(.x, "_2019"), any_of(cols_to_suffix))
 
-h24_sf <- south_seattle_2024 |>
+h24_sf <- kent_2024 |>
   rename_with(~ paste0(.x, "_2024"), any_of(cols_to_suffix))
 
-h24 <- south_seattle_2024_tract |>
+h24 <- kent_2024_tract |>
   rename_with(~ paste0(.x, "_2024"), any_of(cols_to_suffix))
 ```
 
@@ -326,19 +313,19 @@ h24 <- south_seattle_2024_tract |>
 ```{r}
 # ---- Prepare Each Year Separately (KEEP GEOMETRY) ----
 
-h14_sf <- south_seattle_2014 |>
+h14_sf <- kent_2014 |>
   rename_with(~ paste0(.x, "_2014"), any_of(cols_to_suffix)) |>
   mutate(period = "2014") |>
   select(GEOID, tract_name, county_name, period, geometry, ends_with("_2014")) |>
   rename_with(~ sub("_2014$", "", .x), ends_with("_2014"))
 
-h19_sf <- south_seattle_2019 |>
+h19_sf <- kent_2019 |>
   rename_with(~ paste0(.x, "_2019"), any_of(cols_to_suffix)) |>
   mutate(period = "2019") |>
   select(GEOID, tract_name, county_name, period, geometry, ends_with("_2019")) |>
   rename_with(~ sub("_2019$", "", .x), ends_with("_2019"))
 
-h24_sf <- south_seattle_2024 |>
+h24_sf <- kent_2024 |>
   rename_with(~ paste0(.x, "_2024"), any_of(cols_to_suffix)) |>
   mutate(period = "2024") |>
   select(GEOID, tract_name, county_name, period, geometry, ends_with("_2024")) |>
@@ -362,7 +349,7 @@ long_panel_pts <- long_panel |>
 # ---- Facet Helper ----
 facet_metric <- function(metric_name, title, fill_lab,
                          fill_lab_fmt = NULL, text_fmt = NULL,
-                         text_size = 1.25,
+                         text_size = 1.5,
                          box_fill = alpha("white", 0.60)) {
 
   dat <- long_panel     |> filter(metric == metric_name)
@@ -411,29 +398,19 @@ dol_fmt <- scales::label_dollar(accuracy = 1)
 pop_fmt <- scales::label_number(big.mark = ",", accuracy = 1)
 
 # ---- Facet Maps ----
-facet_metric("pct_poverty",    "South Seattle: % in Poverty", "%", 
-             fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
-facet_metric("pct_white",      "South Seattle: % White (race alone)", "%", 
-             fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
-facet_metric("pct_black",      "South Seattle: % Black (race alone)", "%", 
-             fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
-facet_metric("pct_hispanic",   "South Seattle: % Hispanic (any race)", "%", 
-             fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
-facet_metric("total_popE", "South Seattle: Total Population", "Population", 
-             text_fmt = pop_fmt)
-facet_metric("pct_child",      "South Seattle: % Children (Under 18)", "%", 
-             fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
-facet_metric("pct_family",      "South Seattle: % Families", "%", fill_lab_fmt = 
-               pct_fmt, text_fmt = pct_fmt)
-facet_metric("pct_fam_child",      "South Seattle: % Families with Children (Under 
-             18)", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
-facet_metric("pct_elderly",    "South Seattle: % Elderly (65+)", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
-facet_metric("median_incomeE", "South Seattle: Median Household Income", "$", fill_lab_fmt = dol_fmt, text_fmt = dol_fmt)
-facet_metric("pct_renter", "South Seattle: % Renter Households", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
-facet_metric("pct_rent_burden","South Seattle: % Renters Cost Burdened", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
-facet_metric("pct_income_50_100k", "South Seattle: % Households $50k–$100k", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
-facet_metric("median_rentE",   "South Seattle: Median Gross Rent", "$", fill_lab_fmt = dol_fmt, text_fmt = dol_fmt)
-facet_metric("vacancy_rate",   "South Seattle: Housing Vacancy Rate", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("pct_poverty",    "Kent: % in Poverty", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("pct_white",      "Kent: % White (race alone)", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("pct_black",      "Kent: % Black (race alone)", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("pct_hispanic",   "Kent: % Hispanic (any race)", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("total_popE", "Kent: Total Population", "Population", text_fmt = pop_fmt)
+facet_metric("pct_child",      "Kent: % Children (Under 18)", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("pct_elderly",    "Kent: % Elderly (65+)", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("median_incomeE", "Kent: Median Household Income", "$", fill_lab_fmt = dol_fmt, text_fmt = dol_fmt)
+facet_metric("pct_renter", "Kent: % Renter Households", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("pct_rent_burden","Kent: % Renters Cost Burdened", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("pct_income_50_100k", "Kent: % Households $50k–$100k", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
+facet_metric("median_rentE",   "Kent: Median Gross Rent", "$", fill_lab_fmt = dol_fmt, text_fmt = dol_fmt)
+facet_metric("vacancy_rate",   "Kent: Housing Vacancy Rate", "%", fill_lab_fmt = pct_fmt, text_fmt = pct_fmt)
 ```
 
 ```{r, progress = FALSE}
@@ -441,7 +418,7 @@ facet_metric("vacancy_rate",   "South Seattle: Housing Vacancy Rate", "%", fill_
 #| warning: false
 #| results: 'hide'
 
-# Check changes in census tract boundaries in South Seattle, WA
+# Check changes in census tract boundaries in Kent, WA
 old <- tracts(
   state = "WA",
   county = "King",
@@ -482,3 +459,4 @@ tm_shape(old) +
   <https://www.wshfc.org/managers/AMCLimits/Others/BoxInfo/2025%20Income%20and%20Rent%20Limit%20Charts.pdf>
 
 ![](images/clipboard-998324499.png)
+
